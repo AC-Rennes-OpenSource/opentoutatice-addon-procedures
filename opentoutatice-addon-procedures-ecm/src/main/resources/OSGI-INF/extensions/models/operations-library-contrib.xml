@@ -1,0 +1,10 @@
+<component name="org.osivia.procedures.instances.operations.library">
+
+  <extension target="org.nuxeo.ecm.core.operation.OperationServiceComponent"
+    point="operations" >
+    
+     <operation class="org.osivia.procedures.instances.operations.library.UploadFileWithMetadata" />
+      
+   </extension>
+    
+</component>

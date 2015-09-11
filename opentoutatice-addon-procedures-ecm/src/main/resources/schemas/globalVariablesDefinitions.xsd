@@ -1,0 +1,20 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:nxs="http://www.nuxeo.org/ecm/project/schemas/osivia/models/procedures"
+	targetNamespace="http://www.nuxeo.org/ecm/project/schemas/osivia/models/procedures">
+	
+	<xs:complexType name="definitionType">
+		<xs:sequence>
+			<xs:element name="label" type="xs:string" />
+			<xs:element name="type" type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="definitionsList">
+		<xs:sequence>
+			<xs:element name="definition" type="nxs:definitionType" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:element name="definitions" type="nxs:definitionsList" />
+
+</xs:schema>

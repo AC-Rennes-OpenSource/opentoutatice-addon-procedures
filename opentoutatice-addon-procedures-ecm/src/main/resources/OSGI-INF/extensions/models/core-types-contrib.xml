@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+
+<component name="org.osivia.procedures.models.doctypes" version="1.0">
+
+	<require>org.nuxeo.ecm.core.schema.TypeService</require>
+	<require>org.osivia.procedures.instances.doctypes</require>
+	
+	<extension target="org.nuxeo.ecm.core.schema.TypeService"
+		point="schema">
+
+		<schema name="globalVariablesDefinitions" prefix="gvd" src="schemas/globalVariablesDefinitions.xsd" />
+		<schema name="procedure" prefix="pcd" src="schemas/procedure.xsd" />
+		<schema name="step" prefix="step" src="schemas/step.xsd" />
+		
+	</extension>
+	
+	<extension target="org.nuxeo.ecm.core.schema.TypeService"
+		point="doctype">
+		
+		<doctype name="ProceduresModels" extends="Document">
+			<facet name="Folderish" />
+			<schema name="dublincore" />
+		</doctype>
+		
+		<doctype name="Procedure" extends="Document">
+			<facet name="Folderish" />
+			<facet name="Orderable" />
+			<schema name="dublincore" />
+			<schema name="procedure" />
+			<schema name="globalVariablesDefinitions" />
+		</doctype>
+		
+		<doctype name="Step" extends="Document">
+			<schema name="dublincore" />
+			<schema name="step" />
+		</doctype>
+		
+	</extension>
+	
+	<extension target="org.nuxeo.ecm.platform.types.TypeService"
+		point="types">
+		
+		<type id="ProceduresModels">
+			<subtypes>
+				<type>Procedure</type>
+				<type>ProceduresInstancesContainer</type>
+			</subtypes>
+		</type>
+		
+		<type id="Procedure">
+			<subtypes>
+				<type>Step</type>
+			</subtypes>
+		</type>
+		
+	</extension>
+	
+	<extension target="org.nuxeo.ecm.core.lifecycle.LifeCycleService"
+		point="types">
+
+		<types>
+			<type name="ProceduresModels">default</type>
+			<type name="Procedure">default</type>
+			<type name="Step">default</type>
+		</types>
+
+	</extension>
+
+</component>

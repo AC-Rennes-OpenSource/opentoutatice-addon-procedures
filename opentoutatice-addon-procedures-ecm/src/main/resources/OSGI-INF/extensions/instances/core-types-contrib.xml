@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+
+<component name="org.osivia.procedures.instances.doctypes" version="1.0">
+
+	<require>org.nuxeo.ecm.core.schema.TypeService</require>
+	
+	<extension target="org.nuxeo.ecm.core.schema.TypeService"
+		point="schema">
+
+		<schema name="procedureInstance" prefix="pi" src="schemas/procedureInstance.xsd" />
+		
+	</extension>
+	
+	<extension target="org.nuxeo.ecm.core.schema.TypeService"
+		point="doctype">
+		
+		<doctype name="ProceduresInstancesContainer" extends="Document">
+			<facet name="Folderish" />
+			<facet name="Orderable" />
+			<schema name="dublincore" />
+		</doctype>
+		
+		<doctype name="ProcedureInstance" extends="Document">
+			<schema name="dublincore" />
+			<schema name="procedureInstance" />
+		</doctype>
+		
+	</extension>
+	
+	<extension target="org.nuxeo.ecm.platform.types.TypeService"
+		point="types">
+
+		<type id="ProceduresInstancesContainer">
+			<subtypes>
+				<type>ProcedureInstance</type>
+			</subtypes>
+		</type>
+		
+	</extension>
+	
+	<extension target="org.nuxeo.ecm.core.lifecycle.LifeCycleService"
+		point="types">
+
+		<types>
+			<type name="ProceduresInstancesContainer">default</type>
+			<type name="ProcedureInstance">default</type>
+		</types>
+
+	</extension>
+
+</component>

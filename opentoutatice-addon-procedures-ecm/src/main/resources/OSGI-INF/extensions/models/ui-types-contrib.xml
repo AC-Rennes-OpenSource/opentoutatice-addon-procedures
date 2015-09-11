@@ -1,0 +1,252 @@
+<?xml version="1.0"?>
+
+<component name="org.osivia.procedures.models.ui.types"
+	version="1.0">
+
+	<require>org.nuxeo.ecm.platform.types.TypeService</require>
+	<require>org.nuxeo.ecm.platform.forms.layout.WebLayoutManager</require>
+
+	<extension target="org.nuxeo.ecm.platform.forms.layout.WebLayoutManager"
+		point="widgets">
+		
+		<widget name="directive" type="text">
+			<labels>
+				<label mode="any">Directive</label>
+			</labels>
+			<translated>false</translated>
+			<fields>
+				<field>step:directive</field>
+			</fields>
+			<properties widgetMode="edit">
+				<property name="styleClass">dataInputText</property>
+			</properties>
+		</widget>
+		
+		<widget name="message" type="text">
+			<labels>
+				<label mode="any">Message</label>
+			</labels>
+			<translated>false</translated>
+			<fields>
+				<field>step:message</field>
+			</fields>
+			<properties widgetMode="edit">
+				<property name="styleClass">dataInputText</property>
+			</properties>
+		</widget>
+		
+		<widget name="form" type="text">
+			<labels>
+				<label mode="any">Form</label>
+			</labels>
+			<translated>false</translated>
+			<fields>
+				<field>step:form</field>
+			</fields>
+			<properties widgetMode="edit">
+				<property name="styleClass">dataInputText</property>
+			</properties>
+		</widget>
+
+		<widget name="firstStep" type="checkbox">
+			<labels>
+				<label mode="any">First Step?</label>
+			</labels>
+			<translated>false</translated>
+			<fields>
+				<field>step:firstStep</field>
+			</fields>
+		</widget>
+		
+		<widget name="nextStep" type="text">
+			<labels>
+				<label mode="any">Next Step</label>
+			</labels>
+			<translated>false</translated>
+			<fields>
+				<field>step:nextStep</field>
+			</fields>
+			<properties widgetMode="edit">
+				<property name="styleClass">dataInputText</property>
+			</properties>
+		</widget>
+		
+		<widget name="action" type="text">
+			<labels>
+				<label mode="any">Action</label>
+			</labels>
+			<translated>false</translated>
+			<fields>
+				<field>step:action</field>
+			</fields>
+			<properties widgetMode="edit">
+				<property name="styleClass">dataInputText</property>
+			</properties>
+		</widget>
+		
+		<widget name="initiator" type="checkbox">
+			<labels>
+				<label mode="any">Step's actor is initiator?</label>
+			</labels>
+			<translated>false</translated>
+			<fields>
+				<field>step:initiator</field>
+			</fields>
+		</widget>
+		
+		<widget name="groups" type="multipleUsersSuggestion">
+			<labels>
+				<label mode="any">Step's group: </label>
+			</labels>
+			<fields>
+				<field>step:groups</field>
+			</fields>
+			<properties widgetMode="edit">
+				<property name="searchType">GROUP_TYPE</property>
+				<property name="minChars">3</property>
+				<property name="hideHelpLabel">true</property>
+			</properties>
+		</widget>
+
+		<widget name="authorizedGroups" type="multipleUsersSuggestion">
+			<labels>
+				<label mode="any">Procedure's groups: </label>
+			</labels>
+			<fields>
+				<field>pcd:authorizedGroups</field>
+			</fields>
+			<properties widgetMode="edit">
+				<property name="searchType">GROUP_TYPE</property>
+				<property name="minChars">3</property>
+				<property name="hideHelpLabel">true</property>
+			</properties>
+		</widget>
+
+	</extension>
+
+	<extension target="org.nuxeo.ecm.platform.forms.layout.WebLayoutManager"
+		point="layouts">
+		
+		<layout name="procedure">
+			<templates>
+				<template mode="any">/layouts/layout_default_template.xhtml
+				</template>
+			</templates>
+			<rows>
+				<row>
+					<widget>authorizedGroups</widget>
+				</row>
+			</rows>
+		</layout>
+
+		<layout name="step">
+			<templates>
+				<template mode="any">/layouts/layout_default_template.xhtml
+				</template>
+			</templates>
+			<rows>
+				<row>
+					<widget>initiator</widget>
+				</row>
+				<row>
+					<widget>groups</widget>
+				</row>
+				<row>
+					<widget>directive</widget>
+				</row>
+				<row>
+					<widget>form</widget>
+				</row>
+				<row>
+					<widget>firstStep</widget>
+				</row>
+				<row>
+					<widget>nextStep</widget>
+				</row>
+				<row>
+					<widget>message</widget>
+				</row>
+				<row>
+					<widget>action</widget>
+				</row>
+			</rows>
+		</layout>
+
+	</extension>
+
+	<extension point="filters"
+		target="org.nuxeo.ecm.platform.actions.ActionService">
+
+		<filter append="true" id="create">
+			<rule grant="true">
+				<permission>AddChildren</permission>
+				<type>Domain</type>
+				<type>ProceduresModels</type>
+				<type>Procedure</type>
+			</rule>
+		</filter>
+
+	</extension>
+
+	<extension target="org.nuxeo.ecm.platform.types.TypeService"
+		point="types">
+
+		<type id="Domain">
+			<subtypes>
+				<type>ProceduresModels</type>
+			</subtypes>
+		</type>
+
+		<type id="ProceduresModels">
+			<label>Procedures Models</label>
+			<icon>/icons/folder.gif</icon>
+			<bigIcon>/icons/folder_100.png</bigIcon>
+			<default-view>view_documents</default-view>
+			<layouts mode="any">
+				<layout>heading</layout>
+			</layouts>
+			<contentViews category="content">
+				<contentView>document_content</contentView>
+			</contentViews>
+			<contentViews category="trash_content">
+				<contentView showInExportView="false">
+					document_trash_content
+				</contentView>
+			</contentViews>
+		</type>
+
+		<type id="Procedure">
+			<label>Procedure</label>
+			<icon>/icons/ordered_folder.png</icon>
+			<bigIcon>/icons/ordered_folder_100.png</bigIcon>
+			<default-view>view_documents</default-view>
+			<layouts mode="any">
+				<layout>heading</layout>
+				<layout>procedure</layout>
+			</layouts>
+			<contentViews category="content">
+				<contentView>orderable_document_content</contentView>
+			</contentViews>
+			<contentViews category="trash_content">
+				<contentView showInExportView="false">
+					document_trash_content
+				</contentView>
+			</contentViews>
+		</type>
+
+		<type id="Step">
+			<label>Step</label>
+			<icon>/icons/fork.png</icon>
+			<bigIcon>/icons/fork_100.png</bigIcon>
+			<category>SimpleDocument</category>
+			<description>Note.description</description>
+			<default-view>view_documents</default-view>
+			<layouts mode="any">
+				<layout>heading</layout>
+				<layout>step</layout>
+			</layouts>
+		</type>
+
+	</extension>
+
+</component>

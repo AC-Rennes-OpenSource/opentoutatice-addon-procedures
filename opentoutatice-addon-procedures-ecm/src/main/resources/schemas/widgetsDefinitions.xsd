@@ -1,0 +1,20 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:nxs="http://www.nuxeo.org/ecm/project/schemas/osivia/models/step"
+	targetNamespace="http://www.nuxeo.org/ecm/project/schemas/osivia/models/step">
+	
+	<xs:complexType name="widgetDefinitionType">
+		<xs:sequence>
+			<xs:element name="label" type="xs:string" />
+			<xs:element name="type" type="xs:string" />
+			<xs:element name="property" type="xs:string" />
+			<xs:element name="order" type="xs:integer" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="widgetsDefinitionsList">
+		<xs:sequence>
+			<xs:element name="widgetDefinition" type="nxs:widgetDefinitionType" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+</xs:schema>
