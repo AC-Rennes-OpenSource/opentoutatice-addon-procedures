@@ -2,18 +2,16 @@
 	xmlns:nxs="http://www.nuxeo.org/ecm/project/schemas/osivia/models/procedure"
 	targetNamespace="http://www.nuxeo.org/ecm/project/schemas/osivia/models/procedure">
 	
-	<xs:complexType name="widgetDefinitionType">
+	<xs:complexType name="widgetReferenceType">
 		<xs:sequence>
 			<xs:element name="label" type="xs:string" />
-			<xs:element name="type" type="xs:string" />
-			<xs:element name="property" type="xs:string" />
-			<xs:element name="order" type="xs:integer" />
+			<xs:element name="isInput" type="xs:boolean" default="true"/>
 		</xs:sequence>
 	</xs:complexType>
-
-	<xs:complexType name="widgetsDefinitionsList">
+	
+	<xs:complexType name="widgetsReferenceList">
 		<xs:sequence>
-			<xs:element name="widgetDefinition" type="nxs:widgetDefinitionType" minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="widgetReference" type="nxs:widgetReferenceType" minOccurs="0" maxOccurs="unbounded" />
 		</xs:sequence>
 	</xs:complexType>
 

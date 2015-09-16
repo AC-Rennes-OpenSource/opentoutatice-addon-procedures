@@ -2,18 +2,17 @@
 	xmlns:nxs="http://www.nuxeo.org/ecm/project/schemas/osivia/models/procedure"
 	targetNamespace="http://www.nuxeo.org/ecm/project/schemas/osivia/models/procedure">
 	
-	<xs:complexType name="widgetDefinitionType">
+	<xs:complexType name="actionType">
 		<xs:sequence>
 			<xs:element name="label" type="xs:string" />
-			<xs:element name="type" type="xs:string" />
-			<xs:element name="property" type="xs:string" />
-			<xs:element name="order" type="xs:integer" />
+			<xs:element name="scriptReference" type="xs:string"/>
+			<xs:element name="stepReference" type="xs:string" />
 		</xs:sequence>
 	</xs:complexType>
-
-	<xs:complexType name="widgetsDefinitionsList">
+	
+	<xs:complexType name="actionsList">
 		<xs:sequence>
-			<xs:element name="widgetDefinition" type="nxs:widgetDefinitionType" minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="action" type="nxs:actionType" minOccurs="0" maxOccurs="unbounded" />
 		</xs:sequence>
 	</xs:complexType>
 

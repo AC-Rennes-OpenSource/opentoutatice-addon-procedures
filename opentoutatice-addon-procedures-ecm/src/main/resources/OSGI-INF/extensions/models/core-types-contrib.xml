@@ -9,30 +9,27 @@
 		point="schema">
 
 		<schema name="globalVariablesDefinitions" prefix="gvd" src="schemas/globalVariablesDefinitions.xsd" />
+		
 		<schema name="procedure" prefix="pcd" src="schemas/procedure.xsd" />
 		<schema name="step" prefix="step" src="schemas/step.xsd" />
+		<schema name="form" prefix="form" src="schemas/form.xsd" />
+		<schema name="widgetDefinitions" prefix="wgtDef" src="schemas/widgetsDefinitions.xsd" />
+		<schema name="widgetReferences" prefix="wgtRef" src="schemas/widgetsReferences.xsd" />
+		<schema name="actions" prefix="act" src="schemas/actions.xsd" />
 		
 	</extension>
 	
 	<extension target="org.nuxeo.ecm.core.schema.TypeService"
 		point="doctype">
 		
-		<doctype name="ProceduresModels" extends="Document">
+		<doctype name="ProceduresModelsContainer" extends="Document">
 			<facet name="Folderish" />
 			<schema name="dublincore" />
 		</doctype>
 		
-		<doctype name="Procedure" extends="Document">
-			<facet name="Folderish" />
-			<facet name="Orderable" />
+		<doctype name="ProcedureModel" extends="Document">
 			<schema name="dublincore" />
 			<schema name="procedure" />
-			<schema name="globalVariablesDefinitions" />
-		</doctype>
-		
-		<doctype name="Step" extends="Document">
-			<schema name="dublincore" />
-			<schema name="step" />
 		</doctype>
 		
 	</extension>
@@ -40,16 +37,9 @@
 	<extension target="org.nuxeo.ecm.platform.types.TypeService"
 		point="types">
 		
-		<type id="ProceduresModels">
+		<type id="ProceduresModelsContainer">
 			<subtypes>
-				<type>Procedure</type>
-				<type>ProceduresInstancesContainer</type>
-			</subtypes>
-		</type>
-		
-		<type id="Procedure">
-			<subtypes>
-				<type>Step</type>
+				<type>ProcedureModel</type>
 			</subtypes>
 		</type>
 		
@@ -61,7 +51,6 @@
 		<types>
 			<type name="ProceduresModels">default</type>
 			<type name="Procedure">default</type>
-			<type name="Step">default</type>
 		</types>
 
 	</extension>

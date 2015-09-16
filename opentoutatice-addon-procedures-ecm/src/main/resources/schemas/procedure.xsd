@@ -2,11 +2,20 @@
 	xmlns:nxs="http://www.nuxeo.org/ecm/project/schemas/osivia/models/procedure"
 	targetNamespace="http://www.nuxeo.org/ecm/project/schemas/osivia/models/procedure">
 	
-	<xs:simpleType name="stringList">
-		<xs:list itemType="xs:string" />
-	</xs:simpleType>
+	<xs:include schemaLocation="widgetsDefinitions.xsd" />
+	<xs:include schemaLocation="step.xsd" />
+	
+	<xs:complexType name="stepsList">
+		<xs:sequence>
+			<xs:element name="step" type="nxs:step" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
 	
 	<xs:element name="authorizedGroups" type="nxs:stringList" />
 	<xs:element name="authorizedActors" type="nxs:stringList" />
+	
+	<xs:element name="steps" type="nxs:stepsList" />
+	
+	<xs:element name="widgetsDefinitions" type="nxs:widgetsDefinitionsList" />
 
 </xs:schema>
