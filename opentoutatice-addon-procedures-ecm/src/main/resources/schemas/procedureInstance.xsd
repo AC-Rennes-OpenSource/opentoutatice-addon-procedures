@@ -2,23 +2,15 @@
 	xmlns:nxs="http://www.nuxeo.org/ecm/project/schemas/osivia/models/procedure"
 	targetNamespace="http://www.nuxeo.org/ecm/project/schemas/osivia/models/procedure">
 	
-	<xs:include schemaLocation="widgetsValues.xsd" />
-	<xs:include schemaLocation="form.xsd" />
+	<xs:include schemaLocation="globalVariablesValues.xsd" />
 
 	<xs:simpleType name="stringList">
 		<xs:list itemType="xs:string" />
 	</xs:simpleType>
 
-	<xs:element name="name" type="xs:string" />
-	<xs:element name="initiator" type="xs:string" />
-	<xs:element name="directive" type="xs:string" />
-	<xs:element name="message" type="xs:string" />
-	<xs:element name="currentStep" type="xs:string" />
-	<xs:element name="currentStepPath" type="xs:string" />
-	<xs:element name="nextStep" type="xs:string" />
 	<xs:element name="currentActors" type="nxs:stringList" />
-	
-	<xs:element name="formId" type="xs:string" />
-	<xs:element name="form" type="nxs:form" />
+	<xs:element name="globalVariablesValues" type="nxs:globalVariablesValuesList" />
+    <xs:element name="currentStep" type="xs:string" />
+    <xs:element name="procedureModelPath" type="xs:string" />
 	
 </xs:schema>

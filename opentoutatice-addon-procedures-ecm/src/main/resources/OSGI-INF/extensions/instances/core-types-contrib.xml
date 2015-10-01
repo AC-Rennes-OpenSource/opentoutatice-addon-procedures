@@ -8,6 +8,7 @@
 		point="schema">
 
 		<schema name="procedureInstance" prefix="pi" src="schemas/procedureInstance.xsd" />
+        <schema name="globalVariablesValues" prefix="gvv" src="schemas/globalVariablesValues.xsd" />
 		
 	</extension>
 	

@@ -4,12 +4,10 @@ Bundle-Name: Opentoutatice addon managing procedures
 Bundle-Localization: plugin
 Bundle-ManifestVersion: 1
 Nuxeo-Component: OSGI-INF/extensions/models/core-types-contrib.xml,OSG
- I-INF/extensions/models/ui-types-contrib.xml,OSGI-INF/extensions/mode
- ls/operations-library-contrib.xml,OSGI-INF/extensions/instances/actio
- ns-contrib.xml,OSGI-INF/extensions/instances/core-types-contrib.xml,O
- SGI-INF/extensions/instances/ui-types-contrib.xml,OSGI-INF/extensions
- /ProcedureService.xml,OSGI-INF/extensions/instances/operations-contri
- b.xml,OSGI-INF/extensions/generic-workflow/core-types.xml,OSGI-INF/ex
- tensions/generic-workflow/routing-service.xml
+ I-INF/extensions/models/ui-types-contrib.xml,OSGI-INF/extensions/inst
+ ances/core-types-contrib.xml,OSGI-INF/extensions/instances/ui-types-c
+ ontrib.xml,OSGI-INF/extensions/generic-workflow/core-types.xml,OSGI-I
+ NF/extensions/instances/operations-contrib.xml,OSGI-INF/extensions/ge
+ neric-workflow/routing-service.xml
 Bundle-SymbolicName: org.osivia.addon.procedures;singleton:=true
 

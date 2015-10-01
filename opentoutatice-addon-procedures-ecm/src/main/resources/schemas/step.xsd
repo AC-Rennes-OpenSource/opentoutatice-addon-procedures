@@ -1,6 +1,9 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	xmlns:nxs="http://www.nuxeo.org/ecm/project/schemas/osivia/models/procedure"
 	targetNamespace="http://www.nuxeo.org/ecm/project/schemas/osivia/models/procedure">
+    
+    <xs:include schemaLocation="globalVariablesReferences.xsd" />
+    <xs:include schemaLocation="actions.xsd" />
 	
 	<xs:simpleType name="stringList">
 		<xs:list itemType="xs:string" />
@@ -10,7 +13,18 @@
 		<xs:sequence>
 			<xs:element name="groups" type="nxs:stringList" />
 			<xs:element name="directive" type="xs:string" />
+            <xs:element name="name" type="xs:string" />
+            <xs:element name="index" type="xs:integer" />
+            <xs:element name="reference" type="xs:string" />
+            <xs:element name="globalVariablesReferences" type="nxs:globalVariablesReferenceList" />
+            <xs:element name="actions" type="nxs:actionsList" />
 		</xs:sequence>
 	</xs:complexType>
+    
+    <xs:complexType name="stepsList">
+        <xs:sequence>
+            <xs:element name="step" type="nxs:step" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
 
 </xs:schema>

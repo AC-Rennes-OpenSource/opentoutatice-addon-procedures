@@ -11,7 +11,7 @@
 		
 		<widget name="currentStep" type="text">
 			<labels>
-				<label mode="any">Current Step</label>
+				<label mode="any">Next step</label>
 			</labels>
 			<translated>false</translated>
 			<fields>
@@ -40,9 +40,28 @@
 		</layout>
 		
 	</extension>
+    
+    <extension point="filters"
+        target="org.nuxeo.ecm.platform.actions.ActionService">
+
+        <filter append="true" id="create">
+            <rule grant="true">
+                <permission>AddChildren</permission>
+                <type>Domain</type>
+                <type>ProceduresInstancesContainer</type>
+            </rule>
+        </filter>
+
+    </extension>
 
 	<extension target="org.nuxeo.ecm.platform.types.TypeService"
 		point="types">
+        
+        <type id="Domain">
+            <subtypes>
+                <type>ProceduresInstancesContainer</type>
+            </subtypes>
+        </type>
 
 		<type id="ProceduresInstancesContainer">
 			<label>Procedures Instances</label>

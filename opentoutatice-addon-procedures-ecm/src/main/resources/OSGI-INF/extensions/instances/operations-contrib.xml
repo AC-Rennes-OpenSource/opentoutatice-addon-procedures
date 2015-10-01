@@ -2,27 +2,8 @@
 
   <extension target="org.nuxeo.ecm.core.operation.OperationServiceComponent"
     point="operations" >
-    
       <operation class="org.osivia.procedures.instances.operations.StartProcedure" />
-      <operation class="org.osivia.procedures.instances.operations.GoToNextStep" />
-      <operation class="org.osivia.procedures.instances.operations.UpdateProcedureInstance" />
-      
+      <operation class="org.osivia.procedures.instances.operations.UpdateProcedure" />
    </extension>
    
-   <extension target="org.nuxeo.ecm.core.operation.OperationServiceComponent"
-		point="chains">
-		
-		<chain id="updateProcedureInstance">
-			<operation id="Services.UpdateProcedureInstance" />
-	    </chain>
-	    
-	    <chain id="deleteProcedureInstance">
-	    	<operation id="Fetch.DocumentInList" >
-				<param type="integer" name="index">0</param>
-			</operation> 
-	    	<operation id="Document.Delete" />
-	    </chain>
-		
-	</extension>
-    
 </component>
