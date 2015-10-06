@@ -1,0 +1,31 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:nxs="http://www.nuxeo.org/ecm/project/schemas/osivia/models/procedure"
+	targetNamespace="http://www.nuxeo.org/ecm/project/schemas/osivia/models/procedure">
+    
+    
+    <xs:complexType name="content">
+        <xs:sequence>
+            <xs:element name="encoding" type="xs:string" />
+            <xs:element name="mime-type" type="xs:string" />
+            <xs:element name="data" type="xs:base64Binary" />
+            <xs:element name="name" type="xs:string" />
+            <xs:element name="length" type="xs:long" />
+            <xs:element name="digest" type="xs:string" />
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="fileType">
+        <xs:sequence>
+            <xs:element name="blob" type="nxs:content" />
+            <xs:element name="fileName" type="xs:string" />
+            <xs:element name="variableName" type="xs:string" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="fileList">
+        <xs:sequence>
+            <xs:element name="files" type="nxs:fileType" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+    
+</xs:schema>
