@@ -111,17 +111,18 @@ public class StartProcedure {
             // attach blobs to procedure instance
             if (blobList != null) {
 
-                List<Map<String, Object>> filesTypeList = (List<Map<String, Object>>) procedureInstance.getPropertyValue("files");
-                if (filesTypeList == null) {
-                    filesTypeList = new ArrayList<Map<String, Object>>();
+                List<Map<String, Object>> attachmentsTypeList = (List<Map<String, Object>>) procedureInstance.getPropertyValue("attachments");
+                if (attachmentsTypeList == null) {
+                    attachmentsTypeList = new ArrayList<Map<String, Object>>();
                 }
                 // for each file element in the document properties
                 int i = 0;
-                for (Map<String, Object> filesmap : filesTypeList) {
-                    Object blobObject = filesmap.get("blob");
+                for (Map<String, Object> attachmentsmap : attachmentsTypeList) {
+                    Object blobObject = attachmentsmap.get("blob");
                     if (blobObject == null) {
                         // find the corresponding blob and add it to the document
-                        DocumentHelper.addBlob(procedureInstance.getProperty("files/" + i + "/blob"), getBlobByFileName((String) filesmap.get("fileName")));
+                        DocumentHelper.addBlob(procedureInstance.getProperty("attachments/" + i + "/blob"),
+                                getBlobByFileName((String) attachmentsmap.get("fileName")));
                     }
                     i++;
                 }

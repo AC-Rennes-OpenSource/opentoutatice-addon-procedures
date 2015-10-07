@@ -14,7 +14,7 @@
         </xs:sequence>
     </xs:complexType>
     
-    <xs:complexType name="fileType">
+    <xs:complexType name="attachmentType">
         <xs:sequence>
             <xs:element name="blob" type="nxs:content" />
             <xs:element name="fileName" type="xs:string" />
@@ -22,9 +22,9 @@
         </xs:sequence>
     </xs:complexType>
 
-    <xs:complexType name="fileList">
+    <xs:complexType name="attachmentList">
         <xs:sequence>
-            <xs:element name="files" type="nxs:fileType" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="attachments" type="nxs:attachmentType" minOccurs="0" maxOccurs="unbounded" />
         </xs:sequence>
     </xs:complexType>
     

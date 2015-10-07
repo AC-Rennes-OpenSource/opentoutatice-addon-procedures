@@ -3,7 +3,7 @@
 	targetNamespace="http://www.nuxeo.org/ecm/project/schemas/osivia/models/procedure">
 	
 	<xs:include schemaLocation="globalVariablesValues.xsd" />
-    <xs:include schemaLocation="file.xsd" />
+    <xs:include schemaLocation="attachment.xsd" />
 
 	<xs:simpleType name="stringList">
 		<xs:list itemType="xs:string" />
@@ -13,6 +13,6 @@
 	<xs:element name="globalVariablesValues" type="nxs:globalVariablesValuesList" />
     <xs:element name="currentStep" type="xs:string" />
     <xs:element name="procedureModelPath" type="xs:string" />
-    <xs:element name="files" type="nxs:fileList" />
+    <xs:element name="attachments" type="nxs:attachmentList" />
 	
 </xs:schema>
