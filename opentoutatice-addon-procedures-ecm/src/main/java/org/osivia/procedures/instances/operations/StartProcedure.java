@@ -67,6 +67,14 @@ public class StartProcedure {
     TaskService taskService;
 
     @OperationMethod
+    public DocumentModel run() throws Exception {
+        UnrestrictedStartProcedure unrestrictedStartProcedure = new UnrestrictedStartProcedure(session, null);
+        unrestrictedStartProcedure.runUnrestricted();
+
+        return unrestrictedStartProcedure.getProcedureInstance();
+    }
+
+    @OperationMethod
     public DocumentModel run(Blob blob) throws Exception {
 
         BlobList blobList = new BlobList();
@@ -110,26 +118,35 @@ public class StartProcedure {
 
             // attach blobs to procedure instance
             if (blobList != null) {
-
-                List<Map<String, Object>> attachmentsTypeList = (List<Map<String, Object>>) procedureInstance.getPropertyValue("attachments");
-                if (attachmentsTypeList == null) {
-                    attachmentsTypeList = new ArrayList<Map<String, Object>>();
-                }
-                // for each file element in the document properties
-                int i = 0;
-                for (Map<String, Object> attachmentsmap : attachmentsTypeList) {
-                    Object blobObject = attachmentsmap.get("blob");
-                    if (blobObject == null) {
-                        // find the corresponding blob and add it to the document
-                        DocumentHelper.addBlob(procedureInstance.getProperty("attachments/" + i + "/blob"),
-                                getBlobByFileName((String) attachmentsmap.get("fileName")));
+                List<Map<String, Object>> attachmentsTypeList = (List<Map<String, Object>>) procedureInstance.getPropertyValue("pi:attachments");
+                if (attachmentsTypeList != null) {
+                    // for each file element in the document properties
+                    int i = 0;
+                    for (Map<String, Object> attachmentsmap : attachmentsTypeList) {
+                        Object blobObject = attachmentsmap.get("blob");
+                        if (blobObject == null) {
+                            // find the corresponding blob and add it to the document
+                            DocumentHelper.addBlob(procedureInstance.getProperty("pi:attachments/" + i + "/blob"),
+                                    getBlobByFileName((String) attachmentsmap.get("fileName")));
+                        }
+                        i++;
                     }
-                    i++;
+                    session.saveDocument(procedureInstance);
                 }
-
-                session.saveDocument(procedureInstance);
-
             }
+
+            // associate objects to workflow
+            List<Map<String, Object>> procedureObjectInstancesList = (List<Map<String, Object>>) procedureInstance
+                    .getPropertyValue("pi:procedureObjectInstances");
+            if (procedureObjectInstancesList != null) {
+                for (Map<String, Object> procedureObjectInstancesMap : procedureObjectInstancesList) {
+                    String procedureObjectId = (String) procedureObjectInstancesMap.get("procedureObjectId");
+                    if (procedureObjectId != null) {
+                        currentDocIds.add(procedureObjectId);
+                    }
+                }
+            }
+
 
             String processId = documentRoutingService.createNewInstance(genericModel.getName(), currentDocIds, session, true);
             List<Task> allTaskInstances = taskService.getAllTaskInstances(processId, session);
