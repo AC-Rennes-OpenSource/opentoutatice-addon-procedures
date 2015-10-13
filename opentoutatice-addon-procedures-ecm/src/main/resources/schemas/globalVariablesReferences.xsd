@@ -4,7 +4,7 @@
 	
 	<xs:complexType name="globalVariablesReferenceType">
 		<xs:sequence>
-			<xs:element name="variableLabel" type="xs:string" />
+			<xs:element name="variableName" type="xs:string" />
 			<xs:element name="isInput" type="xs:boolean" default="true"/>
             <xs:element name="order" type="xs:integer" />
 		</xs:sequence>

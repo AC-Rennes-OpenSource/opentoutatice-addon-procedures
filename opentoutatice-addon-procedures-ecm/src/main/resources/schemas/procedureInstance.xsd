@@ -4,6 +4,7 @@
 	
 	<xs:include schemaLocation="globalVariablesValues.xsd" />
     <xs:include schemaLocation="attachment.xsd" />
+    <xs:include schemaLocation="procedureObjectInstance.xsd" />
 
 	<xs:simpleType name="stringList">
 		<xs:list itemType="xs:string" />
@@ -14,5 +15,6 @@
     <xs:element name="currentStep" type="xs:string" />
     <xs:element name="procedureModelPath" type="xs:string" />
     <xs:element name="attachments" type="nxs:attachmentList" />
+    <xs:element name="procedureObjectInstances" type="nxs:procedureObjectInstanceList" />
 	
 </xs:schema>
