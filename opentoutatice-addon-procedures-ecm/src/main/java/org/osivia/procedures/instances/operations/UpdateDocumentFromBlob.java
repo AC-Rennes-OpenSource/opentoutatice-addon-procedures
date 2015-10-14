@@ -10,23 +10,21 @@ import org.nuxeo.ecm.automation.core.util.Properties;
 import org.nuxeo.ecm.core.api.Blob;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.platform.filemanager.api.FileManager;
 
-@Operation(id = CreateDocumentFromBlob.ID, category = Constants.CAT_SERVICES, label = "CreateDocumentFromBlob",
-        description = "Creates a document from a file and initialize the properties ")
-public class CreateDocumentFromBlob {
+@Operation(id = UpdateDocumentFromBlob.ID, category = Constants.CAT_SERVICES, label = "UpdateDocumentFromBlob",
+        description = "Updates a document from a file and its properties")
+public class UpdateDocumentFromBlob {
 
     /** ID */
-    public static final String ID = "Services.CreateDocumentFromBlob";
-
-    @Param(name = "path", required = true)
-    private String path;
+    public static final String ID = "Services.UpdateDocumentFromBlob";
 
     @Param(name = "properties", required = false)
     private Properties properties;
 
-    @Param(name = "overwite", required = false)
-    protected Boolean overwite = false;
+    @Param(name = "path", required = true)
+    private String path;
 
     @Context
     CoreSession session;
@@ -37,9 +35,12 @@ public class CreateDocumentFromBlob {
     @OperationMethod
     public DocumentModel run(Blob blob) throws Exception {
 
-        DocumentModel documentBlob = fileManager.createDocumentFromBlob(session, blob, path, overwite, blob.getFilename());
-        DocumentHelper.setProperties(session, documentBlob, properties);
+        DocumentModel document = session.getDocument(new PathRef(path));
 
-        return session.saveDocument(documentBlob);
+        document.setProperty("file", "content", blob);
+
+        DocumentHelper.setProperties(session, document, properties);
+
+        return session.saveDocument(document);
     }
 }

@@ -6,6 +6,7 @@
       <operation class="org.osivia.procedures.instances.operations.UpdateProcedure" />
       <operation class="org.osivia.procedures.instances.operations.CreateDocumentFromAttachment" />
       <operation class="org.osivia.procedures.instances.operations.CreateDocumentFromBlob" />
+      <operation class="org.osivia.procedures.instances.operations.UpdateDocumentFromBlob" />
    </extension>
    
 </component>
