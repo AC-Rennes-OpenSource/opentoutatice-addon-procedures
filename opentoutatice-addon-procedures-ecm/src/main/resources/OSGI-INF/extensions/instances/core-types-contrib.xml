@@ -3,6 +3,7 @@
 <component name="org.osivia.procedures.instances.doctypes" version="1.0">
 
 	<require>org.nuxeo.ecm.core.schema.TypeService</require>
+	<require>org.nuxeo.ecm.core.lifecycle.LifeCycleService</require>
 	
 	<extension target="org.nuxeo.ecm.core.schema.TypeService"
 		point="schema">
