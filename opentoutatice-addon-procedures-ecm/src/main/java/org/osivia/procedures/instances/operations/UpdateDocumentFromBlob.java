@@ -38,6 +38,7 @@ public class UpdateDocumentFromBlob {
         DocumentModel document = session.getDocument(new PathRef(path));
 
         document.setProperty("file", "content", blob);
+        document.setProperty("file", "filename", blob.getFilename());
 
         DocumentHelper.setProperties(session, document, properties);
 
