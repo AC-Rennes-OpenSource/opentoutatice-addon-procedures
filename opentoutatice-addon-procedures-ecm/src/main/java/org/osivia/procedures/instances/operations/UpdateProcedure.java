@@ -14,6 +14,7 @@ import org.nuxeo.ecm.automation.core.annotations.OperationMethod;
 import org.nuxeo.ecm.automation.core.annotations.Param;
 import org.nuxeo.ecm.automation.core.util.DocumentHelper;
 import org.nuxeo.ecm.automation.core.util.Properties;
+import org.nuxeo.ecm.automation.core.util.StringList;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
@@ -43,6 +44,10 @@ public class UpdateProcedure {
     @Param(name = "taskTitle", required = true)
     private String taskTitle;
 
+    /** groups */
+    @Param(name = "groups", required = false)
+    private StringList groups;
+
     @Context
     CoreSession session;
 
@@ -55,8 +60,8 @@ public class UpdateProcedure {
     @OperationMethod
     public DocumentModel run(DocumentModel procedureInstance) throws Exception {
 
-        UnrestrictedUpdateProcedure unrestrictedStartProcedure = new UnrestrictedUpdateProcedure(this.session, procedureInstance,
-                (NuxeoPrincipal) this.session.getPrincipal());
+        UnrestrictedUpdateProcedure unrestrictedStartProcedure = new UnrestrictedUpdateProcedure(session, procedureInstance,
+                (NuxeoPrincipal) session.getPrincipal());
         unrestrictedStartProcedure.runUnrestricted();
 
         return unrestrictedStartProcedure.getProcedureInstance();
@@ -78,26 +83,25 @@ public class UpdateProcedure {
         public void run() throws ClientException {
             // update the document
             try {
-                DocumentHelper.setProperties(this.session, this.procedureInstance, UpdateProcedure.this.properties);
+                DocumentHelper.setProperties(session, procedureInstance, properties);
             } catch (IOException e) {
                 throw new ClientException(e);
             }
-            this.procedureInstance = this.session.saveDocument(this.procedureInstance);
+            procedureInstance = session.saveDocument(procedureInstance);
 
             // end the related Task, run a procedure cycle
-            List<Task> currentTaskInstances = UpdateProcedure.this.taskService.getTaskInstances(this.procedureInstance, this.principal, this.session);
+            List<Task> currentTaskInstances = taskService.getTaskInstances(procedureInstance, principal, session);
             String processId = currentTaskInstances.get(0).getProcessId();
 
-            UpdateProcedure.this.documentRoutingService.endTask(this.session, currentTaskInstances.get(0), new HashMap<String, Object>(0), StringUtils.EMPTY);
+            documentRoutingService.endTask(session, currentTaskInstances.get(0), new HashMap<String, Object>(0), StringUtils.EMPTY);
 
             // create a new task
-            currentTaskInstances = UpdateProcedure.this.taskService.getAllTaskInstances(processId, this.session);
+            currentTaskInstances = taskService.getAllTaskInstances(processId, session);
             if (CollectionUtils.isNotEmpty(currentTaskInstances)) {
-                currentTaskInstances.get(0).setName(UpdateProcedure.this.taskTitle);
-                String[] groups = {"equipe-dev"};
+                currentTaskInstances.get(0).setName(taskTitle);
                 String[] usersOfGroup = UsersHelper.getUsersOfGroup(groups);
                 currentTaskInstances.get(0).setActors(Arrays.asList(usersOfGroup));
-                ToutaticeDocumentHelper.saveDocumentSilently(this.session, currentTaskInstances.get(0).getDocument(), true);
+                ToutaticeDocumentHelper.saveDocumentSilently(session, currentTaskInstances.get(0).getDocument(), true);
             }
         }
 
@@ -108,7 +112,7 @@ public class UpdateProcedure {
          * @return the procedureInstance
          */
         public DocumentModel getProcedureInstance() {
-            return this.procedureInstance;
+            return procedureInstance;
         }
 
     }

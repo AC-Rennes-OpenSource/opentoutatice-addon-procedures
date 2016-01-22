@@ -14,6 +14,7 @@
             <xs:element name="name" type="xs:string" />
             <xs:element name="index" type="xs:integer" />
             <xs:element name="reference" type="xs:string" />
+            <xs:element name="authorizedGroups" type="nxs:stringList" />
             <xs:element name="globalVariablesReferences" type="nxs:globalVariablesReferenceList" />
             <xs:element name="actions" type="nxs:actionsList" />
 		</xs:sequence>

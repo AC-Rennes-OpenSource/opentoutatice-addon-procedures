@@ -16,6 +16,7 @@ import org.nuxeo.ecm.automation.core.annotations.Param;
 import org.nuxeo.ecm.automation.core.util.BlobList;
 import org.nuxeo.ecm.automation.core.util.DocumentHelper;
 import org.nuxeo.ecm.automation.core.util.Properties;
+import org.nuxeo.ecm.automation.core.util.StringList;
 import org.nuxeo.ecm.core.api.Blob;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
@@ -43,9 +44,6 @@ public class StartProcedure {
     /** INSTANCE_CONTAINER_PATH */
     private static final String INSTANCE_CONTAINER_PATH = "/default-domain/procedures-instances";
 
-    /** FILES_CONTAINER_PATH */
-    private static final String FILES_CONTAINER_PATH = "/default-domain/procedurefiles";
-
     /** INSTANCE_TYPE */
     private static final String INSTANCE_TYPE = "ProcedureInstance";
 
@@ -56,6 +54,10 @@ public class StartProcedure {
     /** taskTitle */
     @Param(name = "taskTitle", required = true)
     private String taskTitle;
+
+	/** groups */
+	@Param(name = "groups", required = true)
+	private StringList groups;
 
     @Context
     CoreSession session;
@@ -113,7 +115,7 @@ public class StartProcedure {
 
             List<String> currentDocIds = new ArrayList<String>(1);
             // create the procedure Instance
-            createProcedureInstance();
+			createProcedureInstance();
             currentDocIds.add(procedureInstance.getId());
 
             // attach blobs to procedure instance
@@ -155,7 +157,6 @@ public class StartProcedure {
             // create a new task
             allTaskInstances = taskService.getAllTaskInstances(processId, session);
             allTaskInstances.get(0).setName(taskTitle);
-            String[] groups = {"equipe-dev"};
             String[] usersOfGroup = UsersHelper.getUsersOfGroup(groups);
             allTaskInstances.get(0).setActors(Arrays.asList(usersOfGroup));
             ToutaticeDocumentHelper.saveDocumentSilently(session, allTaskInstances.get(0).getDocument(), true);
@@ -176,7 +177,7 @@ public class StartProcedure {
         /**
          * create the procedure Instance
          */
-        private void createProcedureInstance() {
+		private void createProcedureInstance() {
             // retrieve the model of the current procedure
             String procedureModelPath = properties.get("pi:procedureModelPath");
             DocumentModel procedureModel = session.getDocument(new PathRef(procedureModelPath));

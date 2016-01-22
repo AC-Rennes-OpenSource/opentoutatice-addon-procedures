@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.osivia.procedures.utils;
 
@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
+import org.nuxeo.ecm.automation.core.util.StringList;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.NuxeoGroup;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
@@ -40,7 +41,7 @@ public class UsersHelper {
 	public static String[] getUsersOfGroup(String[] names) {
 		String[] users = new String[0];
 
-		if (names != null && names.length > 0) {
+		if ((names != null) && (names.length > 0)) {
 
 			for (String name : names) {
 				NuxeoGroup group = userManager.getGroup(name);
@@ -57,6 +58,25 @@ public class UsersHelper {
 		return users;
 	}
 
+    /**
+     * @return users of given group.
+     */
+    public static String[] getUsersOfGroup(StringList names) {
+        String[] users = new String[0];
+
+        for (String name : names) {
+            NuxeoGroup group = userManager.getGroup(name);
+            if (group != null) {
+                List<String> memberUsers = group.getMemberUsers();
+                if (CollectionUtils.isNotEmpty(memberUsers)) {
+                    users = (String[]) ArrayUtils.addAll(users, memberUsers.toArray(new String[memberUsers.size()]));
+                }
+            }
+        }
+
+        return users;
+    }
+
 	/**
 	 * @return the procedure's initiator.
 	 */
@@ -72,7 +92,7 @@ public class UsersHelper {
 
 		return initiator;
 	}
-	
+
 	/**
 	 * @return the user name.
 	 */
@@ -80,7 +100,7 @@ public class UsersHelper {
 		NuxeoPrincipal principal = userManager.getPrincipal(login);
 		String firstName = principal.getFirstName();
 		String lastName = principal.getLastName();
-		
+
 		return firstName + " " + lastName;
 	}
 
