@@ -10,11 +10,7 @@
 		point="schema">
 
         <schema name="procedure" prefix="pcd" src="schemas/procedure.xsd" />
-		<schema name="globalVariablesDefinitions" prefix="gvd" src="schemas/globalVariablesDefinitions.xsd" />
-		<schema name="step" prefix="step" src="schemas/step.xsd" />
-		<schema name="globalVariablesReferences" prefix="gvr" src="schemas/globalVariablesReferences.xsd" />
-		<schema name="actions" prefix="act" src="schemas/actions.xsd" />
-		
+
 	</extension>
 	
 	<extension target="org.nuxeo.ecm.core.schema.TypeService"

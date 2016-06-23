@@ -2,13 +2,8 @@
 	xmlns:nxs="http://www.nuxeo.org/ecm/project/schemas/osivia/models/procedure"
 	targetNamespace="http://www.nuxeo.org/ecm/project/schemas/osivia/models/procedure">
     
-    <xs:include schemaLocation="globalVariablesReferences.xsd" />
     <xs:include schemaLocation="actions.xsd" />
-	
-	<xs:simpleType name="stringList">
-		<xs:list itemType="xs:string" />
-	</xs:simpleType>
-	
+    
 	<xs:complexType name="step">
 		<xs:sequence>
             <xs:element name="name" type="xs:string" />

@@ -2,13 +2,14 @@
 	xmlns:nxs="http://www.nuxeo.org/ecm/project/schemas/osivia/models/procedure"
 	targetNamespace="http://www.nuxeo.org/ecm/project/schemas/osivia/models/procedure">
 	
+	<xs:simpleType name="stringList">
+		<xs:list itemType="xs:string" />
+	</xs:simpleType>
+
 	<xs:include schemaLocation="globalVariablesValues.xsd" />
     <xs:include schemaLocation="attachment.xsd" />
     <xs:include schemaLocation="procedureObjectInstance.xsd" />
 
-	<xs:simpleType name="stringList">
-		<xs:list itemType="xs:string" />
-	</xs:simpleType>
 
 	<xs:element name="currentActors" type="nxs:stringList" />
 	<xs:element name="globalVariablesValues" type="nxs:globalVariablesValuesList" />
