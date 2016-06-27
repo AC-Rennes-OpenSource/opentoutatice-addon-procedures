@@ -7,16 +7,15 @@
 			<xs:element name="variableName" type="xs:string" />
 			<xs:element name="isInput" type="xs:boolean" default="true"/>
 			<xs:element name="required" type="xs:boolean" default="true"/>
-            <xs:element name="order" type="xs:integer" />
+            <xs:element name="path" type="xs:string" />
             <xs:element name="superLabel" type="xs:string" />
             <xs:element name="isFieldSet" type="xs:boolean" default="false"/>
-            <xs:element name="globalVariablesReferences" type="nxs:globalVariablesReferenceList" />
 		</xs:sequence>
 	</xs:complexType>
 	
 	<xs:complexType name="globalVariablesReferenceList">
 		<xs:sequence>
-			<xs:element name="globalVariablesReference" type="nxs:globalVariablesReferenceType" minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="globalVariablesReference" type="nxs:globalVariablesReferenceType" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 

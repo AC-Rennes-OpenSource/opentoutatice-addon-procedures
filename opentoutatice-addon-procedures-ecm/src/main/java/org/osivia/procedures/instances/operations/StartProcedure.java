@@ -157,6 +157,7 @@ public class StartProcedure {
             // create a new task
             allTaskInstances = taskService.getAllTaskInstances(processId, session);
             allTaskInstances.get(0).setName(taskTitle);
+            // allTaskInstances.get(0).setType(arg0);
             String[] usersOfGroup = UsersHelper.getUsersOfGroup(groups);
             allTaskInstances.get(0).setActors(Arrays.asList(usersOfGroup));
             ToutaticeDocumentHelper.saveDocumentSilently(session, allTaskInstances.get(0).getDocument(), true);
