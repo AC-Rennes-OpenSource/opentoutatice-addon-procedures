@@ -8,7 +8,14 @@
 	<extension target="org.nuxeo.ecm.core.schema.TypeService"
 		point="schema">
 
-		<schema name="procedureInstance" prefix="pi" src="schemas/procedureInstance.xsd" />
+		 <!-- Technical definitions to paste xsd files in nuxeo/nxserver/schemas
+             (cf XSDLoader) -->
+        <schema name="globalVariablesValues" src="schemas/globalVariablesValues.xsd" />
+        <schema name="attachment" src="schemas/attachment.xsd" />
+        <schema name="procedureObjectInstance" src="schemas/procedureObjectInstance.xsd" /> 
+        
+        <!-- Schema used -->
+        <schema name="procedureInstance" prefix="pi" src="schemas/procedureInstance.xsd" />
 		
 	</extension>
 	

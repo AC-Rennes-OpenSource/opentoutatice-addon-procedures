@@ -14,5 +14,10 @@ public interface ProceduresConstants {
 	String PI_TYPE = "ProcedureInstance";
 	String PROCEDURE_TYPE = "Procedure";
 	
+	String PI_VALUES_XPATH = "pi:globalVariablesValues";
+	String PI_VALUES_ENTRY_KEY = "name";
+	String PI_VALUES_ENTRY_VALUE = "value";
+	
 	String TEST_PROCEDURE_PATH = "/default-domain/procedures-models";
+	
 }

@@ -8,6 +8,6 @@ Nuxeo-Component: OSGI-INF/extensions/models/core-types-contrib.xml,OSG
  ances/core-types-contrib.xml,OSGI-INF/extensions/instances/ui-types-c
  ontrib.xml,OSGI-INF/extensions/generic-workflow/core-types.xml,OSGI-I
  NF/extensions/instances/operations-contrib.xml,OSGI-INF/extensions/ge
- neric-workflow/routing-service.xml
+ neric-workflow/routing-service.xml,OSGI-INF/extensions/es/es-customizer-contrib.xml
 Bundle-SymbolicName: org.osivia.addon.procedures;singleton:=true
 

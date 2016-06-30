@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+
+<component name="org.osivia.procedures.es.customizer"
+	version="1.0">
+	
+	<require>fr.toutatice.ecm.es.customizer.registry.ESCustomizersServiceRegistry</require>
+	
+	<extension target="fr.toutatice.ecm.es.customizer.registry.ESCustomizersServiceRegistry"
+		point="writers">
+		
+		<writer class="org.osivia.procedures.es.customizer.writer.ProcedureInstanceJsonESWriter" order="0" /> 
+		<writer class="org.osivia.procedures.es.customizer.writer.TaskJsonESWriter" order="1" />
+		
+		<writer class="org.osivia.procedures.es.customizer.writer.denormalization.ProcedureInstanceDenormalizationJsonESWriter" order="2" />
+		<writer class="org.osivia.procedures.es.customizer.writer.denormalization.ProcedureTaskDenormalizationJsonESWriter" order="3" />
+		
+	</extension>
+	
+	<extension target="fr.toutatice.ecm.es.customizer.registry.ESCustomizersServiceRegistry"
+        point="listeners">
+        
+        <listener class="org.osivia.procedures.es.customizer.listener.ProcedureInstanceDenormalizationESListener" />
+        
+    </extension>
+	
+</component>
