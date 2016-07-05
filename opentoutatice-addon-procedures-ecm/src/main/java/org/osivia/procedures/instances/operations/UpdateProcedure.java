@@ -1,6 +1,7 @@
 package org.osivia.procedures.instances.operations;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -44,9 +45,17 @@ public class UpdateProcedure {
     @Param(name = "taskTitle", required = true)
     private String taskTitle;
 
+    /** taskType */
+    @Param(name = "taskType", required = false)
+    private String taskType;
+
     /** groups */
     @Param(name = "groups", required = false)
     private StringList groups;
+
+    /** users */
+    @Param(name = "users", required = false)
+    private StringList users;
 
     @Context
     CoreSession session;
@@ -99,8 +108,16 @@ public class UpdateProcedure {
             currentTaskInstances = taskService.getAllTaskInstances(processId, session);
             if (CollectionUtils.isNotEmpty(currentTaskInstances)) {
                 currentTaskInstances.get(0).setName(taskTitle);
-                String[] usersOfGroup = UsersHelper.getUsersOfGroup(groups);
-                currentTaskInstances.get(0).setActors(Arrays.asList(usersOfGroup));
+                currentTaskInstances.get(0).setType(taskType);
+                List<String> usersAndGroupUsers = new ArrayList<String>();
+                if (groups != null) {
+                    List<String> usersOfGroup = Arrays.asList(UsersHelper.getUsersOfGroup(groups));
+                    usersAndGroupUsers.addAll(usersOfGroup);
+                }
+                if (users != null) {
+                    usersAndGroupUsers.addAll(users);
+                }
+                currentTaskInstances.get(0).setActors(usersAndGroupUsers);
                 ToutaticeDocumentHelper.saveDocumentSilently(session, currentTaskInstances.get(0).getDocument(), true);
             }
         }

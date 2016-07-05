@@ -2,12 +2,14 @@
 	xmlns:nxs="http://www.nuxeo.org/ecm/project/schemas/osivia/models/procedure"
 	targetNamespace="http://www.nuxeo.org/ecm/project/schemas/osivia/models/procedure">
 	
+	<xs:include schemaLocation="filters.xsd" />
 	
 	<xs:complexType name="actionType">
 		<xs:sequence>
 			<xs:element name="label" type="xs:string" />
-			<xs:element name="scriptReference" type="xs:string"/>
+			<xs:element name="actionId" type="xs:string" />
 			<xs:element name="stepReference" type="xs:string" />
+			<xs:element name="filtersList" type="nxs:filtersList" />
 		</xs:sequence>
 	</xs:complexType>
 	

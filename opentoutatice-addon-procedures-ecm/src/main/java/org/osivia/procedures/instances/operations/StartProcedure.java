@@ -55,9 +55,17 @@ public class StartProcedure {
     @Param(name = "taskTitle", required = true)
     private String taskTitle;
 
+    /** taskType */
+    @Param(name = "taskType", required = false)
+    private String taskType;
+
 	/** groups */
-	@Param(name = "groups", required = true)
+    @Param(name = "groups", required = false)
 	private StringList groups;
+
+    /** users */
+    @Param(name = "users", required = false)
+    private StringList users;
 
     @Context
     CoreSession session;
@@ -157,9 +165,16 @@ public class StartProcedure {
             // create a new task
             allTaskInstances = taskService.getAllTaskInstances(processId, session);
             allTaskInstances.get(0).setName(taskTitle);
-            // allTaskInstances.get(0).setType(arg0);
-            String[] usersOfGroup = UsersHelper.getUsersOfGroup(groups);
-            allTaskInstances.get(0).setActors(Arrays.asList(usersOfGroup));
+            allTaskInstances.get(0).setType(taskType);
+            List<String> usersAndGroupUsers = new ArrayList<String>();
+            if (groups != null) {
+                List<String> usersOfGroup = Arrays.asList(UsersHelper.getUsersOfGroup(groups));
+                usersAndGroupUsers.addAll(usersOfGroup);
+            }
+            if (users != null) {
+                usersAndGroupUsers.addAll(users);
+            }
+            allTaskInstances.get(0).setActors(usersAndGroupUsers);
             ToutaticeDocumentHelper.saveDocumentSilently(session, allTaskInstances.get(0).getDocument(), true);
         }
 

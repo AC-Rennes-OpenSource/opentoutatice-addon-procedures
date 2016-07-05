@@ -12,6 +12,8 @@
         <!-- Technical definitions to paste xsd files in nuxeo/nxserver/schemas
              (cf XSDLoader) -->
         <schema name="globalVariablesDefinitions" src="schemas/globalVariablesDefinitions.xsd" />
+        <schema name="arguments" src="schemas/arguments.xsd" />
+        <schema name="filters" src="schemas/filters.xsd" />
         <schema name="actions" src="schemas/actions.xsd" />
         <schema name="globalVariablesReferences" src="schemas/globalVariablesReferences.xsd" /> 
         <schema name="step" src="schemas/step.xsd" />
