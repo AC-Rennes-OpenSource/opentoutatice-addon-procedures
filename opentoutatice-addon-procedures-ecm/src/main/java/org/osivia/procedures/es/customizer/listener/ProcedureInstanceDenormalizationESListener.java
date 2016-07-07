@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.osivia.procedures.es.customizer.listener;
 
@@ -32,8 +32,8 @@ public class ProcedureInstanceDenormalizationESListener extends AbstractDenormal
      */
     @Override
     protected boolean needToReIndex(DocumentModel sourceDocument, String eventId) {
-        return DocumentEventTypes.DOCUMENT_CREATED.equals(eventId)
-            && TaskConstants.TASK_TYPE_NAME.equals(sourceDocument.getType());
+        return (DocumentEventTypes.DOCUMENT_CREATED.equals(eventId) && TaskConstants.TASK_TYPE_NAME.equals(sourceDocument.getType()))
+                || ProceduresConstants.PI_TYPE.equals(sourceDocument.getType());
     }
 
     /**
