@@ -15,6 +15,13 @@
             <xs:element name="authorizedGroups" type="nxs:stringList" />
             <xs:element name="globalVariablesReferences" type="nxs:globalVariablesReferenceList" />
             <xs:element name="actions" type="nxs:actionsList" />
+            <xs:element name="notifiable" type="xs:boolean" default="false"/>
+            <xs:element name="acquitable" type="xs:boolean" default="false"/>
+            <xs:element name="actionIdYes" type="xs:string" />
+            <xs:element name="displayFormYes" type="xs:boolean" default="false"/>
+            <xs:element name="actionIdNo" type="xs:string" />
+            <xs:element name="displayFormNo" type="xs:boolean" default="false"/>
+            <xs:element name="stringMsg" type="xs:string" />
 		</xs:sequence>
 	</xs:complexType>
     
