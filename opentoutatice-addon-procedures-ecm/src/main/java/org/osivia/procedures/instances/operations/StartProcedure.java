@@ -24,6 +24,10 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.UnrestrictedSessionRunner;
+import org.nuxeo.ecm.core.api.security.ACE;
+import org.nuxeo.ecm.core.api.security.ACL;
+import org.nuxeo.ecm.core.api.security.ACP;
+import org.nuxeo.ecm.core.api.security.SecurityConstants;
 import org.nuxeo.ecm.platform.routing.api.DocumentRoutingService;
 import org.nuxeo.ecm.platform.task.Task;
 import org.nuxeo.ecm.platform.task.TaskService;
@@ -164,9 +168,10 @@ public class StartProcedure {
 
             // create a new task
             allTaskInstances = taskService.getAllTaskInstances(processId, session);
-            allTaskInstances.get(0).setName(taskTitle);
-            allTaskInstances.get(0).setType(taskType);
-            List<String> usersAndGroupUsers = new ArrayList<String>();
+            DocumentModel taskDocument = allTaskInstances.get(0).getDocument();
+            taskDocument.setPropertyValue("dc:title", taskTitle);
+            taskDocument.setPropertyValue("nt:type", taskType);
+            ArrayList<String> usersAndGroupUsers = new ArrayList<String>();
             if (groups != null) {
                 List<String> usersOfGroup = Arrays.asList(UsersHelper.getUsersOfGroup(groups));
                 usersAndGroupUsers.addAll(usersOfGroup);
@@ -174,8 +179,17 @@ public class StartProcedure {
             if (users != null) {
                 usersAndGroupUsers.addAll(users);
             }
-            allTaskInstances.get(0).setActors(usersAndGroupUsers);
-            ToutaticeDocumentHelper.saveDocumentSilently(session, allTaskInstances.get(0).getDocument(), true);
+            taskDocument.setPropertyValue("nt:actors", usersAndGroupUsers);
+            // Set ACLs for Actors on Task
+            ACP acp = taskDocument.getACP();
+            ACL acl = acp.getOrCreateACL(ACL.LOCAL_ACL);
+            for (String actorId : usersAndGroupUsers) {
+                acl.add(new ACE(actorId, SecurityConstants.EVERYTHING, true));
+            }
+            acp.addACL(acl);
+            taskDocument.setACP(acp, true);
+            
+            ToutaticeDocumentHelper.saveDocumentSilently(session, taskDocument, true);
         }
 
         /**
