@@ -179,8 +179,9 @@ public class StartProcedure {
             if (taskVariables != null) {
                 taskVariables.addAll(stepTaskVariables);
             } else {
-                taskDocument.setPropertyValue(TaskConstants.TASK_VARIABLES_PROPERTY_NAME, stepTaskVariables);
+                taskVariables = stepTaskVariables;
             }
+            taskDocument.setPropertyValue(TaskConstants.TASK_VARIABLES_PROPERTY_NAME, taskVariables);
 
             ArrayList<String> usersAndGroupUsers = new ArrayList<String>();
             if (groups != null) {
