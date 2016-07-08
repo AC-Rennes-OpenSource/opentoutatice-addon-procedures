@@ -22,6 +22,7 @@
             <xs:element name="actionIdNo" type="xs:string" />
             <xs:element name="displayFormNo" type="xs:boolean" default="false"/>
             <xs:element name="stringMsg" type="xs:string" />
+            <xs:element name="actionIdDefault" type="xs:string" />
 		</xs:sequence>
 	</xs:complexType>
     
