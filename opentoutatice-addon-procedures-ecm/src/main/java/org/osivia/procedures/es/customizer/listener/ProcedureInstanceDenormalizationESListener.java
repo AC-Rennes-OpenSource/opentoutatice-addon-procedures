@@ -18,6 +18,11 @@ import fr.toutatice.ecm.es.customizer.listeners.denormalization.AbstractDenormal
  *
  */
 public class ProcedureInstanceDenormalizationESListener extends AbstractDenormalizationESListener {
+    
+    /** Is document a TaskDoc. */
+    private boolean isTaskDoc = false;
+    /** Is document a Procedureinstance. */
+    private boolean isPI = false;
 
     /**
      * Default constructor.
@@ -32,18 +37,24 @@ public class ProcedureInstanceDenormalizationESListener extends AbstractDenormal
      */
     @Override
     protected boolean needToReIndex(DocumentModel sourceDocument, String eventId) {
-        return (DocumentEventTypes.DOCUMENT_CREATED.equals(eventId) && TaskConstants.TASK_TYPE_NAME.equals(sourceDocument.getType()))
-                || ProceduresConstants.PI_TYPE.equals(sourceDocument.getType());
+        isTaskDoc = TaskConstants.TASK_TYPE_NAME.equals(sourceDocument.getType());
+        isPI = ProceduresConstants.PI_TYPE.equals(sourceDocument.getType());
+        
+        return (DocumentEventTypes.DOCUMENT_CREATED.equals(eventId) && isTaskDoc) || isPI;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    protected void stackCommands(CoreSession session, DocumentModel taskDoc, String eventId) {
-        DocumentModel pi = ProcedureDenormalizationHelper.getInstance().getProcedureInstanceOfTask(session, taskDoc);
-        if(pi != null){
-            super.esListener.stackCommand(pi, eventId, true);
+    protected void stackCommands(CoreSession session, DocumentModel doc, String eventId) {
+        if(isTaskDoc){
+            DocumentModel pi = ProcedureDenormalizationHelper.getInstance().getProcedureInstanceOfTask(session, doc);
+            if(pi != null){
+                super.esListener.stackCommand(pi, eventId, true);
+            }
+        } else if(doc != null && isPI){
+            super.esListener.stackCommand(doc, eventId, true);
         }
     }
 

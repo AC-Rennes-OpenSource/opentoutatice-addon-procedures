@@ -4,6 +4,7 @@
 package org.osivia.procedures.es.customizer.writer.denormalization;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,25 +34,8 @@ public class ProcedureTaskDenormalizationJsonESWriter extends AbstractDenormaliz
      * {@inheritDoc}
      */
     @Override
-    public void initializeDenormalizationInfos() {
-        
-        super.denormalizationInfos = new LinkedHashMap<String, Object>(1){
-            
-            private static final long serialVersionUID = 7391540965330663468L;
-
-            {   
-                List<Object> linkedEntities = new LinkedList<Object>(){
-                    
-                    private static final long serialVersionUID = 5244086703423115278L;
-
-                    {
-                        add(ProceduresConstants.PI_TYPE);
-                    }
-                };
-                put(TaskConstants.TASK_TYPE_NAME, linkedEntities);
-            }
-        };
-        
+    public boolean accept(DocumentModel doc) {
+        return TaskConstants.TASK_TYPE_NAME.equals(doc.getType());
     }
     
     /**
@@ -65,5 +49,5 @@ public class ProcedureTaskDenormalizationJsonESWriter extends AbstractDenormaliz
             this.jsonESWriter.writeESDocument(jg, pi, pi.getSchemas(), contextParameters);
         }
     }
-    
+
 }

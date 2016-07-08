@@ -4,12 +4,15 @@
 package org.osivia.procedures.es.customizer.writer.denormalization;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.codehaus.jackson.JsonGenerator;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
+import org.nuxeo.ecm.platform.task.TaskConstants;
 import org.osivia.procedures.constants.ProceduresConstants;
 import org.osivia.procedures.es.customizer.ESCustomizerConstants;
 import org.osivia.procedures.es.customizer.ProcedureDenormalizationHelper;
@@ -27,9 +30,8 @@ public class ProcedureInstanceDenormalizationJsonESWriter extends AbstractDenorm
      * {@inheritDoc}
      */
     @Override
-    public void initializeDenormalizationInfos() {
-        super.denormalizationInfos = new LinkedHashMap<>();
-        super.denormalizationInfos.put(ProceduresConstants.PI_TYPE, new Object());
+    public boolean accept(DocumentModel doc) {
+        return ProceduresConstants.PI_TYPE.equals(doc.getType());
     }
     
     /**
@@ -40,8 +42,8 @@ public class ProcedureInstanceDenormalizationJsonESWriter extends AbstractDenorm
         DocumentModel task = ProcedureDenormalizationHelper.getInstance().getTaskOfProcedureInstance(super.session, pi);
         if(task != null){
             jg.writeFieldName(ESCustomizerConstants.TASK_IN_PI_KEY);
-            super.jsonESWriter.writeNativeESDocument(jg, task, schemas, contextParameters);
+            super.jsonESWriter.writeESDocument(jg, task, schemas, contextParameters);
         }
     }
-    
+
 }
