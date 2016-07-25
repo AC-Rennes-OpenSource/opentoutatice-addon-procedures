@@ -18,10 +18,9 @@
             <xs:element name="notifiable" type="xs:boolean" default="false"/>
             <xs:element name="acquitable" type="xs:boolean" default="false"/>
             <xs:element name="closable" type="xs:boolean" default="false"/>
+            <xs:element name="actionIdClosable" type="xs:string"/>
             <xs:element name="actionIdYes" type="xs:string" />
-            <xs:element name="displayFormYes" type="xs:boolean" default="false"/>
             <xs:element name="actionIdNo" type="xs:string" />
-            <xs:element name="displayFormNo" type="xs:boolean" default="false"/>
             <xs:element name="stringMsg" type="xs:string" />
             <xs:element name="actionIdDefault" type="xs:string" />
 		</xs:sequence>
