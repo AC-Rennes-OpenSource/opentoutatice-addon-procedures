@@ -20,6 +20,7 @@
         point="listeners">
         
         <listener class="org.osivia.procedures.es.customizer.listener.ProcedureInstanceDenormalizationESListener" />
+        <listener class="org.osivia.procedures.es.customizer.listener.ProcedureTaskDenormalizationESListener" />
         
     </extension>
 	
