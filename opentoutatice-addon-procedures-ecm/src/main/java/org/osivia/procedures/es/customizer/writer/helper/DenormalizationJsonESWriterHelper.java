@@ -51,8 +51,10 @@ public class DenormalizationJsonESWriterHelper {
             for (Property valueProp : valuesProp) {
                 String name = (String) valueProp.get(entryKey).getValue();
                 String value = (String) valueProp.get(entryValue).getValue();
-
-                jg.writeStringField(name, value);
+                
+                if(name != null){
+                    jg.writeStringField(name, value);
+                }
             }
 
             jg.writeEndObject();
