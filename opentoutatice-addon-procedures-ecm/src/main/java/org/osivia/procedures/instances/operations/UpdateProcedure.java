@@ -171,20 +171,10 @@ public class UpdateProcedure {
                         taskVariableActionIdYes.put("value", (String) stepMap.get("actionIdYes"));
                         stepTaskVariables.add(taskVariableActionIdYes);
 
-                        Map<String, Serializable> taskVariableDisplayFormYes = new HashMap<String, Serializable>(2);
-                        taskVariableDisplayFormYes.put("key", "displayFormYes");
-                        taskVariableDisplayFormYes.put("value", BooleanUtils.toStringTrueFalse((Boolean) stepMap.get("displayFormYes")));
-                        stepTaskVariables.add(taskVariableDisplayFormYes);
-
                         Map<String, Serializable> taskVariableActionIdNo = new HashMap<String, Serializable>(2);
                         taskVariableActionIdNo.put("key", "actionIdNo");
                         taskVariableActionIdNo.put("value", (String) stepMap.get("actionIdNo"));
                         stepTaskVariables.add(taskVariableActionIdNo);
-
-                        Map<String, Serializable> taskVariableDisplayFormNo = new HashMap<String, Serializable>(2);
-                        taskVariableDisplayFormNo.put("key", "displayFormNo");
-                        taskVariableDisplayFormNo.put("value", BooleanUtils.toStringTrueFalse((Boolean) stepMap.get("displayFormNo")));
-                        stepTaskVariables.add(taskVariableDisplayFormNo);
 
                         Map<String, Serializable> taskVariableStringMsg = new HashMap<String, Serializable>(2);
                         taskVariableStringMsg.put("key", "stringMsg");
