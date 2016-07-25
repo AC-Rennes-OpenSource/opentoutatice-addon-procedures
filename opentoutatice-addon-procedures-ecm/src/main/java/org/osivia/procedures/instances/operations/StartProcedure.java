@@ -241,6 +241,11 @@ public class StartProcedure {
                         taskVariableAcquitable.put("value", BooleanUtils.toStringTrueFalse((Boolean) stepMap.get("acquitable")));
                         stepTaskVariables.add(taskVariableAcquitable);
 
+                        Map<String, Serializable> taskVariableClosable = new HashMap<String, Serializable>(2);
+                        taskVariableAcquitable.put("key", "closable");
+                        taskVariableAcquitable.put("value", BooleanUtils.toStringTrueFalse((Boolean) stepMap.get("closable")));
+                        stepTaskVariables.add(taskVariableClosable);
+
                         Map<String, Serializable> taskVariableActionIdYes = new HashMap<String, Serializable>(2);
                         taskVariableActionIdYes.put("key", "actionIdYes");
                         taskVariableActionIdYes.put("value", (String) stepMap.get("actionIdYes"));
