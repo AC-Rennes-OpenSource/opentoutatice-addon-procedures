@@ -1,11 +1,10 @@
 /**
- *
+ * 
  */
 package org.osivia.procedures.es.customizer.listener;
 
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.api.event.DocumentEventTypes;
 import org.nuxeo.ecm.platform.task.TaskConstants;
 import org.osivia.procedures.constants.ProceduresConstants;
 import org.osivia.procedures.es.customizer.ProcedureDenormalizationHelper;
@@ -17,17 +16,17 @@ import fr.toutatice.ecm.es.customizer.listeners.denormalization.AbstractDenormal
  * @author david
  *
  */
-public class ProcedureInstanceDenormalizationESListener extends AbstractDenormalizationESListener {
+public class ProcedureTaskDenormalizationESListener extends AbstractDenormalizationESListener {
     
     /** Is document a TaskDoc. */
     private boolean isTaskDoc = false;
     /** Is document a Procedureinstance. */
     private boolean isPI = false;
-
+    
     /**
      * Default constructor.
      */
-    public ProcedureInstanceDenormalizationESListener() {
+    public ProcedureTaskDenormalizationESListener() {
         super();
     }
 
@@ -37,26 +36,24 @@ public class ProcedureInstanceDenormalizationESListener extends AbstractDenormal
     @Override
     protected boolean needToReIndex(DocumentModel sourceDocument, String eventId) {
         // Base events: FIXME: set them by default
-        isPI = ProceduresConstants.PI_TYPE.equals(sourceDocument.getType());
-        
-        // Denormalization events
         isTaskDoc = TaskConstants.TASK_TYPE_NAME.equals(sourceDocument.getType());
         
-        return isPI || isTaskDoc;
+        // Denormalization events
+        isPI = ProceduresConstants.PI_TYPE.equals(sourceDocument.getType());
+        
+        return isTaskDoc || isPI;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
-    protected void stackCommands(CoreSession session, DocumentModel doc, String eventId) {
-        if(isTaskDoc){
-            DocumentModel pi = ProcedureDenormalizationHelper.getInstance().getProcedureInstanceOfTask(session, doc);
-            if(pi != null){
-                super.esListener.stackCommand(pi, eventId, true);
+    protected void stackCommands(CoreSession session, DocumentModel sourceDocument, String eventId) {
+        if(isPI){
+            DocumentModel task = ProcedureDenormalizationHelper.getInstance().getTaskOfProcedureInstance(session, sourceDocument);
+            if(task != null){
+                super.esListener.stackCommand(task, eventId, true);
             }
-        } else if(doc != null && isPI){
-            super.esListener.stackCommand(doc, eventId, true);
+        } else if(sourceDocument != null && isTaskDoc){
+            super.esListener.stackCommand(sourceDocument, eventId, true);
         }
     }
 
