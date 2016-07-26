@@ -120,11 +120,13 @@ public class UpdateProcedure {
                 taskDocument.setPropertyValue(TaskConstants.TASK_TYPE_PROPERTY_NAME, taskType);
                 ArrayList<Map<String, Serializable>> taskVariables = (ArrayList<Map<String, Serializable>>) taskDocument
                         .getPropertyValue(TaskConstants.TASK_VARIABLES_PROPERTY_NAME);
+
                 if (taskVariables != null) {
                     taskVariables.addAll(stepTaskVariables);
                 } else {
-                    taskDocument.setPropertyValue(TaskConstants.TASK_VARIABLES_PROPERTY_NAME, stepTaskVariables);
+                    taskVariables = stepTaskVariables;
                 }
+                taskDocument.setPropertyValue(TaskConstants.TASK_VARIABLES_PROPERTY_NAME, taskVariables);
                 ArrayList<String> usersAndGroupUsers = new ArrayList<String>();
                 if (groups != null) {
                     List<String> usersOfGroup = Arrays.asList(UsersHelper.getUsersOfGroup(groups));
@@ -165,6 +167,11 @@ public class UpdateProcedure {
                         taskVariableClosable.put("key", "closable");
                         taskVariableClosable.put("value", BooleanUtils.toStringTrueFalse((Boolean) stepMap.get("closable")));
                         stepTaskVariables.add(taskVariableClosable);
+
+                        Map<String, Serializable> taskVariableactionIdClosable = new HashMap<String, Serializable>(2);
+                        taskVariableactionIdClosable.put("key", "actionIdClosable");
+                        taskVariableactionIdClosable.put("value", (String) stepMap.get("actionIdClosable"));
+                        stepTaskVariables.add(taskVariableactionIdClosable);
 
                         Map<String, Serializable> taskVariableActionIdYes = new HashMap<String, Serializable>(2);
                         taskVariableActionIdYes.put("key", "actionIdYes");
