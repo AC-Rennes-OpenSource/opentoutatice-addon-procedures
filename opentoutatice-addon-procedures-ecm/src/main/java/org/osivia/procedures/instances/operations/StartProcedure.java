@@ -24,6 +24,7 @@ import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.IdRef;
+import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.UnrestrictedSessionRunner;
 import org.nuxeo.ecm.core.api.security.ACE;
@@ -85,7 +86,7 @@ public class StartProcedure {
 
     @OperationMethod
     public DocumentModel run() throws Exception {
-        UnrestrictedStartProcedure unrestrictedStartProcedure = new UnrestrictedStartProcedure(session, null);
+        UnrestrictedStartProcedure unrestrictedStartProcedure = new UnrestrictedStartProcedure(session, null, (NuxeoPrincipal) session.getPrincipal());
         unrestrictedStartProcedure.runUnrestricted();
 
         return unrestrictedStartProcedure.getProcedureInstance();
@@ -96,7 +97,7 @@ public class StartProcedure {
 
         BlobList blobList = new BlobList();
         blobList.add(blob);
-        UnrestrictedStartProcedure unrestrictedStartProcedure = new UnrestrictedStartProcedure(session, blobList);
+        UnrestrictedStartProcedure unrestrictedStartProcedure = new UnrestrictedStartProcedure(session, blobList, (NuxeoPrincipal) session.getPrincipal());
         unrestrictedStartProcedure.runUnrestricted();
 
         return unrestrictedStartProcedure.getProcedureInstance();
@@ -105,7 +106,7 @@ public class StartProcedure {
     @OperationMethod
     public DocumentModel run(BlobList blobList) throws Exception {
 
-        UnrestrictedStartProcedure unrestrictedStartProcedure = new UnrestrictedStartProcedure(session, blobList);
+        UnrestrictedStartProcedure unrestrictedStartProcedure = new UnrestrictedStartProcedure(session, blobList, (NuxeoPrincipal) session.getPrincipal());
         unrestrictedStartProcedure.runUnrestricted();
 
         return unrestrictedStartProcedure.getProcedureInstance();
@@ -117,9 +118,12 @@ public class StartProcedure {
 
         private BlobList blobList;
 
-        protected UnrestrictedStartProcedure(CoreSession session, BlobList blobList) {
+        private NuxeoPrincipal principal;
+
+        protected UnrestrictedStartProcedure(CoreSession session, BlobList blobList, NuxeoPrincipal principal) {
             super(session);
             this.blobList = blobList;
+            this.principal = principal;
         }
 
         @Override
@@ -130,7 +134,7 @@ public class StartProcedure {
 
             List<String> currentDocIds = new ArrayList<String>(1);
             // create the procedure Instance
-            ArrayList<Map<String, Serializable>> stepTaskVariables = createProcedureInstance();
+            ArrayList<Map<String, Serializable>> stepTaskVariables = createProcedureInstance(principal.getName());
             currentDocIds.add(procedureInstance.getId());
 
             // attach blobs to procedure instance
@@ -219,7 +223,7 @@ public class StartProcedure {
         /**
          * create the procedure Instance
          */
-        private ArrayList<Map<String, Serializable>> createProcedureInstance() {
+        private ArrayList<Map<String, Serializable>> createProcedureInstance(String procedureInitiator) {
             // retrieve the model of the current procedure
             String procedureModelPath = properties.get("pi:procedureModelPath");
             DocumentModel procedureModel = session.getDocument(new PathRef(procedureModelPath));
@@ -275,6 +279,9 @@ public class StartProcedure {
 
             // create procedureInstance based on documentModel
             procedureInstance = session.createDocument(procedureInstanceModel);
+
+            // set the initiator
+            properties.put("pi:procedureInitiator", procedureInitiator);
 
             // update the procedureInstance with properties in parameters
             try {
