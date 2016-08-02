@@ -24,8 +24,6 @@ public class UnrestrictedCancelProcedure extends UnrestrictedSessionRunner {
     private DocumentModel procedureInstance;
     /** Delete Procedure instance indicator. */
     private boolean deletePi;
-    /** Routing service. */
-    private DocumentRoutingService routingService;
     /** Engine service. */
     private DocumentRoutingEngineService engineService;
     
