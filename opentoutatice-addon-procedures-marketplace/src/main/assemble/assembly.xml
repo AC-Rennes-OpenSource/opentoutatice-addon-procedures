@@ -23,7 +23,7 @@
 		
 		<copy todir="${outdir}/marketplace/install/bundles">
 			<!-- Your bundles -->
-			<artifact:resolveFile key="opentoutatice-ecm.procedures:opentoutatice-addon-procedures-ecm:${maven.project.version}:jar" />
+			<artifact:resolveFile key="opentoutatice-ecm.procedures:opentoutatice-procedures-ecm:${maven.project.version}:jar" />
 		</copy>
 		
 		<zip destfile="${outdir}/${maven.project.artifactId}-${maven.project.version}.zip" basedir="${outdir}/marketplace" />
