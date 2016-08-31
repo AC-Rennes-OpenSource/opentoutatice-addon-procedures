@@ -10,6 +10,7 @@ package org.osivia.procedures.constants;
 public interface ProceduresConstants {
 
 	String GENERICMODEL_ID = "generic-model";
+	String PI_CONTAINER_TYPE = "ProceduresInstancesContainer";
 	String PI_CONTAINER_PATH = "/default-domain/procedures-models/procedures-instances";
 	String PI_TYPE = "ProcedureInstance";
 	String PROCEDURE_TYPE = "Procedure";

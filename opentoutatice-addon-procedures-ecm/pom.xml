@@ -8,7 +8,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
     
-    <artifactId>opentoutatice-procedures-ecm</artifactId>
+    <artifactId>opentoutatice-addon-procedures-ecm</artifactId>
     <name>Procedures plugin</name>
     <description>Procedures plugin.</description>
 
