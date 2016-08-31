@@ -11,10 +11,10 @@
 	<version>1.0-SNAPSHOT</version>
 
 	<properties>
-		<nuxeo.version>6.0-HF21</nuxeo.version>
+		<nuxeo.version>6.0-HF30</nuxeo.version>
 		<nuxeo.cap.distribution.version>6.0</nuxeo.cap.distribution.version>
-		<ottc.version>3.0.10-RC01</ottc.version>
-		<ottc.addon.es.customizer.version>2.0-RC02</ottc.addon.es.customizer.version>
+		<ottc.version>3.4.0-SNAPSHOT</ottc.version>
+		<ottc.addon.es.customizer.version>2.0-SNAPSHOT</ottc.addon.es.customizer.version>
 	</properties>
 
 	<modules>
