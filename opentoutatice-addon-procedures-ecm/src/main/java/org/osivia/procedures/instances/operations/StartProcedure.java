@@ -4,11 +4,9 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.nuxeo.ecm.automation.core.Constants;
 import org.nuxeo.ecm.automation.core.annotations.Context;
@@ -23,9 +21,9 @@ import org.nuxeo.ecm.core.api.Blob;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.IdRef;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
-import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.UnrestrictedSessionRunner;
 import org.nuxeo.ecm.core.api.security.ACE;
 import org.nuxeo.ecm.core.api.security.ACL;
@@ -35,6 +33,7 @@ import org.nuxeo.ecm.platform.routing.api.DocumentRoutingService;
 import org.nuxeo.ecm.platform.task.Task;
 import org.nuxeo.ecm.platform.task.TaskConstants;
 import org.nuxeo.ecm.platform.task.TaskService;
+import org.osivia.procedures.utils.ProcedureHelper;
 import org.osivia.procedures.utils.UsersHelper;
 
 import fr.toutatice.ecm.platform.core.helper.ToutaticeDocumentHelper;
@@ -49,11 +48,11 @@ public class StartProcedure {
     /** ID */
     public static final String ID = "Services.StartProcedure";
 
-    /** INSTANCE_CONTAINER_PATH */
-    private static final String INSTANCE_CONTAINER_PATH = "/default-domain/procedures-instances";
-
     /** INSTANCE_TYPE */
     private static final String INSTANCE_TYPE = "ProcedureInstance";
+
+    /** INSTANCE_CONTAINER_TYPE */
+    private static final String INSTANCE_CONTAINER_TYPE = "ProceduresInstancesContainer";
 
     /** properties of the created instance */
     @Param(name = "properties", required = false)
@@ -225,60 +224,33 @@ public class StartProcedure {
          */
         private ArrayList<Map<String, Serializable>> createProcedureInstance(String procedureInitiator) {
             // retrieve the model of the current procedure
-            String procedureModelPath = properties.get("pi:procedureModelPath");
-            DocumentModel procedureModel = session.getDocument(new PathRef(procedureModelPath));
+            String procedureModelWebId = properties.get("pi:procedureModelWebId");
+            // récupération model par son webid
+            DocumentModelList procedureModelByWebId = session.query(ProcedureHelper.WEB_ID_QUERY + procedureModelWebId + "'");
+            DocumentModel procedureModel = procedureModelByWebId.get(0);
+            String procedureInstanceFolder = StringUtils.substringBeforeLast(procedureModel.getPathAsString(), "/");
 
-            ArrayList<Map<String, Serializable>> stepTaskVariables = null;
-            List<Map<String, Object>> steps = (List<Map<String, Object>>) procedureModel.getPropertyValue("pcd:steps");
-            if (steps != null) {
-                for (Map<String, Object> stepMap : steps) {
-                    String reference = (String) stepMap.get("reference");
-                    if (StringUtils.equals(reference, properties.get("pi:currentStep"))) {
-                        stepTaskVariables = new ArrayList<Map<String, Serializable>>(7);
-                        Map<String, Serializable> taskVariableNotifiable = new HashMap<String, Serializable>(2);
-                        taskVariableNotifiable.put("key", "notifiable");
-                        taskVariableNotifiable.put("value", BooleanUtils.toStringTrueFalse((Boolean) stepMap.get("notifiable")));
-                        stepTaskVariables.add(taskVariableNotifiable);
-
-                        Map<String, Serializable> taskVariableAcquitable = new HashMap<String, Serializable>(2);
-                        taskVariableAcquitable.put("key", "acquitable");
-                        taskVariableAcquitable.put("value", BooleanUtils.toStringTrueFalse((Boolean) stepMap.get("acquitable")));
-                        stepTaskVariables.add(taskVariableAcquitable);
-
-                        Map<String, Serializable> taskVariableClosable = new HashMap<String, Serializable>(2);
-                        taskVariableClosable.put("key", "closable");
-                        taskVariableClosable.put("value", BooleanUtils.toStringTrueFalse((Boolean) stepMap.get("closable")));
-                        stepTaskVariables.add(taskVariableClosable);
-
-                        Map<String, Serializable> taskVariableactionIdClosable = new HashMap<String, Serializable>(2);
-                        taskVariableactionIdClosable.put("key", "actionIdClosable");
-                        taskVariableactionIdClosable.put("value", (String) stepMap.get("actionIdClosable"));
-                        stepTaskVariables.add(taskVariableactionIdClosable);
-
-                        Map<String, Serializable> taskVariableActionIdYes = new HashMap<String, Serializable>(2);
-                        taskVariableActionIdYes.put("key", "actionIdYes");
-                        taskVariableActionIdYes.put("value", (String) stepMap.get("actionIdYes"));
-                        stepTaskVariables.add(taskVariableActionIdYes);
-
-                        Map<String, Serializable> taskVariableActionIdNo = new HashMap<String, Serializable>(2);
-                        taskVariableActionIdNo.put("key", "actionIdNo");
-                        taskVariableActionIdNo.put("value", (String) stepMap.get("actionIdNo"));
-                        stepTaskVariables.add(taskVariableActionIdNo);
-
-                        Map<String, Serializable> taskVariableStringMsg = new HashMap<String, Serializable>(2);
-                        taskVariableStringMsg.put("key", "stringMsg");
-                        taskVariableStringMsg.put("value", (String) stepMap.get("stringMsg"));
-                        stepTaskVariables.add(taskVariableStringMsg);
-                    }
+            // si dossier instance non existant, le créer, et y mettre l'instance
+            DocumentModelList procedureModelChildren = session.getChildren(procedureModel.getParentRef(), INSTANCE_CONTAINER_TYPE);
+            DocumentModel procedureInstanceContainer = null;
+            for (DocumentModel procedureModelChild : procedureModelChildren) {
+                if (StringUtils.equals(procedureModelChild.getName(), procedureModel.getName())) {
+                    procedureInstanceContainer = procedureModelChild;
+                    break;
                 }
             }
-
-
+            if (procedureInstanceContainer == null) {
+                DocumentModel procedureInstanceContainerModel = session.createDocumentModel(procedureInstanceFolder,
+                        procedureModel.getName(), INSTANCE_CONTAINER_TYPE);
+                procedureInstanceContainer = session.createDocument(procedureInstanceContainerModel);
+            }
             // create documentModel based on ProcedureInstance
-            DocumentModel procedureInstanceModel = session.createDocumentModel(INSTANCE_CONTAINER_PATH, procedureModel.getName(), INSTANCE_TYPE);
+            DocumentModel procedureInstanceModel = session.createDocumentModel(procedureInstanceContainer.getPathAsString(), procedureModel.getName(),
+                    INSTANCE_TYPE);
 
             // create procedureInstance based on documentModel
             procedureInstance = session.createDocument(procedureInstanceModel);
+
 
             // set the initiator
             properties.put("pi:procedureInitiator", procedureInitiator);
@@ -291,6 +263,19 @@ public class StartProcedure {
             }
             procedureInstance = session.saveDocument(procedureInstance);
 
+            String webId = (String) procedureInstance.getPropertyValue("ttc:webid");
+
+            // fill task variables
+            ArrayList<Map<String, Serializable>> stepTaskVariables = null;
+            List<Map<String, Object>> steps = (List<Map<String, Object>>) procedureModel.getPropertyValue("pcd:steps");
+            if (steps != null) {
+                for (Map<String, Object> stepMap : steps) {
+                    String reference = (String) stepMap.get("reference");
+                    if (StringUtils.equals(reference, properties.get("pi:currentStep"))) {
+                        stepTaskVariables = ProcedureHelper.buildTaskVariables(webId, stepMap);
+                    }
+                }
+            }
 
             return stepTaskVariables;
         }

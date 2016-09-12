@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.nuxeo.ecm.automation.core.Constants;
 import org.nuxeo.ecm.automation.core.annotations.Context;
@@ -29,6 +28,7 @@ import org.nuxeo.ecm.platform.routing.api.DocumentRoutingService;
 import org.nuxeo.ecm.platform.task.Task;
 import org.nuxeo.ecm.platform.task.TaskConstants;
 import org.nuxeo.ecm.platform.task.TaskService;
+import org.osivia.procedures.utils.ProcedureHelper;
 import org.osivia.procedures.utils.UsersHelper;
 
 import fr.toutatice.ecm.platform.core.helper.ToutaticeDocumentHelper;
@@ -109,7 +109,7 @@ public class UpdateProcedure {
 
             documentRoutingService.endTask(session, currentTaskInstances.get(0), new HashMap<String, Object>(0), StringUtils.EMPTY);
 
-            ArrayList<Map<String, Serializable>> stepTaskVariables = fillTaskVariables();
+            ArrayList<Map<String, Serializable>> stepTaskVariables = fillTaskVariables(procedureInstance);
 
             // create a new task
             currentTaskInstances = taskService.getAllTaskInstances(processId, session);
@@ -141,10 +141,12 @@ public class UpdateProcedure {
         }
 
 
-        private ArrayList<Map<String, Serializable>> fillTaskVariables() {
+        private ArrayList<Map<String, Serializable>> fillTaskVariables(DocumentModel procedureInstance) {
             // retrieve the model of the current procedure
-            String procedureModelPath = properties.get("pi:procedureModelPath");
-            DocumentModel procedureModel = session.getDocument(new PathRef(procedureModelPath));
+            String procedureModelWebId = properties.get("pi:procedureModelWebId");
+
+            String procedureInstancePath = (String) procedureInstance.getPropertyValue("ttc:webid");
+            DocumentModel procedureModel = session.getDocument(new PathRef(procedureModelWebId));
 
             ArrayList<Map<String, Serializable>> stepTaskVariables = null;
             List<Map<String, Object>> steps = (List<Map<String, Object>>) procedureModel.getPropertyValue("pcd:steps");
@@ -152,41 +154,7 @@ public class UpdateProcedure {
                 for (Map<String, Object> stepMap : steps) {
                     String reference = (String) stepMap.get("reference");
                     if (StringUtils.equals(reference, properties.get("pi:currentStep"))) {
-                        stepTaskVariables = new ArrayList<Map<String, Serializable>>(7);
-                        Map<String, Serializable> taskVariableNotifiable = new HashMap<String, Serializable>(2);
-                        taskVariableNotifiable.put("key", "notifiable");
-                        taskVariableNotifiable.put("value", BooleanUtils.toStringTrueFalse((Boolean) stepMap.get("notifiable")));
-                        stepTaskVariables.add(taskVariableNotifiable);
-
-                        Map<String, Serializable> taskVariableAcquitable = new HashMap<String, Serializable>(2);
-                        taskVariableAcquitable.put("key", "acquitable");
-                        taskVariableAcquitable.put("value", BooleanUtils.toStringTrueFalse((Boolean) stepMap.get("acquitable")));
-                        stepTaskVariables.add(taskVariableAcquitable);
-
-                        Map<String, Serializable> taskVariableClosable = new HashMap<String, Serializable>(2);
-                        taskVariableClosable.put("key", "closable");
-                        taskVariableClosable.put("value", BooleanUtils.toStringTrueFalse((Boolean) stepMap.get("closable")));
-                        stepTaskVariables.add(taskVariableClosable);
-
-                        Map<String, Serializable> taskVariableactionIdClosable = new HashMap<String, Serializable>(2);
-                        taskVariableactionIdClosable.put("key", "actionIdClosable");
-                        taskVariableactionIdClosable.put("value", (String) stepMap.get("actionIdClosable"));
-                        stepTaskVariables.add(taskVariableactionIdClosable);
-
-                        Map<String, Serializable> taskVariableActionIdYes = new HashMap<String, Serializable>(2);
-                        taskVariableActionIdYes.put("key", "actionIdYes");
-                        taskVariableActionIdYes.put("value", (String) stepMap.get("actionIdYes"));
-                        stepTaskVariables.add(taskVariableActionIdYes);
-
-                        Map<String, Serializable> taskVariableActionIdNo = new HashMap<String, Serializable>(2);
-                        taskVariableActionIdNo.put("key", "actionIdNo");
-                        taskVariableActionIdNo.put("value", (String) stepMap.get("actionIdNo"));
-                        stepTaskVariables.add(taskVariableActionIdNo);
-
-                        Map<String, Serializable> taskVariableStringMsg = new HashMap<String, Serializable>(2);
-                        taskVariableStringMsg.put("key", "stringMsg");
-                        taskVariableStringMsg.put("value", (String) stepMap.get("stringMsg"));
-                        stepTaskVariables.add(taskVariableStringMsg);
+                        stepTaskVariables = ProcedureHelper.buildTaskVariables(procedureInstancePath, stepMap);
                     }
                 }
             }

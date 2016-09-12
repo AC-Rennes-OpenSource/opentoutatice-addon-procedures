@@ -13,7 +13,7 @@
 	<xs:element name="currentActors" type="nxs:stringList" />
 	<xs:element name="globalVariablesValues" type="nxs:globalVariablesValuesList" />
     <xs:element name="currentStep" type="xs:string" />
-    <xs:element name="procedureModelPath" type="xs:string" />
+    <xs:element name="procedureModelWebId" type="xs:string" />
     <xs:element name="attachments" type="nxs:attachmentList" />
     <xs:element name="procedureObjectInstances" type="nxs:procedureObjectInstanceList" />
 	
