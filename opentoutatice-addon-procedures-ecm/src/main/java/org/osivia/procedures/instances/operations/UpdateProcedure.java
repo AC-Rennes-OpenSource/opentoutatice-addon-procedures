@@ -21,8 +21,8 @@ import org.nuxeo.ecm.automation.core.util.StringList;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
-import org.nuxeo.ecm.core.api.PathRef;
 import org.nuxeo.ecm.core.api.UnrestrictedSessionRunner;
 import org.nuxeo.ecm.platform.routing.api.DocumentRoutingService;
 import org.nuxeo.ecm.platform.task.Task;
@@ -109,7 +109,7 @@ public class UpdateProcedure {
 
             documentRoutingService.endTask(session, currentTaskInstances.get(0), new HashMap<String, Object>(0), StringUtils.EMPTY);
 
-            ArrayList<Map<String, Serializable>> stepTaskVariables = fillTaskVariables(procedureInstance);
+            ArrayList<Map<String, Serializable>> stepTaskVariables = fillTaskVariables();
 
             // create a new task
             currentTaskInstances = taskService.getAllTaskInstances(processId, session);
@@ -141,12 +141,13 @@ public class UpdateProcedure {
         }
 
 
-        private ArrayList<Map<String, Serializable>> fillTaskVariables(DocumentModel procedureInstance) {
-            // retrieve the model of the current procedure
+        private ArrayList<Map<String, Serializable>> fillTaskVariables() {
+            // récupération model par son webid
             String procedureModelWebId = properties.get("pi:procedureModelWebId");
+            DocumentModelList procedureModelByWebId = session.query(ProcedureHelper.WEB_ID_QUERY + procedureModelWebId + "'");
+            DocumentModel procedureModel = procedureModelByWebId.get(0);
 
-            String procedureInstancePath = (String) procedureInstance.getPropertyValue("ttc:webid");
-            DocumentModel procedureModel = session.getDocument(new PathRef(procedureModelWebId));
+            String webId = properties.get("ttc:webid");
 
             ArrayList<Map<String, Serializable>> stepTaskVariables = null;
             List<Map<String, Object>> steps = (List<Map<String, Object>>) procedureModel.getPropertyValue("pcd:steps");
@@ -154,7 +155,7 @@ public class UpdateProcedure {
                 for (Map<String, Object> stepMap : steps) {
                     String reference = (String) stepMap.get("reference");
                     if (StringUtils.equals(reference, properties.get("pi:currentStep"))) {
-                        stepTaskVariables = ProcedureHelper.buildTaskVariables(procedureInstancePath, stepMap);
+                        stepTaskVariables = ProcedureHelper.buildTaskVariables(webId, stepMap);
                     }
                 }
             }
