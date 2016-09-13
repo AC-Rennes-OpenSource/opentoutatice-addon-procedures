@@ -33,6 +33,7 @@ import org.nuxeo.ecm.platform.routing.api.DocumentRoutingService;
 import org.nuxeo.ecm.platform.task.Task;
 import org.nuxeo.ecm.platform.task.TaskConstants;
 import org.nuxeo.ecm.platform.task.TaskService;
+import org.osivia.procedures.constants.ProceduresConstants;
 import org.osivia.procedures.utils.ProcedureHelper;
 import org.osivia.procedures.utils.UsersHelper;
 
@@ -50,9 +51,6 @@ public class StartProcedure {
 
     /** INSTANCE_TYPE */
     private static final String INSTANCE_TYPE = "ProcedureInstance";
-
-    /** INSTANCE_CONTAINER_TYPE */
-    private static final String INSTANCE_CONTAINER_TYPE = "ProceduresInstancesContainer";
 
     /** properties of the created instance */
     @Param(name = "properties", required = false)
@@ -231,7 +229,7 @@ public class StartProcedure {
             String procedureInstanceFolder = StringUtils.substringBeforeLast(procedureModel.getPathAsString(), "/");
 
             // si dossier instance non existant, le créer, et y mettre l'instance
-            DocumentModelList procedureModelChildren = session.getChildren(procedureModel.getParentRef(), INSTANCE_CONTAINER_TYPE);
+            DocumentModelList procedureModelChildren = session.getChildren(procedureModel.getParentRef(), ProceduresConstants.PI_CONTAINER_TYPE);
             DocumentModel procedureInstanceContainer = null;
             for (DocumentModel procedureModelChild : procedureModelChildren) {
                 if (StringUtils.equals(procedureModelChild.getName(), procedureModel.getName())) {
@@ -241,7 +239,8 @@ public class StartProcedure {
             }
             if (procedureInstanceContainer == null) {
                 DocumentModel procedureInstanceContainerModel = session.createDocumentModel(procedureInstanceFolder,
-                        procedureModel.getName(), INSTANCE_CONTAINER_TYPE);
+ procedureModel.getName(),
+                        ProceduresConstants.PI_CONTAINER_TYPE);
                 procedureInstanceContainer = session.createDocument(procedureInstanceContainerModel);
             }
             // create documentModel based on ProcedureInstance

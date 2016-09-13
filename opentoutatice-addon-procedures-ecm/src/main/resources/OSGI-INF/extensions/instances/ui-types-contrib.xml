@@ -57,12 +57,6 @@
 	<extension target="org.nuxeo.ecm.platform.types.TypeService"
 		point="types">
         
-        <type id="Domain">
-            <subtypes>
-                <type>ProceduresInstancesContainer</type>
-            </subtypes>
-        </type>
-
 		<type id="ProceduresInstancesContainer">
 			<label>Procedures Instances</label>
 			<icon>/icons/folder.gif</icon>

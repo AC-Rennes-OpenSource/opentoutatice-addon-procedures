@@ -11,8 +11,7 @@
 		
 		<layout name="procedure">
 			<templates>
-				<template mode="any">/layouts/layout_default_template.xhtml
-				</template>
+				<template mode="any">/layouts/layout_default_template.xhtml</template>
 			</templates>
 		</layout>
 
@@ -25,7 +24,7 @@
 			<rule grant="true">
 				<permission>AddChildren</permission>
 				<type>Domain</type>
-				<type>ProceduresModelsContainer</type>
+				<type>ProceduresContainer</type>
 			</rule>
 		</filter>
 
@@ -34,10 +33,25 @@
 	<extension target="org.nuxeo.ecm.platform.types.TypeService"
 		point="types">
 
-		<type id="Domain">
-			<subtypes>
-				<type>ProceduresModelsContainer</type>
-			</subtypes>
+		<type id="ProceduresContainer">
+			<label>Procedures</label>
+			<icon>/icons/folder.gif</icon>
+			<bigIcon>/icons/folder_100.png</bigIcon>
+			<default-view>view_documents</default-view>
+			<layouts mode="create">
+				<layout>heading</layout>
+			</layouts>
+			<layouts mode="edit">
+				<layout>heading</layout>
+			</layouts>
+			<contentViews category="content">
+				<contentView>document_content</contentView>
+			</contentViews>
+			<contentViews category="trash_content">
+				<contentView showInExportView="false">
+					document_trash_content
+				</contentView>
+			</contentViews>
 		</type>
 
 		<type id="ProceduresModelsContainer">
