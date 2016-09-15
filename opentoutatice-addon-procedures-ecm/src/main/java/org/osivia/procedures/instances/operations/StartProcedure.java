@@ -33,7 +33,6 @@ import org.nuxeo.ecm.platform.routing.api.DocumentRoutingService;
 import org.nuxeo.ecm.platform.task.Task;
 import org.nuxeo.ecm.platform.task.TaskConstants;
 import org.nuxeo.ecm.platform.task.TaskService;
-import org.osivia.procedures.constants.ProceduresConstants;
 import org.osivia.procedures.utils.ProcedureHelper;
 import org.osivia.procedures.utils.UsersHelper;
 
@@ -226,25 +225,15 @@ public class StartProcedure {
             // récupération model par son webid
             DocumentModelList procedureModelByWebId = session.query(ProcedureHelper.WEB_ID_QUERY + procedureModelWebId + "'");
             DocumentModel procedureModel = procedureModelByWebId.get(0);
-            String procedureInstanceFolder = StringUtils.substringBeforeLast(procedureModel.getPathAsString(), "/");
 
-            // si dossier instance non existant, le créer, et y mettre l'instance
-            DocumentModelList procedureModelChildren = session.getChildren(procedureModel.getParentRef(), ProceduresConstants.PI_CONTAINER_TYPE);
-            DocumentModel procedureInstanceContainer = null;
-            for (DocumentModel procedureModelChild : procedureModelChildren) {
-                if (StringUtils.equals(procedureModelChild.getName(), procedureModel.getName())) {
-                    procedureInstanceContainer = procedureModelChild;
-                    break;
-                }
-            }
-            if (procedureInstanceContainer == null) {
-                DocumentModel procedureInstanceContainerModel = session.createDocumentModel(procedureInstanceFolder,
- procedureModel.getName(),
-                        ProceduresConstants.PI_CONTAINER_TYPE);
-                procedureInstanceContainer = session.createDocument(procedureInstanceContainerModel);
-            }
+            // on retrouve le dossier ProcedureInstanceContainer
+            String procedureModeloContainerPath = StringUtils.substringBeforeLast(procedureModel.getPathAsString(), "/");
+            String procedureContainerPath = StringUtils.substringBeforeLast(procedureModeloContainerPath, "/");
+            DocumentModelList proceduresInstancesContainerList = session.query(ProcedureHelper.PROC_INSTANCE_CONTAINER_QUERY + procedureContainerPath + "'");
+            DocumentModel proceduresInstancesContainer = proceduresInstancesContainerList.get(0);
+
             // create documentModel based on ProcedureInstance
-            DocumentModel procedureInstanceModel = session.createDocumentModel(procedureInstanceContainer.getPathAsString(), procedureModel.getName(),
+            DocumentModel procedureInstanceModel = session.createDocumentModel(proceduresInstancesContainer.getPathAsString(), procedureModel.getName(),
                     INSTANCE_TYPE);
 
             // create procedureInstance based on documentModel

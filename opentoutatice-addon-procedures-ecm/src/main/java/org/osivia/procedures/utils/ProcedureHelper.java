@@ -41,6 +41,8 @@ public class ProcedureHelper {
 
     public static final String WEB_ID_QUERY = "SELECT * FROM Document WHERE ttc:webid = '";
 
+    public static final String PROC_INSTANCE_CONTAINER_QUERY = "SELECT * FROM ProceduresInstancesContainer where ecm:path STARTSWITH '";
+
     /**
      * Singleton.
      */
