@@ -17,6 +17,7 @@
 	</platforms>
 	<dependencies>
 		<package>open-toutatice:@OTTC_VERSION@</package>
+		<package>open-toutatice-addons-elasticsearch-customizer:@ottc.addon.es.customizer.version@</package>
 	</dependencies>
 	<license>LGPL 2.1</license>
 	<license-url>http://www.gnu.org/licenses/lgpl-2.1.html</license-url>
