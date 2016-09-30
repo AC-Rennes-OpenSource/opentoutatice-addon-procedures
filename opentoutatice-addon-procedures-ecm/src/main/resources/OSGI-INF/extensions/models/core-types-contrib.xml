@@ -3,8 +3,9 @@
 <component name="org.osivia.procedures.models.doctypes" version="1.0">
 
 	<require>org.nuxeo.ecm.core.schema.TypeService</require>
-	<require>org.osivia.procedures.instances.doctypes</require>
+	<require>org.nuxeo.ecm.platform.types.TypeService</require>
 	<require>org.nuxeo.ecm.core.lifecycle.LifeCycleService</require>
+	<require>org.osivia.procedures.instances.doctypes</require>
 	
 	<extension target="org.nuxeo.ecm.core.schema.TypeService" point="schema">
 
@@ -51,11 +52,19 @@
 				<type>ProceduresInstancesContainer</type>
 			</subtypes>
 		</type>
+		
+		<type id="ProceduresModelsContainer">
+            <subtypes>
+                <type>ProcedureModel</type>
+            </subtypes>
+        </type>
+		
 		<type id="Domain">
 			<subtypes>
 				<type>ProceduresContainer</type>
 			</subtypes>
 		</type>
+		
 		<type id="Workspace">
 			<subtypes>
 				<type>ProceduresContainer</type>
@@ -64,21 +73,12 @@
 		
 	</extension>
 	
-	<extension target="org.nuxeo.ecm.platform.types.TypeService" point="types">
-		
-		<type id="ProceduresModelsContainer">
-			<subtypes>
-				<type>ProcedureModel</type>
-			</subtypes>
-		</type>
-		
-	</extension>
-	
 	<extension target="org.nuxeo.ecm.core.lifecycle.LifeCycleService" point="types">
 
 		<types>
+		    <type name="ProceduresContainer">default</type>
 			<type name="ProceduresModelsContainer">default</type>
-			<type name="ProceduresModel">default</type>
+			<type name="ProcedureModel">default</type>
 		</types>
 
 	</extension>

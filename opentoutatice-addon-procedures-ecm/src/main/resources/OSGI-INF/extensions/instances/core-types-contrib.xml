@@ -31,7 +31,7 @@
 		<doctype name="ProcedureInstance" extends="Document">
 			<schema name="dublincore" />
 			<schema name="procedureInstance" />
-			<prefetch>pi:*</prefetch>  
+			<prefetch>procedureInstance</prefetch>  
 		</doctype>
 		
 	</extension>
