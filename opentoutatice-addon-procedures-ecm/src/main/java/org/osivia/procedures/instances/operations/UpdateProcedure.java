@@ -24,6 +24,11 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.NuxeoPrincipal;
 import org.nuxeo.ecm.core.api.UnrestrictedSessionRunner;
+import org.nuxeo.ecm.core.api.model.Property;
+import org.nuxeo.ecm.core.api.security.ACE;
+import org.nuxeo.ecm.core.api.security.ACL;
+import org.nuxeo.ecm.core.api.security.ACP;
+import org.nuxeo.ecm.core.api.security.SecurityConstants;
 import org.nuxeo.ecm.platform.routing.api.DocumentRoutingService;
 import org.nuxeo.ecm.platform.task.Task;
 import org.nuxeo.ecm.platform.task.TaskConstants;
@@ -128,14 +133,23 @@ public class UpdateProcedure {
                 }
                 taskDocument.setPropertyValue(TaskConstants.TASK_VARIABLES_PROPERTY_NAME, taskVariables);
                 ArrayList<String> usersAndGroupUsers = new ArrayList<String>();
-                if (groups != null) {
+                if ((groups != null) && (groups.size() > 0)) {
                     List<String> usersOfGroup = Arrays.asList(UsersHelper.getUsersOfGroup(groups));
                     usersAndGroupUsers.addAll(usersOfGroup);
                 }
-                if (users != null) {
+                if ((users != null) && (users.size() > 0)) {
                     usersAndGroupUsers.addAll(users);
                 }
                 taskDocument.setPropertyValue(TaskConstants.TASK_USERS_PROPERTY_NAME, usersAndGroupUsers);
+                // Set ACLs for Actors on Task
+                ACP acp = taskDocument.getACP();
+                ACL acl = acp.getOrCreateACL(ACL.LOCAL_ACL);
+                for (String actorId : usersAndGroupUsers) {
+                    acl.add(new ACE(actorId, SecurityConstants.EVERYTHING, true));
+                }
+                acp.addACL(acl);
+                taskDocument.setACP(acp, true);
+
                 ToutaticeDocumentHelper.saveDocumentSilently(session, taskDocument, true);
             }
         }
@@ -147,7 +161,8 @@ public class UpdateProcedure {
             DocumentModelList procedureModelByWebId = session.query(ProcedureHelper.WEB_ID_QUERY + procedureModelWebId + "'");
             DocumentModel procedureModel = procedureModelByWebId.get(0);
 
-            String webId = properties.get("ttc:webid");
+            Property webid = procedureInstance.getProperty("ttc:webid");
+            String webId = (String) webid.getValue();
 
             ArrayList<Map<String, Serializable>> stepTaskVariables = null;
             List<Map<String, Object>> steps = (List<Map<String, Object>>) procedureModel.getPropertyValue("pcd:steps");

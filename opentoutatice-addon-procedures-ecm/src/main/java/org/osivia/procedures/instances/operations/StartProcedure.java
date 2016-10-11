@@ -184,11 +184,11 @@ public class StartProcedure {
             taskDocument.setPropertyValue(TaskConstants.TASK_VARIABLES_PROPERTY_NAME, taskVariables);
 
             ArrayList<String> usersAndGroupUsers = new ArrayList<String>();
-            if (groups != null) {
+            if ((groups != null) && (groups.size() > 0)) {
                 List<String> usersOfGroup = Arrays.asList(UsersHelper.getUsersOfGroup(groups));
                 usersAndGroupUsers.addAll(usersOfGroup);
             }
-            if (users != null) {
+            if ((users != null) && (users.size() > 0)) {
                 usersAndGroupUsers.addAll(users);
             }
             taskDocument.setPropertyValue(TaskConstants.TASK_USERS_PROPERTY_NAME, usersAndGroupUsers);
