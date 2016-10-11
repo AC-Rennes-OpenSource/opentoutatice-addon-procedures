@@ -23,6 +23,7 @@
             <xs:element name="actionIdNo" type="xs:string" />
             <xs:element name="stringMsg" type="xs:string" />
             <xs:element name="actionIdDefault" type="xs:string" />
+            <xs:element name="endStepMsg" type="xs:string" />
 		</xs:sequence>
 	</xs:complexType>
     

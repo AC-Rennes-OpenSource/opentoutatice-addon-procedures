@@ -9,7 +9,7 @@
             <xs:element name="name" type="xs:string" />
 			<xs:element name="label" type="xs:string" />
 			<xs:element name="type" type="xs:string" />
-			<xs:element name="varOptions" type="nxs:stringList" />
+			<xs:element name="varOptions" type="xs:string" />
 		</xs:sequence>
 	</xs:complexType>
 

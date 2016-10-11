@@ -5,6 +5,7 @@
 	<xs:complexType name="globalVariablesReferenceType">
 		<xs:sequence>
 			<xs:element name="variableName" type="xs:string" />
+			<xs:element name="helpText" type="xs:string" />
 			<xs:element name="isInput" type="xs:boolean" default="true"/>
 			<xs:element name="required" type="xs:boolean" default="true"/>
             <xs:element name="path" type="xs:string" />
