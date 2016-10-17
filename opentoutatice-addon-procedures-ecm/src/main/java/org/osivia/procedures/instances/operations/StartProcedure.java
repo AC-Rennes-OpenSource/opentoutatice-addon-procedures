@@ -173,7 +173,6 @@ public class StartProcedure {
             allTaskInstances = taskService.getAllTaskInstances(processId, session);
             DocumentModel taskDocument = allTaskInstances.get(0).getDocument();
             taskDocument.setPropertyValue(TaskConstants.TASK_NAME_PROPERTY_NAME, taskTitle);
-            taskDocument.setPropertyValue(TaskConstants.TASK_TYPE_PROPERTY_NAME, taskType);
             ArrayList<Map<String, Serializable>> taskVariables = (ArrayList<Map<String, Serializable>>) taskDocument
                     .getPropertyValue(TaskConstants.TASK_VARIABLES_PROPERTY_NAME);
             if (taskVariables != null) {
@@ -224,21 +223,38 @@ public class StartProcedure {
             String procedureModelWebId = properties.get("pi:procedureModelWebId");
             // récupération model par son webid
             DocumentModelList procedureModelByWebId = session.query(ProcedureHelper.WEB_ID_QUERY + procedureModelWebId + "'");
-            DocumentModel procedureModel = procedureModelByWebId.get(0);
+            DocumentModel procedureModel = null;
+            if ((procedureModelByWebId != null) && (procedureModelByWebId.size() > 0)) {
+                procedureModel = procedureModelByWebId.get(0);
+            } else {
+                throw new ClientException("Le modèle est introuvable");
+            }
 
-            // on retrouve le dossier ProcedureInstanceContainer
-            String procedureModeloContainerPath = StringUtils.substringBeforeLast(procedureModel.getPathAsString(), "/");
-            String procedureContainerPath = StringUtils.substringBeforeLast(procedureModeloContainerPath, "/");
-            DocumentModelList proceduresInstancesContainerList = session.query(ProcedureHelper.PROC_INSTANCE_CONTAINER_QUERY + procedureContainerPath + "'");
-            DocumentModel proceduresInstancesContainer = proceduresInstancesContainerList.get(0);
+            String parentPath;
+            String procedureType = (String) procedureModel.getPropertyValue("pcd:procedureType");
+            // si le modèle est de type LIST, on crée l'instance dedans
+            if (StringUtils.equals(procedureType, "LIST")) {
+                parentPath = procedureModel.getPathAsString();
+            } else {
+                // sinon on retrouve le dossier ProcedureInstanceContainer
+                String procedureModeloContainerPath = StringUtils.substringBeforeLast(procedureModel.getPathAsString(), "/");
+                String procedureContainerPath = StringUtils.substringBeforeLast(procedureModeloContainerPath, "/");
+                DocumentModelList proceduresInstancesContainerList = session
+                        .query(ProcedureHelper.PROC_INSTANCE_CONTAINER_QUERY + procedureContainerPath + "'");
+                DocumentModel proceduresInstancesContainer = null;
+                if ((procedureModelByWebId != null) && (procedureModelByWebId.size() > 0)) {
+                    proceduresInstancesContainer = proceduresInstancesContainerList.get(0);
+                } else {
+                    throw new ClientException("Le dossier container d'instance est introuvable");
+                }
+                parentPath = proceduresInstancesContainer.getPathAsString();
+            }
 
             // create documentModel based on ProcedureInstance
-            DocumentModel procedureInstanceModel = session.createDocumentModel(proceduresInstancesContainer.getPathAsString(), procedureModel.getName(),
-                    INSTANCE_TYPE);
+            DocumentModel procedureInstanceModel = session.createDocumentModel(parentPath, procedureModel.getName(), INSTANCE_TYPE);
 
             // create procedureInstance based on documentModel
             procedureInstance = session.createDocument(procedureInstanceModel);
-
 
             // set the initiator
             properties.put("pi:procedureInitiator", procedureInitiator);

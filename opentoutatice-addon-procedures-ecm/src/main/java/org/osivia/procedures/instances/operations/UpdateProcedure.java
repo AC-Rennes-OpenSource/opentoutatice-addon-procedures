@@ -122,7 +122,6 @@ public class UpdateProcedure {
 
                 DocumentModel taskDocument = currentTaskInstances.get(0).getDocument();
                 taskDocument.setPropertyValue(TaskConstants.TASK_NAME_PROPERTY_NAME, taskTitle);
-                taskDocument.setPropertyValue(TaskConstants.TASK_TYPE_PROPERTY_NAME, taskType);
                 ArrayList<Map<String, Serializable>> taskVariables = (ArrayList<Map<String, Serializable>>) taskDocument
                         .getPropertyValue(TaskConstants.TASK_VARIABLES_PROPERTY_NAME);
 
