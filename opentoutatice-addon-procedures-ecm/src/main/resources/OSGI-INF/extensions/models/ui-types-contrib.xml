@@ -20,13 +20,13 @@
 	<extension point="filters"
 		target="org.nuxeo.ecm.platform.actions.ActionService">
 
-		<filter append="true" id="create">
-			<rule grant="true">
-				<permission>AddChildren</permission>
-				<type>Domain</type>
-				<type>ProcedureModel</type>
-			</rule>
-		</filter>
+        <filter append="true" id="create">
+            <rule grant="true">
+                <permission>AddChildren</permission>
+                <type>Domain</type>
+                <type>ProceduresContainer</type>
+            </rule>
+        </filter>
 		<filter append="true" id="create">
 			<rule grant="true">
 				<permission>AddChildren</permission>
@@ -34,11 +34,39 @@
 				<type>ProceduresContainer</type>
 			</rule>
 		</filter>
+		<filter append="true" id="create">
+			<rule grant="true">
+				<permission>AddChildren</permission>
+				<type>Domain</type>
+				<type>ProcedureModel</type>
+			</rule>
+		</filter>
 
 	</extension>
 
 	<extension target="org.nuxeo.ecm.platform.types.TypeService"
 		point="types">
+		
+		<type id="ProceduresContainer">
+            <label>Procedures</label>
+            <icon>/icons/folder.gif</icon>
+            <bigIcon>/icons/folder_100.png</bigIcon>
+            <default-view>view_documents</default-view>
+            <layouts mode="create">
+                <layout>heading</layout>
+            </layouts>
+            <layouts mode="edit">
+                <layout>heading</layout>
+            </layouts>
+            <contentViews category="content">
+                <contentView>document_content</contentView>
+            </contentViews>
+            <contentViews category="trash_content">
+                <contentView showInExportView="false">
+                    document_trash_content
+                </contentView>
+            </contentViews>
+        </type>
 		<type id="ProceduresModelsContainer">
 			<label>Procedures Models</label>
 			<icon>/icons/folder.gif</icon>
