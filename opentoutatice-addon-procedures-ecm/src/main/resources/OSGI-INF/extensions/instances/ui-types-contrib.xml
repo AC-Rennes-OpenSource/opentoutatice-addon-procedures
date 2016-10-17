@@ -40,8 +40,8 @@
 		</layout>
 		
 	</extension>
-    
-    <extension point="filters"
+	
+	<extension point="filters"
         target="org.nuxeo.ecm.platform.actions.ActionService">
 
         <filter append="true" id="create">
@@ -53,11 +53,11 @@
         </filter>
 
     </extension>
-
+    
 	<extension target="org.nuxeo.ecm.platform.types.TypeService"
 		point="types">
         
-		<type id="ProceduresInstancesContainer">
+        <type id="ProceduresInstancesContainer">
 			<label>Procedures Instances</label>
 			<icon>/icons/folder.gif</icon>
 			<bigIcon>/icons/folder_100.png</bigIcon>
@@ -74,7 +74,7 @@
 				</contentView>
 			</contentViews>
 		</type>
-
+		
 		<type id="ProcedureInstance">
 			<label>ProcedureInstance</label>
 			<icon>/icons/fork.png</icon>

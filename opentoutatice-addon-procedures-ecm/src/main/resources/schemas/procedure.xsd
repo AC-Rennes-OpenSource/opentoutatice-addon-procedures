@@ -12,6 +12,7 @@
 	<xs:element name="authorizedActors" type="nxs:stringList" />
 	
     <xs:element name="globalVariablesDefinitions" type="nxs:globalVariablesDefinitionsList" />
+    <xs:element name="procedureType" type="xs:string" />
 	<xs:element name="steps" type="nxs:stepsList" />
     <xs:element name="startingStep" type="xs:string" />
     <xs:element name="procedureObjects" type="nxs:procedureObjectList" />

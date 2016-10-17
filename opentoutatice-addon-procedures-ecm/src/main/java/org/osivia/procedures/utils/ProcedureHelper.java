@@ -102,11 +102,16 @@ public class ProcedureHelper {
      */
     public static ArrayList<Map<String, Serializable>> buildTaskVariables(String procedureInstanceWebId, Map<String, Object> stepMap) {
         ArrayList<Map<String, Serializable>> stepTaskVariables;
-        stepTaskVariables = new ArrayList<Map<String, Serializable>>(8);
+        stepTaskVariables = new ArrayList<Map<String, Serializable>>(9);
         Map<String, Serializable> taskVariableNotifiable = new HashMap<String, Serializable>(2);
         taskVariableNotifiable.put("key", "notifiable");
         taskVariableNotifiable.put("value", BooleanUtils.toStringTrueFalse((Boolean) stepMap.get("notifiable")));
         stepTaskVariables.add(taskVariableNotifiable);
+
+        Map<String, Serializable> taskVariableNotifEmail = new HashMap<String, Serializable>(2);
+        taskVariableNotifEmail.put("key", "notifEmail");
+        taskVariableNotifEmail.put("value", BooleanUtils.toStringTrueFalse((Boolean) stepMap.get("notifEmail")));
+        stepTaskVariables.add(taskVariableNotifEmail);
 
         Map<String, Serializable> taskVariableAcquitable = new HashMap<String, Serializable>(2);
         taskVariableAcquitable.put("key", "acquitable");

@@ -6,9 +6,9 @@
 	<require>org.nuxeo.ecm.platform.types.TypeService</require>
 	<require>org.nuxeo.ecm.core.lifecycle.LifeCycleService</require>
 	<require>org.osivia.procedures.instances.doctypes</require>
+	<require>org.nuxeo.ecm.core.lifecycle.LifeCycleService</require>
 	
 	<extension target="org.nuxeo.ecm.core.schema.TypeService" point="schema">
-
         <!-- Technical definitions to paste xsd files in nuxeo/nxserver/schemas
              (cf XSDLoader) -->
         <schema name="globalVariablesDefinitions" src="schemas/globalVariablesDefinitions.xsd" />
@@ -21,17 +21,9 @@
         
         <!-- Schema used -->
         <schema name="procedure" prefix="pcd" src="schemas/procedure.xsd" />
-
 	</extension>
 	
 	<extension target="org.nuxeo.ecm.core.schema.TypeService" point="doctype">
-	
-		<doctype name="ProceduresContainer" extends="Document">
-			<facet name="Folderish" />
-			<facet name="Space" />
-			<schema name="dublincore" />
-		</doctype>
-		
 		<doctype name="ProceduresModelsContainer" extends="Document">
 			<facet name="Folderish" />
 			<schema name="dublincore" />
@@ -39,48 +31,36 @@
 		
 		<doctype name="ProcedureModel" extends="Document">
 			<schema name="dublincore" />
+			<facet name="Folderish" />
 			<schema name="procedure" />
 		</doctype>
-		
 	</extension>
 	
 	<extension target="org.nuxeo.ecm.platform.types.TypeService" point="types">
-		
-		<type id="ProceduresContainer">
-			<subtypes>
-				<type>ProceduresModelsContainer</type>
-				<type>ProceduresInstancesContainer</type>
-			</subtypes>
-		</type>
-		
 		<type id="ProceduresModelsContainer">
             <subtypes>
                 <type>ProcedureModel</type>
             </subtypes>
         </type>
-		
 		<type id="Domain">
 			<subtypes>
-				<type>ProceduresContainer</type>
+				<type>ProceduresModelsContainer</type>
+				<type>ProcedureModel</type>
 			</subtypes>
 		</type>
-		
 		<type id="Workspace">
 			<subtypes>
-				<type>ProceduresContainer</type>
+				<type>ProceduresModelsContainer</type>
+				<type>ProcedureModel</type>
 			</subtypes>
 		</type>
-		
 	</extension>
 	
 	<extension target="org.nuxeo.ecm.core.lifecycle.LifeCycleService" point="types">
-
 		<types>
-		    <type name="ProceduresContainer">default</type>
 			<type name="ProceduresModelsContainer">default</type>
-			<type name="ProcedureModel">default</type>
+			<type name="ProceduresModel">default</type>
 		</types>
-
 	</extension>
 
 </component>

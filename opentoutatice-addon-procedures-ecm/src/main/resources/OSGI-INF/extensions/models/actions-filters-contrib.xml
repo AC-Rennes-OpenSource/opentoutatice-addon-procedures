@@ -6,10 +6,17 @@
 
     <extension target="org.nuxeo.ecm.platform.actions.ActionService"
         point="filters">
-
+        
         <filter id="create" append="true">
             <rule grant="true">
                 <type>ProceduresModelsContainer</type>
+                <permission>AddChildren</permission>
+            </rule>
+        </filter>
+
+        <filter id="create" append="true">
+            <rule grant="true">
+                <type>ProcedureModel</type>
                 <permission>AddChildren</permission>
             </rule>
         </filter>
