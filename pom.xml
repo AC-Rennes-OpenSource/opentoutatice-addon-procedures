@@ -13,8 +13,8 @@
 	<properties>
 		<nuxeo.version>6.0-HF30</nuxeo.version>
 		<nuxeo.cap.distribution.version>6.0</nuxeo.cap.distribution.version>
-		<ottc.version>3.0.10-RC03</ottc.version>
-		<ottc.addon.es.customizer.version>2.0-RC02</ottc.addon.es.customizer.version>
+		<ottc.version>3.4.0-RC06</ottc.version>
+		<ottc.addon.es.customizer.version>2.0-RC03</ottc.addon.es.customizer.version>
 	</properties>
 
 	<modules>
