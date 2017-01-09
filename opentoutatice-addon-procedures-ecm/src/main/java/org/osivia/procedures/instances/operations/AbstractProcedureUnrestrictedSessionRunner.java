@@ -22,6 +22,7 @@ import org.nuxeo.ecm.core.api.security.ACE;
 import org.nuxeo.ecm.core.api.security.ACL;
 import org.nuxeo.ecm.core.api.security.ACP;
 import org.nuxeo.ecm.core.api.security.SecurityConstants;
+import org.nuxeo.ecm.platform.ec.notification.NotificationConstants;
 import org.nuxeo.ecm.platform.task.Task;
 import org.nuxeo.ecm.platform.task.TaskConstants;
 import org.nuxeo.ecm.platform.task.TaskService;
@@ -270,16 +271,22 @@ public abstract class AbstractProcedureUnrestrictedSessionRunner extends Unrestr
     private void setActors(DocumentModel task, StringList users) {
         if (CollectionUtils.isNotEmpty(users)) {
             List<String> actors = new ArrayList<>();
+
             for (String user : users) {
                 NuxeoGroup group = this.userManager.getGroup(user);
+
+                String prefix;
                 if (group == null) {
                     // User
-                    actors.add(user);
+                    prefix = NotificationConstants.USER_PREFIX;
                 } else {
                     // Group
-                    actors.addAll(group.getMemberUsers());
+                    prefix = NotificationConstants.GROUP_PREFIX;
                 }
+
+                actors.add(prefix + user);
             }
+
             task.setPropertyValue(TaskConstants.TASK_USERS_PROPERTY_NAME, (Serializable) actors);
         }
     }
