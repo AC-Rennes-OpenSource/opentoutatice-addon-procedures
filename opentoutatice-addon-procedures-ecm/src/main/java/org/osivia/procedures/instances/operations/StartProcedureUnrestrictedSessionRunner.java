@@ -42,8 +42,8 @@ public class StartProcedureUnrestrictedSessionRunner extends AbstractProcedureUn
     private final String title;
     /** Task properties. */
     private final Properties properties;
-    /** Task users and groups. */
-    private final StringList users;
+    /** Task actors: users and groups. */
+    private final StringList actors;
     /** Task additional authorizations. */
     private final StringList additionalAuthorizations;
     /** Associated BLOB list. */
@@ -60,21 +60,21 @@ public class StartProcedureUnrestrictedSessionRunner extends AbstractProcedureUn
      * @param procedureInitiator procedure initiator
      * @param title task title
      * @param properties task properties
-     * @param users task users and groups
+     * @param actors task users and groups
      * @param additionalAuthorizations task additional authorizations
      * @param blobList associated BLOB list
      */
-    public StartProcedureUnrestrictedSessionRunner(CoreSession session, String procedureInitiator, String title, Properties properties, StringList users,
+    public StartProcedureUnrestrictedSessionRunner(CoreSession session, String procedureInitiator, String title, Properties properties, StringList actors,
             StringList additionalAuthorizations, BlobList blobList) {
         super(session, properties);
         this.procedureInitiator = procedureInitiator;
         this.title = title;
         this.properties = properties;
-        this.users = users;
+        this.actors = actors;
         this.additionalAuthorizations = additionalAuthorizations;
         this.blobList = blobList;
 
-        this.documentRoutingService = Framework.getService(DocumentRoutingService.class);
+        documentRoutingService = Framework.getService(DocumentRoutingService.class);
     }
 
 
@@ -84,29 +84,29 @@ public class StartProcedureUnrestrictedSessionRunner extends AbstractProcedureUn
     @Override
     public void run() throws ClientException {
         // Generic model
-        DocumentModel genericModel = this.getGenericModel();
+        DocumentModel genericModel = getGenericModel();
 
         // Procedure model
-        DocumentModel model = this.getModel();
+        DocumentModel model = getModel();
 
         // Procedure instance creation
-        this.procedureInstance = this.createProcedureInstance(model);
+        procedureInstance = createProcedureInstance(model);
 
         // Document identifiers
         List<String> identifiers = new ArrayList<>();
-        identifiers.add(this.procedureInstance.getId());
+        identifiers.add(procedureInstance.getId());
 
         // Add attachments
-        this.addAttachments(this.procedureInstance);
+        addAttachments(procedureInstance);
 
         // Associate objects to workflow
-        this.associateObject(this.procedureInstance, identifiers);
+        associateObject(procedureInstance, identifiers);
 
         // Create workflow
-        String processId = this.documentRoutingService.createNewInstance(genericModel.getName(), identifiers, this.session, true);
+        String processId = documentRoutingService.createNewInstance(genericModel.getName(), identifiers, session, true);
 
         // Create task
-        this.createTask(model, this.procedureInstance, processId, this.title, this.users, this.additionalAuthorizations);
+        createTask(model, procedureInstance, processId, title, actors, additionalAuthorizations);
     }
 
 
@@ -116,9 +116,9 @@ public class StartProcedureUnrestrictedSessionRunner extends AbstractProcedureUn
      * @return generic model
      */
     private DocumentModel getGenericModel() {
-        String id = this.documentRoutingService.getRouteModelDocIdWithId(this.session, "generic-model");
+        String id = documentRoutingService.getRouteModelDocIdWithId(session, "generic-model");
         DocumentRef ref = new IdRef(id);
-        return this.session.getDocument(ref);
+        return session.getDocument(ref);
     }
 
 
@@ -138,29 +138,29 @@ public class StartProcedureUnrestrictedSessionRunner extends AbstractProcedureUn
             parentPath = model.getPathAsString();
         } else {
             // Procedure instance container
-            DocumentModel procedureInstanceContainer = this.getProcedureInstanceContainer(model);
+            DocumentModel procedureInstanceContainer = getProcedureInstanceContainer(model);
 
             parentPath = procedureInstanceContainer.getPathAsString();
         }
 
         // Create procedure instance model
-        DocumentModel procedureInstanceModel = this.session.createDocumentModel(parentPath, model.getName(), "ProcedureInstance");
+        DocumentModel procedureInstanceModel = session.createDocumentModel(parentPath, model.getName(), "ProcedureInstance");
 
         // Create procedure instance based on model
-        DocumentModel procedureInstance = this.session.createDocument(procedureInstanceModel);
+        DocumentModel procedureInstance = session.createDocument(procedureInstanceModel);
 
         // Procedure initiator
-        this.properties.put("pi:procedureInitiator", this.procedureInitiator);
+        properties.put("pi:procedureInitiator", procedureInitiator);
 
         // Update procedure instance properties
         try {
-            DocumentHelper.setProperties(this.session, procedureInstance, this.properties);
+            DocumentHelper.setProperties(session, procedureInstance, properties);
         } catch (IOException e) {
             throw new ClientException(e);
         }
 
         // Save document
-        return this.session.saveDocument(procedureInstance);
+        return session.saveDocument(procedureInstance);
     }
 
 
@@ -183,7 +183,7 @@ public class StartProcedureUnrestrictedSessionRunner extends AbstractProcedureUn
         query.append("AND ecm:path STARTSWITH '").append(containerPath.toString()).append("' ");
 
         // Query execution
-        DocumentModelList result = this.session.query(query.toString());
+        DocumentModelList result = session.query(query.toString());
 
         // Procedure instance container
         DocumentModel procedureInstanceContainer;
@@ -202,7 +202,7 @@ public class StartProcedureUnrestrictedSessionRunner extends AbstractProcedureUn
      * @param procedureInstance procedure instance
      */
     private void addAttachments(DocumentModel procedureInstance) {
-        if (this.blobList != null) {
+        if (blobList != null) {
 
             List<?> attachments = procedureInstance.getProperty("pi:attachments").getValue(List.class);
 
@@ -219,7 +219,7 @@ public class StartProcedureUnrestrictedSessionRunner extends AbstractProcedureUn
 
                         // Current BLOB
                         Blob currentBlob = null;
-                        for (Blob blob : this.blobList) {
+                        for (Blob blob : blobList) {
                             if (StringUtils.equals(blob.getFilename(), fileName)) {
                                 currentBlob = blob;
                             }
@@ -231,7 +231,7 @@ public class StartProcedureUnrestrictedSessionRunner extends AbstractProcedureUn
                     i++;
                 }
 
-                this.session.saveDocument(procedureInstance);
+                session.saveDocument(procedureInstance);
             }
         }
     }
@@ -263,7 +263,7 @@ public class StartProcedureUnrestrictedSessionRunner extends AbstractProcedureUn
      * @return the procedureInstance
      */
     public DocumentModel getProcedureInstance() {
-        return this.procedureInstance;
+        return procedureInstance;
     }
 
 }

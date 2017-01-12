@@ -49,13 +49,9 @@ public class StartProcedure {
     @Param(name = "properties", required = false)
     private Properties properties;
 
-    /** Task actor groups parameter. */
-    @Param(name = "groups", required = false)
-    private StringList groups;
-
-    /** Task actor users parameter. */
-    @Param(name = "users", required = false)
-    private StringList users;
+    /** Task actors parameter. */
+    @Param(name = "actors", required = false)
+    private StringList actors;
 
     /** Task additional authorizations parameter. */
     @Param(name = "additionalAuthorizations", required = false)
@@ -78,7 +74,7 @@ public class StartProcedure {
      */
     @OperationMethod
     public DocumentModel run() throws Exception {
-        return this.execute(null);
+        return execute(null);
     }
 
 
@@ -95,7 +91,7 @@ public class StartProcedure {
         BlobList blobList = new BlobList();
         blobList.add(blob);
 
-        return this.execute(blobList);
+        return execute(blobList);
     }
 
 
@@ -108,7 +104,7 @@ public class StartProcedure {
      */
     @OperationMethod
     public DocumentModel run(BlobList blobList) throws Exception {
-        return this.execute(blobList);
+        return execute(blobList);
     }
 
 
@@ -121,11 +117,11 @@ public class StartProcedure {
      */
     private DocumentModel execute(BlobList blobList) throws Exception {
         // Procedure initiator
-        String procedureInitiator = this.session.getPrincipal().getName();
+        String procedureInitiator = session.getPrincipal().getName();
 
         // Unrestricted session runner
-        StartProcedureUnrestrictedSessionRunner unrestrictedSessionRunner = new StartProcedureUnrestrictedSessionRunner(this.session, procedureInitiator,
-                this.taskTitle, this.properties, this.users, this.additionalAuthorizations, blobList);
+        StartProcedureUnrestrictedSessionRunner unrestrictedSessionRunner = new StartProcedureUnrestrictedSessionRunner(session, procedureInitiator, taskTitle,
+                properties, actors, additionalAuthorizations, blobList);
         unrestrictedSessionRunner.runUnrestricted();
 
         return unrestrictedSessionRunner.getProcedureInstance();

@@ -58,8 +58,8 @@ public abstract class AbstractProcedureUnrestrictedSessionRunner extends Unrestr
         super(session);
         this.properties = properties;
 
-        this.taskService = Framework.getService(TaskService.class);
-        this.userManager = Framework.getService(UserManager.class);
+        taskService = Framework.getService(TaskService.class);
+        userManager = Framework.getService(UserManager.class);
     }
 
 
@@ -70,7 +70,7 @@ public abstract class AbstractProcedureUnrestrictedSessionRunner extends Unrestr
      */
     protected DocumentModel getModel() {
         // Model webId
-        String webId = this.properties.get("pi:procedureModelWebId");
+        String webId = properties.get("pi:procedureModelWebId");
 
         // Query
         StringBuilder query = new StringBuilder();
@@ -78,7 +78,7 @@ public abstract class AbstractProcedureUnrestrictedSessionRunner extends Unrestr
         query.append("WHERE ttc:webid = '").append(webId).append("' ");
 
         // Query execution
-        DocumentModelList result = this.session.query(query.toString(), 1);
+        DocumentModelList result = session.query(query.toString(), 1);
 
         // Model
         DocumentModel model;
@@ -102,13 +102,13 @@ public abstract class AbstractProcedureUnrestrictedSessionRunner extends Unrestr
      * @param procedureInstance procedure instance
      * @param processId process identifier
      * @param title task title
-     * @param users task users and groups
+     * @param actors task users and groups
      * @param additionalAuthorizations task additional authorizations
      */
-    protected void createTask(DocumentModel model, DocumentModel procedureInstance, String processId, String title, StringList users,
+    protected void createTask(DocumentModel model, DocumentModel procedureInstance, String processId, String title, StringList actors,
             StringList additionalAuthorizations) {
         // Task instances
-        List<Task> taskInstances = this.taskService.getAllTaskInstances(processId, this.session);
+        List<Task> taskInstances = taskService.getAllTaskInstances(processId, session);
 
         // Task
         DocumentModel task;
@@ -124,16 +124,16 @@ public abstract class AbstractProcedureUnrestrictedSessionRunner extends Unrestr
             task.setPropertyValue(TaskConstants.TASK_NAME_PROPERTY_NAME, title);
 
             // Task variables
-            this.setTaskVariables(model, procedureInstance, task);
+            setTaskVariables(model, procedureInstance, task);
 
             // Task actors
-            this.setActors(task, users);
+            setActors(task, actors);
 
             // Task ACL
-            this.setAcl(task, users, additionalAuthorizations);
+            setAcl(task, actors, additionalAuthorizations);
 
             // Save silently
-            ToutaticeDocumentHelper.saveDocumentSilently(this.session, task, true);
+            ToutaticeDocumentHelper.saveDocumentSilently(session, task, true);
         }
     }
 
@@ -146,8 +146,8 @@ public abstract class AbstractProcedureUnrestrictedSessionRunner extends Unrestr
      * @param task task
      */
     private void setTaskVariables(DocumentModel model, DocumentModel procedureInstance, DocumentModel task) {
-        List<Map<String, Serializable>> stepVariables = this.getStepVariables(model, procedureInstance);
-        List<Map<String, Serializable>> taskVariables = this.getTaskVariables(task);
+        List<Map<String, Serializable>> stepVariables = getStepVariables(model, procedureInstance);
+        List<Map<String, Serializable>> taskVariables = getTaskVariables(task);
         List<Map<String, Serializable>> variables = new ArrayList<>(stepVariables.size() + taskVariables.size());
         variables.addAll(stepVariables);
         variables.addAll(taskVariables);
@@ -185,7 +185,7 @@ public abstract class AbstractProcedureUnrestrictedSessionRunner extends Unrestr
                 // Step reference
                 String reference = (String) targetMap.get("reference");
 
-                if (StringUtils.equals(reference, this.properties.get("pi:currentStep"))) {
+                if (StringUtils.equals(reference, properties.get("pi:currentStep"))) {
                     targetMap.put("documentWebId", webId);
 
                     // Step variable names
@@ -266,14 +266,14 @@ public abstract class AbstractProcedureUnrestrictedSessionRunner extends Unrestr
      * Set task actors.
      *
      * @param task task
-     * @param users task users and groups
+     * @param actorsP task users and groups
      */
-    private void setActors(DocumentModel task, StringList users) {
-        if (CollectionUtils.isNotEmpty(users)) {
+    private void setActors(DocumentModel task, StringList actorsP) {
+        if (CollectionUtils.isNotEmpty(actorsP)) {
             List<String> actors = new ArrayList<>();
 
-            for (String user : users) {
-                NuxeoGroup group = this.userManager.getGroup(user);
+            for (String user : actorsP) {
+                NuxeoGroup group = userManager.getGroup(user);
 
                 String prefix;
                 if (group == null) {
@@ -296,14 +296,14 @@ public abstract class AbstractProcedureUnrestrictedSessionRunner extends Unrestr
      * Set ACL.
      *
      * @param task task
-     * @param users task users and groups
+     * @param actors task users and groups
      * @param additionalAuthorizations task additional authorizations
      */
-    private void setAcl(DocumentModel task, StringList users, StringList additionalAuthorizations) {
+    private void setAcl(DocumentModel task, StringList actors, StringList additionalAuthorizations) {
         ACP acp = task.getACP();
         ACL acl = acp.getOrCreateACL(ACL.LOCAL_ACL);
-        if (CollectionUtils.isNotEmpty(users)) {
-            for (String user : users) {
+        if (CollectionUtils.isNotEmpty(actors)) {
+            for (String user : actors) {
                 ACE ace = new ACE(user, SecurityConstants.EVERYTHING, true);
                 acl.add(ace);
             }

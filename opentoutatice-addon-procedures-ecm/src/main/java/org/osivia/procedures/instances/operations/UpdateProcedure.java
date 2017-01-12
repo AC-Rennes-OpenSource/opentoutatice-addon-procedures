@@ -46,13 +46,9 @@ public class UpdateProcedure {
     @Param(name = "properties", required = false)
     private Properties properties;
 
-    /** Task actor groups parameter. */
-    @Param(name = "groups", required = false)
-    private StringList groups;
-
-    /** Task actor users parameter. */
-    @Param(name = "users", required = false)
-    private StringList users;
+    /** Task actors parameter. */
+    @Param(name = "actors", required = false)
+    private StringList actors;
 
     /** Task additional authorizations parameter. */
     @Param(name = "additionalAuthorizations", required = false)
@@ -76,8 +72,8 @@ public class UpdateProcedure {
      */
     @OperationMethod
     public DocumentModel run(DocumentModel procedureInstance) throws Exception {
-        UpdateProcedureUnrestrictedSessionRunner unrestrictedSessionRunner = new UpdateProcedureUnrestrictedSessionRunner(this.session, procedureInstance,
-                this.taskTitle, this.properties, this.users, this.additionalAuthorizations);
+        UpdateProcedureUnrestrictedSessionRunner unrestrictedSessionRunner = new UpdateProcedureUnrestrictedSessionRunner(session, procedureInstance,
+                taskTitle, properties, actors, additionalAuthorizations);
         unrestrictedSessionRunner.runUnrestricted();
 
         return unrestrictedSessionRunner.getProcedureInstance();

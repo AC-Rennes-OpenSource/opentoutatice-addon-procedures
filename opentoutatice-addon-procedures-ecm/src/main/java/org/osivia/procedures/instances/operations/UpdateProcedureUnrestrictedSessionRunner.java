@@ -34,8 +34,8 @@ public class UpdateProcedureUnrestrictedSessionRunner extends AbstractProcedureU
     private final String title;
     /** Task properties. */
     private final Properties properties;
-    /** Task users and groups. */
-    private final StringList users;
+    /** Task actors : users and groups. */
+    private final StringList actors;
     /** Task additional authorizations. */
     private final StringList additionalAuthorizations;
 
@@ -52,20 +52,20 @@ public class UpdateProcedureUnrestrictedSessionRunner extends AbstractProcedureU
      * @param procedureInstance procedure instance
      * @param title task title
      * @param properties task properties
-     * @param users task users and groups
+     * @param actors task users and groups
      * @param additionalAuthorizations task additional authorizations
      */
-    public UpdateProcedureUnrestrictedSessionRunner(CoreSession session, DocumentModel procedureInstance, String title, Properties properties, StringList users,
-            StringList additionalAuthorizations) {
+    public UpdateProcedureUnrestrictedSessionRunner(CoreSession session, DocumentModel procedureInstance, String title, Properties properties,
+            StringList actors, StringList additionalAuthorizations) {
         super(session, properties);
         this.procedureInstance = procedureInstance;
         this.title = title;
         this.properties = properties;
-        this.users = users;
+        this.actors = actors;
         this.additionalAuthorizations = additionalAuthorizations;
 
-        this.documentRoutingService = Framework.getService(DocumentRoutingService.class);
-        this.taskService = Framework.getService(TaskService.class);
+        documentRoutingService = Framework.getService(DocumentRoutingService.class);
+        taskService = Framework.getService(TaskService.class);
     }
 
 
@@ -75,22 +75,22 @@ public class UpdateProcedureUnrestrictedSessionRunner extends AbstractProcedureU
     @Override
     public void run() throws ClientException {
         // Procedure model
-        DocumentModel model = this.getModel();
+        DocumentModel model = getModel();
 
         // Update procedure instance properties
         try {
-            DocumentHelper.setProperties(this.session, this.procedureInstance, this.properties);
+            DocumentHelper.setProperties(session, procedureInstance, properties);
         } catch (IOException e) {
             throw new ClientException(e);
         }
 
         // Save document
-        this.procedureInstance = this.session.saveDocument(this.procedureInstance);
+        procedureInstance = session.saveDocument(procedureInstance);
 
 
         // Previous task
         NuxeoPrincipal actor = null;
-        List<Task> previousTasks = this.taskService.getTaskInstances(this.procedureInstance, actor, this.session);
+        List<Task> previousTasks = taskService.getTaskInstances(procedureInstance, actor, session);
         Task previousTask;
         if (previousTasks.size() == 1) {
             previousTask = previousTasks.get(0);
@@ -103,10 +103,10 @@ public class UpdateProcedureUnrestrictedSessionRunner extends AbstractProcedureU
 
         // End previous task
         Map<String, Object> data = new HashMap<>(0);
-        this.documentRoutingService.endTask(this.session, previousTask, data, StringUtils.EMPTY);
+        documentRoutingService.endTask(session, previousTask, data, StringUtils.EMPTY);
 
         // Create task
-        this.createTask(model, this.procedureInstance, processId, this.title, this.users, this.additionalAuthorizations);
+        createTask(model, procedureInstance, processId, title, actors, additionalAuthorizations);
     }
 
 
@@ -116,7 +116,7 @@ public class UpdateProcedureUnrestrictedSessionRunner extends AbstractProcedureU
      * @return the procedureInstance
      */
     public DocumentModel getProcedureInstance() {
-        return this.procedureInstance;
+        return procedureInstance;
     }
 
 }
