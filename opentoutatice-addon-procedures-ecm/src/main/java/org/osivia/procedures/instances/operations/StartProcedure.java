@@ -10,7 +10,6 @@ import org.nuxeo.ecm.automation.core.util.Properties;
 import org.nuxeo.ecm.automation.core.util.StringList;
 import org.nuxeo.ecm.core.api.Blob;
 import org.nuxeo.ecm.core.api.CoreSession;
-import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.platform.routing.api.DocumentRoutingService;
 import org.nuxeo.ecm.platform.task.TaskService;
 
@@ -73,8 +72,8 @@ public class StartProcedure {
      * @throws Exception
      */
     @OperationMethod
-    public DocumentModel run() throws Exception {
-        return execute(null);
+    public void run() throws Exception {
+        execute(null);
     }
 
 
@@ -86,12 +85,12 @@ public class StartProcedure {
      * @throws Exception
      */
     @OperationMethod
-    public DocumentModel run(Blob blob) throws Exception {
+    public void run(Blob blob) throws Exception {
         // BLOB list
         BlobList blobList = new BlobList();
         blobList.add(blob);
 
-        return execute(blobList);
+        execute(blobList);
     }
 
 
@@ -103,8 +102,8 @@ public class StartProcedure {
      * @throws Exception
      */
     @OperationMethod
-    public DocumentModel run(BlobList blobList) throws Exception {
-        return execute(blobList);
+    public void run(BlobList blobList) throws Exception {
+        execute(blobList);
     }
 
 
@@ -115,7 +114,7 @@ public class StartProcedure {
      * @return procedure instance
      * @throws Exception
      */
-    private DocumentModel execute(BlobList blobList) throws Exception {
+    private void execute(BlobList blobList) throws Exception {
         // Procedure initiator
         String procedureInitiator = session.getPrincipal().getName();
 
@@ -123,8 +122,6 @@ public class StartProcedure {
         StartProcedureUnrestrictedSessionRunner unrestrictedSessionRunner = new StartProcedureUnrestrictedSessionRunner(session, procedureInitiator, taskTitle,
                 properties, actors, additionalAuthorizations, blobList);
         unrestrictedSessionRunner.runUnrestricted();
-
-        return unrestrictedSessionRunner.getProcedureInstance();
     }
 
 }
