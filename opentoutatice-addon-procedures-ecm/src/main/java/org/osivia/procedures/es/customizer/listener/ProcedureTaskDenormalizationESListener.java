@@ -50,10 +50,10 @@ public class ProcedureTaskDenormalizationESListener extends AbstractDenormalizat
         if(isPI){
             DocumentModel task = ProcedureDenormalizationHelper.getInstance().getTaskOfProcedureInstance(session, sourceDocument);
             if(task != null){
-                super.esListener.stackCommand(task, eventId, true);
+                super.getEsInlineListener().stackCommand(task, eventId, true);
             }
         } else if(sourceDocument != null && isTaskDoc){
-            super.esListener.stackCommand(sourceDocument, eventId, true);
+            super.getEsInlineListener().stackCommand(sourceDocument, eventId, true);
         }
     }
 

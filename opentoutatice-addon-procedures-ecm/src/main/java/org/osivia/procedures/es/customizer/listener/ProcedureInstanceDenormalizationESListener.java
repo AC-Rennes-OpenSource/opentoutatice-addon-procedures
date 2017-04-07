@@ -5,7 +5,6 @@ package org.osivia.procedures.es.customizer.listener;
 
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.api.event.DocumentEventTypes;
 import org.nuxeo.ecm.platform.task.TaskConstants;
 import org.osivia.procedures.constants.ProceduresConstants;
 import org.osivia.procedures.es.customizer.ProcedureDenormalizationHelper;
@@ -53,10 +52,10 @@ public class ProcedureInstanceDenormalizationESListener extends AbstractDenormal
         if(isTaskDoc){
             DocumentModel pi = ProcedureDenormalizationHelper.getInstance().getProcedureInstanceOfTask(session, doc);
             if(pi != null){
-                super.esListener.stackCommand(pi, eventId, true);
+                super.getEsInlineListener().stackCommand(pi, eventId, true);
             }
         } else if(doc != null && isPI){
-            super.esListener.stackCommand(doc, eventId, true);
+            super.getEsInlineListener().stackCommand(doc, eventId, true);
         }
     }
 
