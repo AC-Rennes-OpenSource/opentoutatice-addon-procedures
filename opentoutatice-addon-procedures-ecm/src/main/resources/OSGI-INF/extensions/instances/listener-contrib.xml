@@ -8,7 +8,7 @@
 		point="listener">
 
 		<listener name="procedureInstanceListener" async="false"
-			postCommit="false" enabled="true"
+			postCommit="false" enabled="false"
 			class="org.osivia.procedure.instance.listener.ProcedureInstanceCreatedListener"
 			priority="100">
 			<event>documentCreated</event>
