@@ -9,8 +9,10 @@ import org.nuxeo.ecm.automation.core.util.Properties;
 import org.nuxeo.ecm.automation.core.util.StringList;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.platform.routing.api.DocumentRoutingService;
 import org.nuxeo.ecm.platform.task.TaskService;
+import org.osivia.procedures.instances.operation.runner.DocRefToDocModelUnrestrictedSessionRunner;
 
 /**
  * Update procedure operation.
@@ -71,12 +73,20 @@ public class UpdateProcedure {
      * @throws Exception
      */
     @OperationMethod
-    public DocumentModel run(DocumentModel procedureInstance) throws Exception {
+    public void run(DocumentModel procedureInstance) throws Exception {
         UpdateProcedureUnrestrictedSessionRunner unrestrictedSessionRunner = new UpdateProcedureUnrestrictedSessionRunner(session, procedureInstance,
                 taskTitle, properties, actors, additionalAuthorizations);
         unrestrictedSessionRunner.runUnrestricted();
+    }
 
-        return unrestrictedSessionRunner.getProcedureInstance();
+    @OperationMethod
+    public void run(DocumentRef procedureInstanceRef) throws Exception {
+        DocRefToDocModelUnrestrictedSessionRunner docRefToDocModelUnrestrictedSessionRunner = new DocRefToDocModelUnrestrictedSessionRunner(session,
+                procedureInstanceRef);
+
+        docRefToDocModelUnrestrictedSessionRunner.runUnrestricted();
+
+        run(docRefToDocModelUnrestrictedSessionRunner.getDocument());
     }
 
 }

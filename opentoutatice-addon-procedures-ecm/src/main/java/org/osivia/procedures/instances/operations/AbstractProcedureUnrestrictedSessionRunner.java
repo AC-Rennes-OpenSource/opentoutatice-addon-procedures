@@ -187,10 +187,11 @@ public abstract class AbstractProcedureUnrestrictedSessionRunner extends Unrestr
 
                 if (StringUtils.equals(reference, properties.get("pi:currentStep"))) {
                     targetMap.put("documentWebId", webId);
+                    targetMap.put("documentPath", procedureInstance.getPathAsString());
 
                     // Step variable names
                     String[] names = new String[]{"notifiable", "notifEmail", "acquitable", "closable", "actionIdClosable", "actionIdYes", "actionIdNo",
-                            "stringMsg", "documentWebId"};
+                            "stringMsg", "documentWebId", "documentPath"};
 
                     stepVariables = new ArrayList<Map<String, Serializable>>(names.length);
 

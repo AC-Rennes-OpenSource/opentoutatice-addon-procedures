@@ -15,6 +15,7 @@
             <xs:element name="actors" type="nxs:stringList" />
             <xs:element name="globalVariablesReferences" type="nxs:globalVariablesReferenceList" />
             <xs:element name="actions" type="nxs:actionsList" />
+            <xs:element name="initAction" type="nxs:actionType" />
             <xs:element name="notifiable" type="xs:boolean" default="false"/>
             <xs:element name="notifEmail" type="xs:boolean" default="false"/>
             <xs:element name="acquitable" type="xs:boolean" default="false"/>
