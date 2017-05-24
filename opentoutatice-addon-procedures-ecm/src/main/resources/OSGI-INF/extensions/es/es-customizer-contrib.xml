@@ -10,9 +10,10 @@
 		
 		<writer class="org.osivia.procedures.es.customizer.writer.ProcedureInstanceJsonESWriter" order="0" /> 
 		<writer class="org.osivia.procedures.es.customizer.writer.TaskJsonESWriter" order="1" />
+		<writer class="org.osivia.procedures.es.customizer.writer.RecordJsonESWriter" order="2" />
 		
-		<writer class="org.osivia.procedures.es.customizer.writer.denormalization.ProcedureInstanceDenormalizationJsonESWriter" order="2" />
-		<writer class="org.osivia.procedures.es.customizer.writer.denormalization.ProcedureTaskDenormalizationJsonESWriter" order="3" />
+		<writer class="org.osivia.procedures.es.customizer.writer.denormalization.ProcedureInstanceDenormalizationJsonESWriter" order="3" />
+		<writer class="org.osivia.procedures.es.customizer.writer.denormalization.ProcedureTaskDenormalizationJsonESWriter" order="4" />
 		
 	</extension>
 	

@@ -1,21 +1,8 @@
 <?xml version="1.0"?>
 
-<component name="org.osivia.procedures.models.ui.types"
-	version="1.0">
+<component name="org.osivia.procedures.records.ui.types" version="1.0">
 
 	<require>org.nuxeo.ecm.platform.types.TypeService</require>
-	<require>org.nuxeo.ecm.platform.forms.layout.WebLayoutManager</require>
-
-	<extension target="org.nuxeo.ecm.platform.forms.layout.WebLayoutManager"
-		point="layouts">
-		
-		<layout name="procedure">
-			<templates>
-				<template mode="any">/layouts/layout_default_template.xhtml</template>
-			</templates>
-		</layout>
-
-	</extension>
 
 	<extension point="filters"
 		target="org.nuxeo.ecm.platform.actions.ActionService">
@@ -24,24 +11,17 @@
             <rule grant="true">
                 <permission>AddChildren</permission>
                 <type>Domain</type>
-                <type>ProceduresContainer</type>
+                <type>RecordContainer</type>
             </rule>
         </filter>
-		<filter append="true" id="create">
-			<rule grant="true">
-				<permission>AddChildren</permission>
-				<type>Domain</type>
-				<type>ProcedureModel</type>
-			</rule>
-		</filter>
 
 	</extension>
 
 	<extension target="org.nuxeo.ecm.platform.types.TypeService"
 		point="types">
 		
-		<type id="ProceduresContainer">
-            <label>Procedures</label>
+		<type id="RecordContainer">
+            <label>Record Container</label>
             <icon>/icons/folder.gif</icon>
             <bigIcon>/icons/folder_100.png</bigIcon>
             <default-view>view_documents</default-view>
@@ -60,8 +40,8 @@
                 </contentView>
             </contentViews>
         </type>
-		<type id="ProceduresModelsContainer">
-			<label>Procedures Models</label>
+		<type id="RecordFolder">
+			<label>Record Folder</label>
 			<icon>/icons/folder.gif</icon>
 			<bigIcon>/icons/folder_100.png</bigIcon>
 			<default-view>view_documents</default-view>
@@ -78,14 +58,13 @@
 			</contentViews>
 		</type>
 
-		<type id="ProcedureModel">
-			<label>Procedure</label>
+		<type id="Record">
+			<label>Record</label>
 			<icon>/icons/ordered_folder.png</icon>
 			<bigIcon>/icons/ordered_folder_100.png</bigIcon>
 			<default-view>view_documents</default-view>
 			<layouts mode="any">
 				<layout>heading</layout>
-				<layout>procedure</layout>
 			</layouts>
 			<contentViews category="content">
                 <contentView>document_content</contentView>

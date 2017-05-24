@@ -12,6 +12,9 @@ Nuxeo-Component: OSGI-INF/extensions/models/core-types-contrib.xml,OSG
  neric-workflow/routing-service.xml,OSGI-INF/extensions/es/es-customizer-contrib.xml,
  OSGI-INF/extensions/instances/security-policy-contrib.xml,
  OSGI-INF/extensions/models/actions-filters-contrib.xml,
- OSGI-INF/extensions/generic-workflow/ui-filter-contrib.xml
+ OSGI-INF/extensions/generic-workflow/ui-filter-contrib.xml,
+ OSGI-INF/extensions/records/actions-filters-contrib.xml,
+ OSGI-INF/extensions/records/core-types-contrib.xml,
+ OSGI-INF/extensions/records/ui-types-contrib.xml
 
 

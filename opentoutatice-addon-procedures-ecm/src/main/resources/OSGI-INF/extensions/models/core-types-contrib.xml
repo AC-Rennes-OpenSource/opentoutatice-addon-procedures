@@ -18,6 +18,7 @@
         <schema name="globalVariablesReferences" src="schemas/globalVariablesReferences.xsd" /> 
         <schema name="step" src="schemas/step.xsd" />
         <schema name="procedureObject" src="schemas/procedureObject.xsd" />
+        <schema name="dashboard" src="schemas/dashboard.xsd" />
         
         <!-- Schema used -->
         <schema name="procedure" prefix="pcd" src="schemas/procedure.xsd" />

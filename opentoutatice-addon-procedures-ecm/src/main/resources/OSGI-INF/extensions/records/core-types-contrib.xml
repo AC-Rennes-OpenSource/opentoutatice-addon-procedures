@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+
+<component name="org.osivia.procedures.records.doctypes" version="1.0">
+
+	<require>org.nuxeo.ecm.core.schema.TypeService</require>
+	<require>org.nuxeo.ecm.platform.types.TypeService</require>
+	<require>org.nuxeo.ecm.core.lifecycle.LifeCycleService</require>
+	<require>org.osivia.procedures.instances.doctypes</require>
+	<require>org.nuxeo.ecm.core.lifecycle.LifeCycleService</require>
+	
+	<extension target="org.nuxeo.ecm.core.schema.TypeService" point="schema">
+        <!-- Technical definitions to paste xsd files in nuxeo/nxserver/schemas
+             (cf XSDLoader) -->
+             
+        
+        <!-- Schema used -->
+        <schema name="procedure" prefix="pcd" src="schemas/procedure.xsd" />
+        <schema name="record" prefix="rcd" src="schemas/record.xsd" />
+	</extension>
+	
+	<extension target="org.nuxeo.ecm.core.schema.TypeService" point="doctype">
+        <doctype name="RecordContainer" extends="Document">
+            <facet name="Folderish" />
+            <facet name="Space" />
+            <schema name="dublincore" />
+        </doctype>
+        
+		<doctype name="RecordFolder" extends="Document">
+			<facet name="Folderish" />
+			<schema name="dublincore" />
+			<schema name="procedure" />
+		</doctype>
+		
+		<doctype name="Record" extends="Document">
+			<schema name="dublincore" />
+			<schema name="record" />
+		</doctype>
+	</extension>
+	
+	<extension target="org.nuxeo.ecm.platform.types.TypeService" point="types">
+        <type id="RecordContainer">
+            <subtypes>
+                <type>RecordFolder</type>
+            </subtypes>
+        </type>
+		<type id="RecordFolder">
+            <subtypes>
+                <type>Record</type>
+            </subtypes>
+        </type>
+		<type id="Workspace">
+			<subtypes>
+                <type>RecordContainer</type>
+			</subtypes>
+		</type>
+	</extension>
+	
+	<extension target="org.nuxeo.ecm.core.lifecycle.LifeCycleService" point="types">
+		<types>
+		    <type name="RecordContainer">default</type>
+			<type name="RecordFolder">default</type>
+			<type name="Record">default</type>
+		</types>
+	</extension>
+
+</component>
