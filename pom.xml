@@ -11,10 +11,10 @@
 	<version>4.6-SNAPSHOT</version>
 
 	<properties>
-		<nuxeo.version>6.0-HF34</nuxeo.version>
-		<nuxeo.cap.distribution.version>6.0</nuxeo.cap.distribution.version>
-		<ottc.version>3.4.3</ottc.version>
-		<ottc.addon.es.customizer.version>2.0</ottc.addon.es.customizer.version>
+		<nuxeo.version>6.0-HF37</nuxeo.version>
+		<nuxeo.cap.version>6.0</nuxeo.cap.version>
+		<nuxeo.opentoutatice.version>4.6-SNAPSHOT</nuxeo.opentoutatice.version>
+		<ottc.addon.es.customizer.version>4.6-SNAPSHOT</ottc.addon.es.customizer.version>
 	</properties>
 
 	<modules>
@@ -24,30 +24,29 @@
 	
 	<dependencyManagement>
 		<dependencies>
-		    <dependency>
-                <groupId>org.nuxeo.ecm.distribution</groupId>
-                <artifactId>nuxeo-distribution</artifactId>
-                <version>${nuxeo.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
+		   <dependency>
+				<groupId>org.nuxeo.ecm.distribution</groupId>
+				<artifactId>nuxeo-distribution-cap</artifactId>
+				<version>${nuxeo.version}</version>
+				<type>pom</type>
+			</dependency>
 
             <dependency>
                 <groupId>org.nuxeo.ecm.distribution</groupId>
                 <artifactId>nuxeo-distribution-cap</artifactId>
-                <version>${nuxeo.cap.distribution.version}</version>
+                <version>${nuxeo.version}</version>
                 <type>pom</type>
             </dependency>
             
 			<dependency>
 				<groupId>opentoutatice-ecm.platform</groupId>
 				<artifactId>opentoutatice-ecm-platform-core</artifactId>
-				<version>${ottc.version}</version>
+				<version>${nuxeo.opentoutatice.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>opentoutatice-ecm.platform</groupId>
 				<artifactId>opentoutatice-ecm-platform-web</artifactId>
-				<version>${ottc.version}</version>
+				<version>${nuxeo.opentoutatice.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>opentoutatice-ecm.elasticsearch-customizer</groupId>

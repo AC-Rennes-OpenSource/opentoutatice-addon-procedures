@@ -17,9 +17,10 @@
 			<fileset dir="src/main/resources" />
 			<filterset>
 				<filter token="VERSION" value="${maven.project.version}" />
-				<filter token="OTTC_VERSION" value="${ottc.version}" />
-				<filter token="ottc.addon.es.customizer.version" value="${ottc.addon.es.customizer.version}" />
-				<filter token="DISTRIB_VERSION" value="${nuxeo.cap.distribution.version}" />
+				<filter token="DISTRIB_VERSION" value="${nuxeo.version}" />
+				<filter token="CAP_DISTRIB_VERSION" value="${nuxeo.cap.version}" />
+				<filter token="OTTC_VERSION" value="${nuxeo.opentoutatice.version}" />
+				<filter token="OTTC_ES_CUSTOMIZER_VERSION" value="${ottc.addon.es.customizer.version}" />
 			</filterset>
 		</copy>
 
