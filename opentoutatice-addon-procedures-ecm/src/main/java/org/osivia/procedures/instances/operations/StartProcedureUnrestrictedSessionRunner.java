@@ -129,9 +129,6 @@ public class StartProcedureUnrestrictedSessionRunner extends AbstractProcedureUn
      * @return created procedure instance
      */
     private DocumentModel createProcedureInstance(DocumentModel model) {
-        // Procedure type
-        String procedureType = model.getProperty("pcd:procedureType").getValue(String.class);
-
         // Parent path
         DocumentModel procedureInstanceContainer = getProcedureInstanceContainer(model);
         String parentPath = procedureInstanceContainer.getPathAsString();
