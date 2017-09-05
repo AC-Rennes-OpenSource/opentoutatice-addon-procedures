@@ -120,8 +120,11 @@ public abstract class AbstractProcedureUnrestrictedSessionRunner extends Unrestr
         }
 
         if (task != null) {
-            // Task title
+            // Task step title
             task.setPropertyValue(TaskConstants.TASK_NAME_PROPERTY_NAME, title);
+
+            // Task model title
+            task.setPropertyValue("dc:title", model.getTitle());
 
             // Task variables
             setTaskVariables(model, procedureInstance, task);
