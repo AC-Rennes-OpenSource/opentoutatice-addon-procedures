@@ -21,7 +21,7 @@
 		point="types">
 		
 		<type id="RecordContainer">
-            <label>Record Container</label>
+            <label>record.container</label>
             <icon>/icons/folder.gif</icon>
             <bigIcon>/icons/folder_100.png</bigIcon>
             <default-view>view_documents</default-view>
@@ -41,7 +41,7 @@
             </contentViews>
         </type>
 		<type id="RecordFolder">
-			<label>Record Folder</label>
+			<label>record.folder</label>
 			<icon>/icons/folder.gif</icon>
 			<bigIcon>/icons/folder_100.png</bigIcon>
 			<default-view>view_documents</default-view>
@@ -59,7 +59,7 @@
 		</type>
 
 		<type id="Record">
-			<label>Record</label>
+			<label>record</label>
 			<icon>/icons/ordered_folder.png</icon>
 			<bigIcon>/icons/ordered_folder_100.png</bigIcon>
 			<default-view>view_documents</default-view>

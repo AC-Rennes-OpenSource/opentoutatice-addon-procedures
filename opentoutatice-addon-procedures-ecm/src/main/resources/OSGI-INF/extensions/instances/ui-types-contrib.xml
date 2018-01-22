@@ -58,7 +58,7 @@
 		point="types">
         
         <type id="ProceduresInstancesContainer">
-			<label>Procedures Instances</label>
+			<label>procedures.instances</label>
 			<icon>/icons/folder.gif</icon>
 			<bigIcon>/icons/folder_100.png</bigIcon>
 			<default-view>view_documents</default-view>
@@ -76,7 +76,7 @@
 		</type>
 		
 		<type id="ProcedureInstance">
-			<label>ProcedureInstance</label>
+			<label>procedure.instance</label>
 			<icon>/icons/fork.png</icon>
 			<bigIcon>/icons/fork_100.png</bigIcon>
 			<category>SimpleDocument</category>

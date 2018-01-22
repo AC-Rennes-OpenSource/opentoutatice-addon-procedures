@@ -41,7 +41,7 @@
 		point="types">
 		
 		<type id="ProceduresContainer">
-            <label>Procedures</label>
+            <label>procedures</label>
             <icon>/icons/folder.gif</icon>
             <bigIcon>/icons/folder_100.png</bigIcon>
             <default-view>view_documents</default-view>
@@ -61,7 +61,7 @@
             </contentViews>
         </type>
 		<type id="ProceduresModelsContainer">
-			<label>Procedures Models</label>
+			<label>procedures.models</label>
 			<icon>/icons/folder.gif</icon>
 			<bigIcon>/icons/folder_100.png</bigIcon>
 			<default-view>view_documents</default-view>
@@ -79,7 +79,7 @@
 		</type>
 
 		<type id="ProcedureModel">
-			<label>Procedure</label>
+			<label>procedure</label>
 			<icon>/icons/ordered_folder.png</icon>
 			<bigIcon>/icons/ordered_folder_100.png</bigIcon>
 			<default-view>view_documents</default-view>
