@@ -58,15 +58,11 @@
 		<type id="Domain">
 			<subtypes>
 			    <type>ProceduresContainer</type>
-				<type>ProceduresModelsContainer</type>
-				<type>ProcedureModel</type>
 			</subtypes>
 		</type>
 		<type id="Workspace">
 			<subtypes>
                 <type>ProceduresContainer</type>
-				<type>ProceduresModelsContainer</type>
-				<type>ProcedureModel</type>
 			</subtypes>
 		</type>
 	</extension>
