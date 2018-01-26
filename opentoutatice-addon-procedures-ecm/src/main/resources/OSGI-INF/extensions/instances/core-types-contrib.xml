@@ -10,7 +10,6 @@
 		 <!-- Technical definitions to paste xsd files in nuxeo/nxserver/schemas
              (cf XSDLoader) -->
         <schema name="globalVariablesValues" src="schemas/globalVariablesValues.xsd" />
-        <schema name="attachment" src="schemas/attachment.xsd" />
         <schema name="procedureObjectInstance" src="schemas/procedureObjectInstance.xsd" /> 
         
         <!-- Schema used -->
@@ -28,6 +27,7 @@
 		<doctype name="ProcedureInstance" extends="Document">
 			<schema name="dublincore" />
 			<schema name="procedureInstance" />
+            <schema name="files" />
 			<prefetch>procedureInstance</prefetch>  
 		</doctype>
 	</extension>

@@ -6,20 +6,16 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
 import org.nuxeo.common.utils.Path;
-import org.nuxeo.ecm.automation.core.util.BlobList;
 import org.nuxeo.ecm.automation.core.util.DocumentHelper;
 import org.nuxeo.ecm.automation.core.util.Properties;
 import org.nuxeo.ecm.automation.core.util.StringList;
-import org.nuxeo.ecm.core.api.Blob;
 import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.api.IdRef;
-import org.nuxeo.ecm.core.api.model.Property;
 import org.nuxeo.ecm.platform.routing.api.DocumentRoutingService;
 import org.nuxeo.runtime.api.Framework;
 
@@ -46,8 +42,6 @@ public class StartProcedureUnrestrictedSessionRunner extends AbstractProcedureUn
     private final StringList actors;
     /** Task additional authorizations. */
     private final StringList additionalAuthorizations;
-    /** Associated BLOB list. */
-    private final BlobList blobList;
 
     /** Document routing service. */
     private final DocumentRoutingService documentRoutingService;
@@ -62,17 +56,15 @@ public class StartProcedureUnrestrictedSessionRunner extends AbstractProcedureUn
      * @param properties task properties
      * @param actors task users and groups
      * @param additionalAuthorizations task additional authorizations
-     * @param blobList associated BLOB list
      */
     public StartProcedureUnrestrictedSessionRunner(CoreSession session, String procedureInitiator, String title, Properties properties, StringList actors,
-            StringList additionalAuthorizations, BlobList blobList) {
+            StringList additionalAuthorizations) {
         super(session, properties);
         this.procedureInitiator = procedureInitiator;
         this.title = title;
         this.properties = properties;
         this.actors = actors;
         this.additionalAuthorizations = additionalAuthorizations;
-        this.blobList = blobList;
 
         documentRoutingService = Framework.getService(DocumentRoutingService.class);
     }
@@ -95,9 +87,6 @@ public class StartProcedureUnrestrictedSessionRunner extends AbstractProcedureUn
         // Document identifiers
         List<String> identifiers = new ArrayList<>();
         identifiers.add(procedureInstance.getId());
-
-        // Add attachments
-        addAttachments(procedureInstance);
 
         // Associate objects to workflow
         associateObject(procedureInstance, identifiers);
@@ -183,47 +172,6 @@ public class StartProcedureUnrestrictedSessionRunner extends AbstractProcedureUn
             throw new ClientException("Procedure instance container not found.");
         }
         return procedureInstanceContainer;
-    }
-
-
-    /**
-     * Add attachments.
-     *
-     * @param procedureInstance procedure instance
-     */
-    private void addAttachments(DocumentModel procedureInstance) {
-        if (blobList != null) {
-
-            List<?> attachments = procedureInstance.getProperty("pi:attachments").getValue(List.class);
-
-            if (CollectionUtils.isNotEmpty(attachments)) {
-                int i = 0;
-                for (Object attachment : attachments) {
-                    Map<?, ?> map = (Map<?, ?>) attachment;
-
-                    Object blobObject = map.get("blob");
-                    if (blobObject == null) {
-                        // Find the corresponding blob and add it to the document
-                        Property property = procedureInstance.getProperty("pi:attachments/" + i + "/blob");
-                        String fileName = (String) map.get("fileName");
-
-                        // Current BLOB
-                        Blob currentBlob = null;
-                        for (Blob blob : blobList) {
-                            if (StringUtils.equals(blob.getFilename(), fileName)) {
-                                currentBlob = blob;
-                            }
-                        }
-
-                        DocumentHelper.addBlob(property, currentBlob);
-                    }
-
-                    i++;
-                }
-
-                session.saveDocument(procedureInstance);
-            }
-        }
     }
 
 

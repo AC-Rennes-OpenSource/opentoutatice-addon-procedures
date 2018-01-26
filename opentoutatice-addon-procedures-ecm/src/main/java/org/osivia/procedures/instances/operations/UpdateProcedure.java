@@ -73,20 +73,21 @@ public class UpdateProcedure {
      * @throws Exception
      */
     @OperationMethod
-    public void run(DocumentModel procedureInstance) throws Exception {
+    public DocumentModel run(DocumentModel procedureInstance) throws Exception {
         UpdateProcedureUnrestrictedSessionRunner unrestrictedSessionRunner = new UpdateProcedureUnrestrictedSessionRunner(session, procedureInstance,
                 taskTitle, properties, actors, additionalAuthorizations);
         unrestrictedSessionRunner.runUnrestricted();
+        return unrestrictedSessionRunner.getProcedureInstance();
     }
 
     @OperationMethod
-    public void run(DocumentRef procedureInstanceRef) throws Exception {
+    public DocumentModel run(DocumentRef procedureInstanceRef) throws Exception {
         DocRefToDocModelUnrestrictedSessionRunner docRefToDocModelUnrestrictedSessionRunner = new DocRefToDocModelUnrestrictedSessionRunner(session,
                 procedureInstanceRef);
 
         docRefToDocModelUnrestrictedSessionRunner.runUnrestricted();
 
-        run(docRefToDocModelUnrestrictedSessionRunner.getDocument());
+        return run(docRefToDocModelUnrestrictedSessionRunner.getDocument());
     }
 
 }

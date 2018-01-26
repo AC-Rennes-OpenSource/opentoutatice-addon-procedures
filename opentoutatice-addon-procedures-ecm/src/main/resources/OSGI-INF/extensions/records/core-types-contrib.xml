@@ -30,6 +30,7 @@
 		<doctype name="Record" extends="Document">
 			<schema name="dublincore" />
 			<schema name="record" />
+            <schema name="files" />
 		</doctype>
 	</extension>
 	

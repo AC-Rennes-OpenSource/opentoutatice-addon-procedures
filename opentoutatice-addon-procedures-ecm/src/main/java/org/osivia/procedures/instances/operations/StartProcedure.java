@@ -5,11 +5,10 @@ import org.nuxeo.ecm.automation.core.annotations.Context;
 import org.nuxeo.ecm.automation.core.annotations.Operation;
 import org.nuxeo.ecm.automation.core.annotations.OperationMethod;
 import org.nuxeo.ecm.automation.core.annotations.Param;
-import org.nuxeo.ecm.automation.core.util.BlobList;
 import org.nuxeo.ecm.automation.core.util.Properties;
 import org.nuxeo.ecm.automation.core.util.StringList;
-import org.nuxeo.ecm.core.api.Blob;
 import org.nuxeo.ecm.core.api.CoreSession;
+import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.platform.routing.api.DocumentRoutingService;
 import org.nuxeo.ecm.platform.task.TaskService;
 
@@ -72,38 +71,8 @@ public class StartProcedure {
      * @throws Exception
      */
     @OperationMethod
-    public void run() throws Exception {
-        execute(null);
-    }
-
-
-    /**
-     * Run operation.
-     *
-     * @param blob associated BLOB
-     * @return procedure instance
-     * @throws Exception
-     */
-    @OperationMethod
-    public void run(Blob blob) throws Exception {
-        // BLOB list
-        BlobList blobList = new BlobList();
-        blobList.add(blob);
-
-        execute(blobList);
-    }
-
-
-    /**
-     * Run operation.
-     *
-     * @param blobList associated BLOB list
-     * @return procedure instance
-     * @throws Exception
-     */
-    @OperationMethod
-    public void run(BlobList blobList) throws Exception {
-        execute(blobList);
+    public DocumentModel run() throws Exception {
+        return execute();
     }
 
 
@@ -114,14 +83,16 @@ public class StartProcedure {
      * @return procedure instance
      * @throws Exception
      */
-    private void execute(BlobList blobList) throws Exception {
+    private DocumentModel execute() throws Exception {
         // Procedure initiator
         String procedureInitiator = session.getPrincipal().getName();
 
         // Unrestricted session runner
         StartProcedureUnrestrictedSessionRunner unrestrictedSessionRunner = new StartProcedureUnrestrictedSessionRunner(session, procedureInitiator, taskTitle,
-                properties, actors, additionalAuthorizations, blobList);
+                properties, actors, additionalAuthorizations);
         unrestrictedSessionRunner.runUnrestricted();
+
+        return unrestrictedSessionRunner.getProcedureInstance();
     }
 
 }
