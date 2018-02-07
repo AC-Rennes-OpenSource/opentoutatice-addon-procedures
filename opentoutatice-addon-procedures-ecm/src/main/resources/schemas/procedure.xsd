@@ -19,5 +19,7 @@
 	
     <xs:element name="startingStep" type="xs:string" />
     <xs:element name="procedureObjects" type="nxs:procedureObjectList" />
+    
+    <xs:element name="businessRules" type="xs:string" />
 
 </xs:schema>
