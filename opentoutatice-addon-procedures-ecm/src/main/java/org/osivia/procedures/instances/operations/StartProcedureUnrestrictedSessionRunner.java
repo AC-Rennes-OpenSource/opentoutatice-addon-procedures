@@ -139,7 +139,11 @@ public class StartProcedureUnrestrictedSessionRunner extends AbstractProcedureUn
         }
 
         // Save document
-        return session.saveDocument(procedureInstance);
+        DocumentModel saveDocument = session.saveDocument(procedureInstance);
+
+        saveDocument.detach(true);
+
+        return saveDocument;
     }
 
 

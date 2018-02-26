@@ -107,6 +107,8 @@ public class UpdateProcedureUnrestrictedSessionRunner extends AbstractProcedureU
 
         // Create task
         createTask(model, procedureInstance, processId, title, actors, additionalAuthorizations);
+
+        procedureInstance.detach(true);
     }
 
 
