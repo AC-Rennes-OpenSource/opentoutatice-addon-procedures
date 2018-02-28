@@ -32,7 +32,7 @@ public class ProcedureInstanceJsonESWriter extends AbstractCustomJsonESWriter {
      */
     @Override
     public boolean accept(DocumentModel doc) {
-        return ProceduresConstants.PI_TYPE.equals(doc.getType());
+        return doc != null && ProceduresConstants.PI_TYPE.equals(doc.getType());
     }
 
     /**
@@ -42,6 +42,9 @@ public class ProcedureInstanceJsonESWriter extends AbstractCustomJsonESWriter {
     public void writeData(JsonGenerator jg, DocumentModel pi, String[] schemas, Map<String, String> contextParameters) throws IOException {
         // Custom name /value
         DenormalizationJsonESWriterHelper.mapKeyValue(jg, pi, ProceduresConstants.PI_VALUES_XPATH, 
+                ProceduresConstants.PI_ENTRY_KEY, ProceduresConstants.ENTRY_VALUE);
+        // Custom name / value as Json
+        DenormalizationJsonESWriterHelper.mapKeyValueAsJson(jg, pi, ProceduresConstants.PI_VALUES_XPATH, 
                 ProceduresConstants.PI_ENTRY_KEY, ProceduresConstants.ENTRY_VALUE);
     }
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 
@@ -13,31 +14,32 @@
 	<properties>
 		<nuxeo.version>6.0-HF42</nuxeo.version>
 		<nuxeo.cap.version>6.0</nuxeo.cap.version>
-		<nuxeo.opentoutatice.version>4.6</nuxeo.opentoutatice.version>
-		<ottc.addon.es.customizer.version>4.6</ottc.addon.es.customizer.version>
+		<nuxeo.opentoutatice.version>4.7-SNAPSHOT</nuxeo.opentoutatice.version>
+		<ottc.addon.es.customizer.version>4.7-SNAPSHOT</ottc.addon.es.customizer.version>
+		<elasticsearch.version>1.1.2</elasticsearch.version>
 	</properties>
 
 	<modules>
-	   <module>opentoutatice-addon-procedures-ecm</module>
-	   <module>opentoutatice-addon-procedures-marketplace</module>
+		<module>opentoutatice-addon-procedures-ecm</module>
+		<module>opentoutatice-addon-procedures-marketplace</module>
 	</modules>
-	
+
 	<dependencyManagement>
 		<dependencies>
-		   <dependency>
+			<dependency>
 				<groupId>org.nuxeo.ecm.distribution</groupId>
 				<artifactId>nuxeo-distribution-cap</artifactId>
 				<version>${nuxeo.version}</version>
 				<type>pom</type>
 			</dependency>
 
-            <dependency>
-                <groupId>org.nuxeo.ecm.distribution</groupId>
-                <artifactId>nuxeo-distribution-cap</artifactId>
-                <version>${nuxeo.version}</version>
-                <type>pom</type>
-            </dependency>
-            
+			<dependency>
+				<groupId>org.nuxeo.ecm.distribution</groupId>
+				<artifactId>nuxeo-distribution-cap</artifactId>
+				<version>${nuxeo.version}</version>
+				<type>pom</type>
+			</dependency>
+
 			<dependency>
 				<groupId>opentoutatice-ecm.platform</groupId>
 				<artifactId>opentoutatice-ecm-platform-core</artifactId>
@@ -50,8 +52,14 @@
 			</dependency>
 			<dependency>
 				<groupId>opentoutatice-ecm.elasticsearch-customizer</groupId>
-      			<artifactId>opentoutatice-addon-elasticsearch-customizer-ecm</artifactId>
+				<artifactId>opentoutatice-addon-elasticsearch-customizer-ecm</artifactId>
 				<version>${ottc.addon.es.customizer.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.elasticsearch</groupId>
+				<artifactId>elasticsearch</artifactId>
+				<version>${elasticsearch.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -59,16 +67,16 @@
 	<build>
 		<plugins>
 			<plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>2.2.1</version>
-                <configuration>
-                    <tagBase>http://projet.toutatice.fr/repos/toutatice-ecm/opentoutatice-addons/opentoutatice-procedures/tags</tagBase>
-                    <releaseProfiles>unpack,pack</releaseProfiles>
-                    <preparationGoals>clean install</preparationGoals>
-                    <goals>deploy</goals>
-                    </configuration>
-            </plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.2.1</version>
+				<configuration>
+					<tagBase>http://projet.toutatice.fr/repos/toutatice-ecm/opentoutatice-addons/opentoutatice-procedures/tags</tagBase>
+					<releaseProfiles>unpack,pack</releaseProfiles>
+					<preparationGoals>clean install</preparationGoals>
+					<goals>deploy</goals>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -78,8 +86,8 @@
 					<source>1.7</source>
 					<target>1.7</target>
 				</configuration>
-			</plugin> 
-		</plugins>			
+			</plugin>
+		</plugins>
 		<pluginManagement>
 			<plugins>
 				<plugin>
@@ -106,6 +114,6 @@
 			<url>http://projet.toutatice.fr/nexus/content/repositories/toutatice-snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
-	
+
 </project>
 

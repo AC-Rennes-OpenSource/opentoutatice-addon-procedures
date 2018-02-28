@@ -4,15 +4,11 @@
 package org.osivia.procedures.es.customizer.writer.denormalization;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.JsonGenerator;
 import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.api.DocumentModelList;
-import org.nuxeo.ecm.platform.task.TaskConstants;
 import org.osivia.procedures.constants.ProceduresConstants;
 import org.osivia.procedures.es.customizer.ESCustomizerConstants;
 import org.osivia.procedures.es.customizer.ProcedureDenormalizationHelper;
@@ -31,7 +27,7 @@ public class ProcedureInstanceDenormalizationJsonESWriter extends AbstractDenorm
      */
     @Override
     public boolean accept(DocumentModel doc) {
-        return ProceduresConstants.PI_TYPE.equals(doc.getType());
+        return doc != null && StringUtils.equals(ProceduresConstants.PI_TYPE, doc.getType());
     }
     
     /**

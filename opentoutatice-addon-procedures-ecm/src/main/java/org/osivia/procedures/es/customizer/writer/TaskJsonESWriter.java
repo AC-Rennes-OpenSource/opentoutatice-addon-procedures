@@ -36,7 +36,7 @@ public class TaskJsonESWriter extends AbstractCustomJsonESWriter {
      */
     @Override
     public boolean accept(DocumentModel doc) {
-        return TaskConstants.TASK_TYPE_NAME.equals(doc.getType());
+        return doc != null && TaskConstants.TASK_TYPE_NAME.equals(doc.getType());
     }
 
     /**

@@ -15,6 +15,7 @@ Nuxeo-Component: OSGI-INF/extensions/models/core-types-contrib.xml,OSG
  OSGI-INF/extensions/generic-workflow/ui-filter-contrib.xml,
  OSGI-INF/extensions/records/actions-filters-contrib.xml,
  OSGI-INF/extensions/records/core-types-contrib.xml,
- OSGI-INF/extensions/records/ui-types-contrib.xml
+ OSGI-INF/extensions/records/ui-types-contrib.xml,
+ OSGI-INF/extensions/records/security-policy-contrib.xml
 
 

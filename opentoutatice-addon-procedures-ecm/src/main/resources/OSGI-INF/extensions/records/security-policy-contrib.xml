@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+
+<component name="org.osivia.procedures.records.security">
+
+	<require>org.nuxeo.ecm.core.security.SecurityService</require>
+	<require>org.nuxeo.ecm.core.security.defaultPermissions</require>
+
+	<extension point="policies"
+		target="org.nuxeo.ecm.core.security.SecurityService">
+
+		<policy
+			class="org.osivia.procedures.record.security.policy.RecordSecurityPolicy"
+			name="recordSecurity" order="20" />
+
+	</extension>
+
+</component>
