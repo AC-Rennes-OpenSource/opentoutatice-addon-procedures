@@ -47,11 +47,18 @@ public class SecurityClauseBuilder {
 	}
 
 	public FilterBuilder getFilter(CoreSession session) {
+		// Result
+		FilterBuilder filterBuilder = null;
+		
 		SecurityRules rules = (SecurityRules) SecurityRulesBuilder.getInstance().build(session.getRepositoryName(),
 				session.getPrincipal());
 		List<FilterBuilder> filters = build(session, rules);
+		// There is Records security
+		if(filters.size() > 0) {
+			filterBuilder = FilterBuilders.orFilter(filters.toArray(new FilterBuilder[0]));
+		}
 
-		return FilterBuilders.orFilter(filters.toArray(new FilterBuilder[0]));
+		return filterBuilder;
 	}
 
 	public List<FilterBuilder> build(CoreSession session, SecurityRules rules) {
