@@ -3,7 +3,6 @@
  */
 package org.osivia.procedures.record.security.rules.helper;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

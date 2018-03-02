@@ -44,7 +44,7 @@ public class LinkedEntitiesResolver {
 
 	protected static final String ONE_TO_ONE_LINK_VALUE_QUERY = "";
 
-	protected final Pattern RECORDS_WEBIDS_PATTERN = Pattern.compile("\\\"[a-zA-Z0-9]+\\\":\\\"([0-9a-zA-Z]{6}){1}\\\"");
+	public static final Pattern RECORDS_WEBIDS_PATTERN = Pattern.compile("\\\"[a-zA-Z0-9]+\\\":\\\"([0-9a-zA-Z]{6}){1}\\\"");
 
 	private static LinkedEntitiesResolver instance;
 
@@ -66,7 +66,7 @@ public class LinkedEntitiesResolver {
 	 * @param entity
 	 * @return
 	 */
-	protected Map<String, Entity> getLinkedEntitiesTo(CoreSession session, SecurityRules rules,
+	public Map<String, Entity> getLinkedEntitiesTo(CoreSession session, SecurityRules rules,
 			DocumentModelList models, Entity entity) {
 		Map<String, Entity> linkedEntities = new HashMap<>(0);
 
@@ -100,6 +100,9 @@ public class LinkedEntitiesResolver {
 								
 								// Relation
 								Relation relation = new Relation(relationModel);
+								if(!entity.isFetched()) {
+									linkedEntity = setNtoOneLinkedEntityRecords(session, entity, model, linkedType, fieldName, linkedEntity);
+								}
 								relation.setTargetIds(entity.getIds());
 
 								linkedEntity.setRelationTo(relation);
@@ -111,7 +114,7 @@ public class LinkedEntitiesResolver {
 							} else if (RelationHelper.isNToNRelation(model, fieldName)) {
 								// linkedEntity.setRelationType(RelationModel.Type.oneToN);
 								// TODO
-							}
+							} 
 
 							// Store
 							linkedEntities.put(modelType, linkedEntity);
@@ -131,7 +134,7 @@ public class LinkedEntitiesResolver {
 	 * @param currentEntity
 	 * @return
 	 */
-	protected Map<String, Entity> getLinkedEntitiesFrom(CoreSession session, SecurityRules rules,
+	public Map<String, Entity> getLinkedEntitiesFrom(CoreSession session, SecurityRules rules,
 			DocumentModelList models, Entity currentEntity) {
 		Map<String, Entity> linkedEntities = new HashMap<>(0);
 
@@ -167,18 +170,12 @@ public class LinkedEntitiesResolver {
 								relationModel.setTargetType(currentEntity.getType());
 								
 								// // Get linked Records 
-								List<String> linkedIds = getLinkedIds(session, currentModel, currentEntity, fieldName);
-								String query = String.format(LINKED_N_TO_N_ENTITIES_QUERY, linkedType, getInOperand(linkedIds));
-
-								DocumentModelList linkedRecords = ToutaticeEsQueryHelper.query(session, query, -1);
-
-								// Complete linked Entity build
-								linkedEntity.setRecords(linkedRecords);
-								linkedEntity.setIds(linkedIds);
+								linkedEntity = setNtoNLinkedEntityRecords(session, currentEntity, currentModel,
+										linkedType, fieldName, linkedEntity);
 								
 								// Relation
 								Relation relation = new Relation(relationModel);
-								relation.setTargetIds(linkedIds);
+								relation.setTargetIds(linkedEntity.getIds());
 								
 								linkedEntity.setRelationFrom(relation);
 
@@ -203,6 +200,40 @@ public class LinkedEntitiesResolver {
 		}
 
 		return linkedEntities;
+	}
+	
+	private Entity setNtoOneLinkedEntityRecords(CoreSession session, Entity currentEntity, DocumentModel currentModel,
+			String linkedType, String fieldName, Entity linkedEntity) {
+		List<String> linkedIds = getLinkedIds(session, currentModel, currentEntity, fieldName);
+		
+		String query = String.format(LINKED_N_TO_ONE_ENTITY_QUERY, linkedType, getInOperand(linkedIds));
+		DocumentModelList linkedRecords = ToutaticeEsQueryHelper.query(session, query, -1);
+
+		// Complete linked Entity build
+		linkedEntity.setRecords(linkedRecords);
+		linkedEntity.setIds(linkedIds);
+		
+		// Mark entity
+		linkedEntity.setFetched(true);
+		
+		return linkedEntity;
+	}
+
+	private Entity setNtoNLinkedEntityRecords(CoreSession session, Entity currentEntity, DocumentModel currentModel,
+			String linkedType, String fieldName, Entity linkedEntity) {
+		List<String> linkedIds = getLinkedIds(session, currentModel, currentEntity, fieldName);
+		
+		String query = String.format(LINKED_N_TO_N_ENTITIES_QUERY, linkedType, getInOperand(linkedIds));
+		DocumentModelList linkedRecords = ToutaticeEsQueryHelper.query(session, query, -1);
+
+		// Complete linked Entity build
+		linkedEntity.setRecords(linkedRecords);
+		linkedEntity.setIds(linkedIds);
+		
+		// Mark entity
+		linkedEntity.setFetched(true);
+		
+		return linkedEntity;
 	}
 
 	public String prepareInOperand(CoreSession session, DocumentModel model, Entity entity, String fieldName) {
@@ -241,7 +272,7 @@ public class LinkedEntitiesResolver {
 		return webIds;
 	}
 
-	protected String getInOperand(List<String> elements) {
+	public String getInOperand(List<String> elements) {
 		StringBuffer operand = new StringBuffer();
 		
 		if(elements != null) {

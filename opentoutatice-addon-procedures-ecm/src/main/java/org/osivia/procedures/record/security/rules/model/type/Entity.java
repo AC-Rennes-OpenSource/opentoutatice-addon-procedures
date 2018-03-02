@@ -11,6 +11,7 @@ import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.osivia.procedures.constants.ProceduresConstants;
 import org.osivia.procedures.record.RecordsConstants;
+import org.osivia.procedures.record.security.rules.LinkedEntitiesResolver;
 import org.osivia.procedures.record.security.rules.model.relation.Relation;
 
 import fr.toutatice.ecm.platform.core.constants.ToutaticeNuxeoStudioConst;
@@ -27,7 +28,7 @@ public class Entity {
 	private Relation relationTo;
 	private Relation relationFrom;
 
-	private boolean fetch;
+	private boolean fetched;
 
 	private List<String> ids;
 	private List<DocumentModel> records;
@@ -74,12 +75,12 @@ public class Entity {
 		this.relationFrom = relationFrom;
 	}
 
-	public boolean isFetch() {
-		return fetch;
+	public boolean isFetched() {
+		return fetched;
 	}
 
-	public void setFetch(boolean fetch) {
-		this.fetch = fetch;
+	public void setFetched(boolean fetched) {
+		this.fetched = fetched;
 	}
 
 	public List<DocumentModel> getRecords() {

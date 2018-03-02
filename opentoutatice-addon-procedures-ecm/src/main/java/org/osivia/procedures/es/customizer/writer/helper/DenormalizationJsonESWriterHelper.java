@@ -30,10 +30,10 @@ import com.ibm.icu.text.SimpleDateFormat;
  */
 public class DenormalizationJsonESWriterHelper {
 	
-	private static Pattern COMPLEX_PROPERTY_PATTERN = Pattern.compile("^[\\[\\{](.+)[\\]\\}]$");
-	private static Pattern DATE_PATTERN = Pattern.compile("^([0-2][0-9]||3[0-1])/(0[0-9]||1[0-2])/([0-9][0-9])?[0-9][0-9]$");
+	public static Pattern COMPLEX_PROPERTY_PATTERN = Pattern.compile("^[\\[\\{](.+)[\\]\\}]$");
+	public static Pattern DATE_PATTERN = Pattern.compile("^([0-2][0-9]||3[0-1])/(0[0-9]||1[0-2])/([0-9][0-9])?[0-9][0-9]$");
 	
-	private static final SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+	public static final SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
 
 	/**
 	 * Utility class.

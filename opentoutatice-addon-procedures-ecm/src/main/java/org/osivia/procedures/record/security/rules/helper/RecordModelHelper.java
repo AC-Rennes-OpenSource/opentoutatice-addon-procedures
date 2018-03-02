@@ -29,7 +29,7 @@ public class RecordModelHelper {
 	public static final String RECORD_MODEL_QUERY = "select * from RecordFolder where "
 			+ StringUtils.substringAfter(RecordsConstants.DEFAULT_FILTER, " and");
 	
-	protected static final Pattern MODEL_WEBID_PATTERN = Pattern
+	public static final Pattern MODEL_WEBID_PATTERN = Pattern
 			.compile("\\\"recordFolderWebId\\\":\\\"([0-9a-zA-Z]{6}){1}\\\"");
 	
 	private RecordModelHelper() {

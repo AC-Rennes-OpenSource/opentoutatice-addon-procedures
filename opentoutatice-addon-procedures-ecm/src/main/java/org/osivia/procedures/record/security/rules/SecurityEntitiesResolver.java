@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -71,15 +72,18 @@ public class SecurityEntitiesResolver {
 			Set<RelationModel> usersRelation = getUsersRelations(securityModel);
 			DocumentModelList securityRecords = getSecurityRecordsOf(systemSession, usersRelation, principal);
 
-			// Entity
-			Entity securityEntity = new Entity(EntityHelper.getType(securityModel));
-			securityEntity.setRecords(securityRecords);
+			// Current user belongs to Security Entity
+			if (CollectionUtils.isNotEmpty(securityRecords)) {
+				// Entity
+				Entity securityEntity = new Entity(EntityHelper.getType(securityModel));
+				securityEntity.setRecords(securityRecords);
 
-			// Store
-			if (entities == null) {
-				entities = new HashMap<>();
+				// Store
+				if (entities == null) {
+					entities = new HashMap<>();
+				}
+				entities.put(EntityHelper.getType(securityModel), securityEntity);
 			}
-			entities.put(EntityHelper.getType(securityModel), securityEntity);
 
 		}
 

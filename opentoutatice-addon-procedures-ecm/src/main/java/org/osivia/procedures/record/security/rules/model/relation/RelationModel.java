@@ -3,13 +3,6 @@
  */
 package org.osivia.procedures.record.security.rules.model.relation;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import org.osivia.procedures.record.RecordsConstants;
-
 /**
  * @author david
  *
@@ -17,7 +10,7 @@ import org.osivia.procedures.record.RecordsConstants;
 public class RelationModel {
 
 	public enum Type {
-		NtoOne, NtoN;
+		oneToOne, NtoOne, NtoN;
 	}
 
 	private Type type;
