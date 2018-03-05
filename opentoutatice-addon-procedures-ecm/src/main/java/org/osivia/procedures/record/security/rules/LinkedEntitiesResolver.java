@@ -100,9 +100,9 @@ public class LinkedEntitiesResolver {
 								
 								// Relation
 								Relation relation = new Relation(relationModel);
-								if(!entity.isFetched()) {
-									linkedEntity = setNtoOneLinkedEntityRecords(session, entity, model, linkedType, fieldName, linkedEntity);
-								}
+//								if(!entity.isFetched()) {
+//									linkedEntity = setNtoOneLinkedEntityRecords(session, entity, model, linkedType, fieldName, linkedEntity);
+//								}
 								relation.setTargetIds(entity.getIds());
 
 								linkedEntity.setRelationTo(relation);
