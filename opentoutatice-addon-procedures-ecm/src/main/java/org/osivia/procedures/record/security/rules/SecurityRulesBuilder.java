@@ -6,9 +6,10 @@ package org.osivia.procedures.record.security.rules;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
@@ -19,7 +20,10 @@ import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.osivia.procedures.constants.ProceduresConstants;
 import org.osivia.procedures.record.security.rules.helper.RecordModelHelper;
+import org.osivia.procedures.record.security.rules.model.SecurityRelation;
+import org.osivia.procedures.record.security.rules.model.SecurityRelations;
 import org.osivia.procedures.record.security.rules.model.SecurityRules;
+import org.osivia.procedures.record.security.rules.model.relation.RecordsRelation;
 import org.osivia.procedures.record.security.rules.model.type.Entity;
 
 import fr.toutatice.ecm.platform.core.query.helper.ToutaticeEsQueryHelper;
@@ -32,12 +36,16 @@ public class SecurityRulesBuilder {
 
 	private static final Log log = LogFactory.getLog(SecurityRulesBuilder.class);
 
-	private static LinkedEntitiesResolver resolver;
+	// Temporary
+	private static Map<String, SecurityRelations> rulesByUser;
+
+	private static RecordsRelationsResolver resolver;
 
 	private static SecurityRulesBuilder instance;
 
 	private SecurityRulesBuilder() {
 		super();
+		rulesByUser = new ConcurrentHashMap<>(0);
 	}
 
 	public static synchronized SecurityRulesBuilder getInstance() {
@@ -47,126 +55,174 @@ public class SecurityRulesBuilder {
 		return instance;
 	}
 
-	public static LinkedEntitiesResolver getLinkedEntitiesResolver() {
+	public static RecordsRelationsResolver getRecordsRelationsResolver() {
 		if (resolver == null) {
-			resolver = LinkedEntitiesResolver.getInstance();
+			resolver = RecordsRelationsResolver.getInstance();
 		}
 		return resolver;
 	}
 
-	public SecurityRules build(String repositoryName, Principal principal) {
+	public static SecurityRelations buildSecurityRelations(CoreSession session, Principal currentPrincipal) {
+		UnrestrictedSecurityRulesBuilder builder = new UnrestrictedSecurityRulesBuilder(session, currentPrincipal);
+		builder.runUnrestricted();
+		return builder.getSecurityRelations();
+	}
+
+	public SecurityRelations build(CoreSession session, Principal currentPrincipal) {
 		// Result
-		SecurityRules rules = new SecurityRules();
+		SecurityRelations rules = null;
 
-		// To do in unrestricted mode
-		CoreSession systemSession = null;
+		// Check if yet calculated
+//		if (rulesByUser.containsKey(currentPrincipal.getName())) {
+//			rules = rulesByUser.get(currentPrincipal.getName());
+//		} else {
+			rules = new SecurityRelations(0);
 
-		try {
-			repositoryName = StringUtils.isNotBlank(repositoryName) ? repositoryName
-					: ProceduresConstants.DEFAULT_REPOSITORY_NAME;
-
-			systemSession = CoreInstance.openCoreSessionSystem(repositoryName);
-
-			Map<String, Entity> securityEntities = SecurityEntitiesResolver.getInstance()
-					.getSecurityEntitiesOf(systemSession, principal);
+			Map<String, Entity> securityEntities = SecurityEntitiesResolver.getInstance().getSecurityEntitiesOf(session,
+					currentPrincipal);
 
 			if (securityEntities != null && securityEntities.size() > 0) {
 				// Get models
-				DocumentModelList models = ToutaticeEsQueryHelper.query(systemSession,
-						RecordModelHelper.RECORD_MODEL_QUERY);
+				DocumentModelList models = ToutaticeEsQueryHelper.query(session, RecordModelHelper.RECORD_MODELS_QUERY);
 
 				// Debug
 				final long begin = System.currentTimeMillis();
 
-				rules = builsRules(systemSession, rules, securityEntities, new HashMap<String, Entity>(),
-						new HashSet<String>(), models);
+				Map<String, Entity> treatedEntities = securityEntities;
+				Set<RecordsRelation> treatedRelations = new HashSet<>(0);
+
+				rules = buildSecurity(session, rules, securityEntities, models, treatedEntities, treatedRelations);
+
+				// Store
+//				rulesByUser.put(currentPrincipal.getName(), rules);
 
 				if (log.isDebugEnabled()) {
 					final long end = System.currentTimeMillis();
 					log.debug("[#resolveLinkedEntites] " + String.valueOf(end - begin) + " ms");
 				}
 			}
-		} finally {
-			if (systemSession != null) {
-				systemSession.close();
-			}
-		}
+//		}
 
 		return rules;
 	}
 
-	
-	public SecurityRules builsRules(CoreSession session, SecurityRules rules, Map<String, Entity> entities,
-			Map<String, Entity> linkedEntities, Set<String> treatedEntities, DocumentModelList models) {
-
+	/**
+	 * Browse entities (as Record types) building associated relations.
+	 * 
+	 * @param session
+	 * @param securityRelations
+	 * @param entities
+	 * @param treatedRelations
+	 * @param models
+	 * @return
+	 */
+	public SecurityRelations buildSecurity(CoreSession session, SecurityRelations securityRelations,
+			Map<String, Entity> entities, DocumentModelList models, Map<String, Entity> treatedEntities,
+			Set<RecordsRelation> treteadRelations) {
 		// Compute linked entities
 		for (Entity entity : entities.values()) {
 
-			Map<String, Entity> linkedEntitiesTo = getLinkedEntitiesResolver().getLinkedEntitiesTo(session, rules,
-					models, entity);
+			if (log.isDebugEnabled()) {
+				log.debug("Treating: " + entity.getType());
+			}
+
+			SecurityRelations inComingRelations = getRecordsRelationsResolver().getInComingRelations(session, models,
+					entity, treatedEntities, treteadRelations);
+			store(securityRelations, inComingRelations);
 
 			if (log.isDebugEnabled()) {
-				log.debug("[Linked entities to: " + entity.getType() + " ]");
-				if (linkedEntitiesTo.keySet() != null) {
-					for (String type : linkedEntitiesTo.keySet()) {
-						log.debug(type);
-					}
+				log.debug("* in:");
+				for (SecurityRelation sr : inComingRelations) {
+					log.debug(" - " + sr.getRecordType());
 				}
 			}
 
-			Map<String, Entity> linkedEntitiesFrom = getLinkedEntitiesResolver().getLinkedEntitiesFrom(session, rules,
-					models, entity);
+			SecurityRelations outComingRelations = getRecordsRelationsResolver().getOutComingRelations(session, models,
+					entity, treatedEntities, treteadRelations);
+			store(securityRelations, outComingRelations);
 
 			if (log.isDebugEnabled()) {
-				log.debug("[Linked entities from: " + entity.getType() + " ]");
-				if (linkedEntitiesFrom.keySet() != null) {
-					for (String type : linkedEntitiesFrom.keySet()) {
-						log.debug(type);
-					}
+				log.debug("* out:");
+				for (SecurityRelation sr : outComingRelations) {
+					log.debug(" - " + sr.getRecordType());
 				}
 			}
 
-			for (Entity entTo : linkedEntitiesTo.values()) {
-				if (!linkedEntities.containsKey(entTo.getType())) {
-					linkedEntities.put(entTo.getType(), entTo);
-				}
-			}
-
-			for (Entity entFrom : linkedEntitiesFrom.values()) {
-				if (!linkedEntities.containsKey(entFrom.getType())) {
-					linkedEntities.put(entFrom.getType(), entFrom);
-				}
-			}
-
-			if (!treatedEntities.contains(entity.getType())) {
-				treatedEntities.add(entity.getType());
-			}
-
-			Map<String, Entity> nextEntities = getNextEntities(linkedEntities, treatedEntities);
-
+			Map<String, Entity> nextEntities = getNextEntities(inComingRelations, outComingRelations);
 			if (MapUtils.isNotEmpty(nextEntities)) {
-				builsRules(session, rules, nextEntities, linkedEntities, treatedEntities, models);
+				buildSecurity(session, securityRelations, nextEntities, models, treatedEntities, treteadRelations);
 			}
 
 		}
 
-		return rules;
+		return securityRelations;
 
 	}
 
-	private Map<String, Entity> getNextEntities(Map<String, Entity> linkedEntities, Set<String> treatedEntities) {
-		Map<String, Entity> nextEntities = new HashMap<>(0);
-
-		if (linkedEntities != null) {
-			for (Entry<String, Entity> entry : linkedEntities.entrySet()) {
-				String type = entry.getKey();
-				if (!treatedEntities.contains(type)) {
-					nextEntities.put(type, entry.getValue());
+	private void store(SecurityRelations securityRelations, SecurityRelations relations) {
+		if (relations != null) {
+			for (SecurityRelation sr : relations) {
+				if (!securityRelations.contains(sr)) {
+					securityRelations.add(sr);
 				}
 			}
+		}
+	}
+
+	private Map<String, Entity> getNextEntities(SecurityRelations inComingRelations,
+			SecurityRelations outComingRelations) {
+		Map<String, Entity> nextEntities = new HashMap<>(0);
+
+		for (SecurityRelation inSr : inComingRelations) {
+			Entity entity = inSr.getEntity();
+			nextEntities.put(entity.getType(), entity);
+		}
+
+		for (SecurityRelation outSr : outComingRelations) {
+			Entity entity = outSr.getEntity();
+			nextEntities.put(entity.getType(), entity);
 		}
 
 		return nextEntities;
 	}
+
+	// private Map<String, Entity> getNextEntities(SecurityRelations
+	// secureRelations,
+	// Map<String, Entity> treatedEntities) {
+	// Map<String, Entity> nextEntities = new HashMap<>(0);
+	//
+	// for (SecurityRelation sr : secureRelations) {
+	// String nextType = sr.getEntity().getType();
+	// if (!treatedEntities.containsKey(nextType)) {
+	// nextEntities.put(nextType, sr.getEntity());
+	// }
+	// }
+	//
+	// return nextEntities;
+	// }
+	//
+	// private void store(Set<String> treatedEntities, SecurityRelations
+	// outComingRelations) {
+	// Iterator<SecurityRelation> outRelationIterator =
+	// outComingRelations.iterator();
+	//
+	// if (log.isDebugEnabled()) {
+	// log.debug("[Tretead entities]: ");
+	// }
+	//
+	// while (outRelationIterator.hasNext()) {
+	// SecurityRelation securityRelation = outRelationIterator.next();
+	//
+	// String entityType = securityRelation.getEntity().getType();
+	//
+	// if (log.isDebugEnabled()) {
+	// log.debug(entityType);
+	// }
+	//
+	// if (!treatedEntities.contains(entityType)) {
+	// treatedEntities.add(entityType);
+	// }
+	// }
+	// }
 
 }

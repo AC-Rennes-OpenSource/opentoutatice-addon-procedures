@@ -28,11 +28,13 @@ import org.osivia.procedures.record.RecordsConstants;
 import org.osivia.procedures.record.model.FieldTypes;
 import org.osivia.procedures.record.model.ModelAnalyzer;
 import org.osivia.procedures.record.model.relation.RelationsModelResolver;
-import org.osivia.procedures.record.security.rules.LinkedEntitiesResolver;
+import org.osivia.procedures.record.security.rules.RecordsRelationsResolver;
 import org.osivia.procedures.record.security.rules.helper.RecordHelper;
+import org.osivia.procedures.record.security.rules.helper.RecordsFetcherHelper;
 
 import fr.toutatice.ecm.es.customizer.writers.denormalization.AbstractDenormalizationJsonESWriter;
 import fr.toutatice.ecm.platform.core.constants.ToutaticeNuxeoStudioConst;
+import fr.toutatice.ecm.platform.core.helper.ToutaticeDocumentHelper;
 
 /**
  * @author david
@@ -103,6 +105,7 @@ public class RecordJsonESDenormalizationWriter extends AbstractDenormalizationJs
 								jg.writeStartArray();
 
 								for (DocumentModel target : targets) {
+									// Keep direct id link relation
 									this.jsonESWriter.writeNativeESDocument(jg, target, target.getSchemas(), null);
 								}
 
@@ -184,11 +187,11 @@ public class RecordJsonESDenormalizationWriter extends AbstractDenormalizationJs
 
 		// Get ids as list
 		List<String> ids = new ArrayList<>(0);
-		ids = RecordHelper.getIds(ids, idsAsString, LinkedEntitiesResolver.RECORDS_WEBIDS_PATTERN);
+		ids = RecordHelper.getIds(ids, idsAsString, RecordsRelationsResolver.RECORDS_WEBIDS_PATTERN);
 
 		if (CollectionUtils.isNotEmpty(ids)) {
 			String query = String.format(GET_LINKED_N_TO_N_ENTITIES_QUERY, type,
-					LinkedEntitiesResolver.getInstance().getInOperand(ids));
+					RecordsFetcherHelper.getInOperand(ids));
 			targets = super.session.query(query, -1);
 		}
 

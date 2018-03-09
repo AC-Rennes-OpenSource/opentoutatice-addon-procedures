@@ -13,11 +13,11 @@ import org.osivia.procedures.record.security.rules.model.type.Entity;
  * @author david
  *
  */
-public class ModelsRules {
+public class SecurityRecordsModels {
 	
 	private Map<String, Entity> entities;
 	
-	public ModelsRules() {
+	public SecurityRecordsModels() {
 		super();
 		this.entities = new HashMap<>(0);
 	}

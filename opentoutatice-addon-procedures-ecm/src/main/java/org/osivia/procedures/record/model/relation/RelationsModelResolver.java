@@ -15,9 +15,11 @@ import org.nuxeo.ecm.core.api.model.Property;
 import org.nuxeo.ecm.core.api.model.impl.ListProperty;
 import org.nuxeo.ecm.core.api.model.impl.MapProperty;
 import org.osivia.procedures.constants.ProceduresConstants;
+import org.osivia.procedures.record.security.rules.SecurityRulesBuilder;
 import org.osivia.procedures.record.security.rules.helper.RecordHelper;
 import org.osivia.procedures.record.security.rules.helper.RecordModelHelper;
-import org.osivia.procedures.record.security.rules.model.relation.RelationType;
+import org.osivia.procedures.record.security.rules.model.SecurityRelations;
+import org.osivia.procedures.record.security.rules.model.type.FieldType;
 
 /**
  * @author david
@@ -37,6 +39,13 @@ public class RelationsModelResolver {
 		}
 		return instance;
 	}
+	
+	// TODO !!!
+	public boolean isTargetOfRelation(DocumentModel recordModel) {
+//		SecurityRelations rules = SecurityRulesBuilder.getInstance().build(record, principal);
+//		
+		return false;
+	}
 
 	public boolean isSourceOfNToOneRelation(DocumentModel recordModel, String fieldDefName) {
 		boolean isRecordType = false;
@@ -53,7 +62,7 @@ public class RelationsModelResolver {
 				if (StringUtils.equals(fieldDefName, fieldDef.get("name").getValue(String.class))) {
 					// Check field type
 					String fieldDefType = fieldDef.get("type").getValue(String.class);
-					isRecordType = StringUtils.equals(fieldDefType, RelationType.Record.getType());
+					isRecordType = StringUtils.equals(fieldDefType, FieldType.Record.getType());
 				}
 			}
 		}
@@ -132,7 +141,7 @@ public class RelationsModelResolver {
 								if (StringUtils.equals(possibleTgtKey, fieldName)) {
 									// Check field type
 									String fieldDefType = fieldDef.get("type").getValue(String.class);
-									if (StringUtils.equals(fieldDefType, RelationType.Record.getType())) {
+									if (StringUtils.equals(fieldDefType, FieldType.Record.getType())) {
 										// Get Model type
 										String typeAsFlatStr = fieldDef.get("varOptions").getValue(String.class);
 										

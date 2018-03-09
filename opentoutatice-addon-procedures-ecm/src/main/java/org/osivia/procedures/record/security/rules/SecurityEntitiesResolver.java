@@ -25,10 +25,12 @@ import org.nuxeo.ecm.core.api.model.impl.MapProperty;
 import org.osivia.procedures.constants.ProceduresConstants;
 import org.osivia.procedures.record.RecordsConstants;
 import org.osivia.procedures.record.security.rules.helper.EntityHelper;
-import org.osivia.procedures.record.security.rules.helper.RelationHelper;
+import org.osivia.procedures.record.security.rules.helper.RelationModelHelper;
 import org.osivia.procedures.record.security.rules.model.relation.RelationModel;
-import org.osivia.procedures.record.security.rules.model.relation.RelationType;
+import org.osivia.procedures.record.security.rules.model.relation.RelationModelType;
 import org.osivia.procedures.record.security.rules.model.type.Entity;
+import org.osivia.procedures.record.security.rules.model.type.FieldType;
+import org.osivia.procedures.record.security.rules.model.type.RecordModel;
 
 import fr.toutatice.ecm.platform.core.query.helper.ToutaticeEsQueryHelper;
 
@@ -57,25 +59,24 @@ public class SecurityEntitiesResolver {
 		return instance;
 	}
 
-	public Map<String, Entity> getSecurityEntitiesOf(CoreSession systemSession, Principal principal) {
+	public Map<String, Entity> getSecurityEntitiesOf(CoreSession session, Principal principal) {
 		// Result
 		Map<String, Entity> entities = null;
 
-		systemSession = CoreInstance.openCoreSessionSystem(ProceduresConstants.DEFAULT_REPOSITORY_NAME);
-
-		DocumentModelList securityModels = ToutaticeEsQueryHelper.query(systemSession,
+		DocumentModelList securityModels = ToutaticeEsQueryHelper.query(session,
 				SECURITY_ENTITIES_MODELS_QUERY + RecordsConstants.DEFAULT_FILTER, -1);
 
 		// Get security records of current user
 		for (DocumentModel securityModel : securityModels) {
 			// Model and instances informations
 			Set<RelationModel> usersRelation = getUsersRelations(securityModel);
-			DocumentModelList securityRecords = getSecurityRecordsOf(systemSession, usersRelation, principal);
+			DocumentModelList securityRecords = getSecurityRecordsOf(session, usersRelation, principal);
 
 			// Current user belongs to Security Entity
 			if (CollectionUtils.isNotEmpty(securityRecords)) {
 				// Entity
 				Entity securityEntity = new Entity(EntityHelper.getType(securityModel));
+				securityEntity.setRecordModel(new RecordModel(securityModel));
 				securityEntity.setRecords(securityRecords);
 
 				// Store
@@ -123,7 +124,7 @@ public class SecurityEntitiesResolver {
 
 				// Check if field definition is the one of PERSON type
 				String fieldDefType = fieldDef.get("type").getValue(String.class);
-				if (StringUtils.equals(RelationType.Person.getType(), fieldDefType)) {
+				if (StringUtils.equals(FieldType.Person.getType(), fieldDefType)) {
 					// Build Relation
 					RelationModel usrRelation = buildRelationModel(securityModel, fieldDef);
 
@@ -145,15 +146,15 @@ public class SecurityEntitiesResolver {
 
 		String fieldName = fieldDefinitionType.get("name").getValue(String.class);
 
-		if (RelationHelper.isNToNRelation(model, fieldName)) {
+		if (RelationModelHelper.isOneToNRelation(model, fieldName)) {
 			// Build Relation model
-			relationM = new RelationModel(RelationModel.Type.NtoN);
+			relationM = new RelationModel(RelationModelType.oneToN);
 			relationM.setSourceType(EntityHelper.getType(model));
-			relationM.setTargetKey(RelationHelper.getNToNRelationKey(model, fieldName) + "/" + fieldName);
+			relationM.setTargetKey(RelationModelHelper.getOneToNRelationKey(model, fieldName) + "/" + fieldName);
 
-		} else if (RelationHelper.isNToOneRelation(model, fieldName)) {
+		} else if (RelationModelHelper.isOneToOneRelation(model, fieldName)) {
 			// Build Relation model
-			relationM = new RelationModel(RelationModel.Type.NtoOne);
+			relationM = new RelationModel(RelationModelType.oneToOne);
 			relationM.setSourceType(EntityHelper.getType(model));
 			relationM.setTargetKey(fieldName);
 		}

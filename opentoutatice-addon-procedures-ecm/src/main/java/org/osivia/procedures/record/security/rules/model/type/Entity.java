@@ -6,13 +6,14 @@ package org.osivia.procedures.record.security.rules.model.type;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.nuxeo.ecm.core.api.CoreInstance;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.osivia.procedures.constants.ProceduresConstants;
 import org.osivia.procedures.record.RecordsConstants;
-import org.osivia.procedures.record.security.rules.LinkedEntitiesResolver;
-import org.osivia.procedures.record.security.rules.model.relation.Relation;
+import org.osivia.procedures.record.security.rules.RecordsRelationsResolver;
+import org.osivia.procedures.record.security.rules.model.relation.RecordsRelation;
 
 import fr.toutatice.ecm.platform.core.constants.ToutaticeNuxeoStudioConst;
 
@@ -24,19 +25,34 @@ public class Entity {
 
 	private String type;
 	private boolean isSecurity;
+	
+	private RecordModel recordModel;
 
-	private Relation relationTo;
-	private Relation relationFrom;
+	private RecordsRelation relationTo;
+	private RecordsRelation relationFrom;
 
 	private boolean fetched;
 
 	private List<String> ids;
 	private List<DocumentModel> records;
+	
+	public Entity(RecordModel recordModel) {
+		super();
+		this.recordModel = recordModel;
+	}
 
 	public Entity(String type) {
 		super();
 		this.type = type;
 		this.records = new ArrayList<>();
+	}
+
+	public RecordModel getRecordModel() {
+		return recordModel;
+	}
+
+	public void setRecordModel(RecordModel recordModel) {
+		this.recordModel = recordModel;
 	}
 
 	public void addRecord(DocumentModel record) {
@@ -59,19 +75,19 @@ public class Entity {
 		this.isSecurity = isSecurity;
 	}
 
-	public Relation getRelationTo() {
+	public RecordsRelation getRelationTo() {
 		return relationTo;
 	}
 
-	public void setRelationTo(Relation relationTo) {
+	public void setRelationTo(RecordsRelation relationTo) {
 		this.relationTo = relationTo;
 	}
 
-	public Relation getRelationFrom() {
+	public RecordsRelation getRelationFrom() {
 		return relationFrom;
 	}
 
-	public void setRelationFrom(Relation relationFrom) {
+	public void setRelationFrom(RecordsRelation relationFrom) {
 		this.relationFrom = relationFrom;
 	}
 
@@ -104,6 +120,18 @@ public class Entity {
 
 	public void setIds(List<String> ids) {
 		this.ids = ids;
+	}
+	
+	@Override
+	public boolean equals(Object other) {
+		boolean equals = false;
+		
+		if(other != null && other instanceof Entity) {
+			Entity otherEntity = (Entity) other;
+			equals = StringUtils.equals(this.type, otherEntity.getType());
+		}
+		
+		return equals;
 	}
 
 }

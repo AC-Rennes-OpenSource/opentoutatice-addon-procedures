@@ -9,27 +9,23 @@ package org.osivia.procedures.record.security.rules.model.relation;
  */
 public class RelationModel {
 
-	public enum Type {
-		oneToOne, NtoOne, NtoN;
-	}
-
-	private Type type;
+	private RelationModelType type;
 
 	private String sourceType;
-	
-	private String targetKey;
-private String targetType;
 
-	public RelationModel(Type type) {
+	private String targetKey;
+	private String targetType;
+
+	public RelationModel(RelationModelType type) {
 		super();
 		this.type = type;
 	}
 
-	public Type getType() {
+	public RelationModelType getType() {
 		return type;
 	}
 
-	public void setType(Type type) {
+	public void setType(RelationModelType type) {
 		this.type = type;
 	}
 
@@ -56,5 +52,6 @@ private String targetType;
 	public void setTargetType(String targetType) {
 		this.targetType = targetType;
 	}
+	
 
 }
