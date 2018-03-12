@@ -5,7 +5,6 @@ package org.osivia.procedures.es.customizer.writer.helper;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,7 +14,6 @@ import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.ser.StdSerializerProvider;
 import org.codehaus.jackson.node.BaseJsonNode;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.model.Property;
@@ -29,10 +27,10 @@ import com.ibm.icu.text.SimpleDateFormat;
  *
  */
 public class DenormalizationJsonESWriterHelper {
-	
+
 	public static Pattern COMPLEX_PROPERTY_PATTERN = Pattern.compile("^[\\[\\{](.+)[\\]\\}]$");
 	public static Pattern DATE_PATTERN = Pattern.compile("^([0-2][0-9]||3[0-1])/(0[0-9]||1[0-2])/([0-9][0-9])?[0-9][0-9]$");
-	
+
 	public static final SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
 
 	/**
@@ -80,7 +78,7 @@ public class DenormalizationJsonESWriterHelper {
 
         return jg;
     }
-	
+
 	public static JsonGenerator mapKeyValueAsJson(JsonGenerator jg, DocumentModel doc, String listPropXPath, String entryKey,
 			String entryValue) throws JsonGenerationException, IOException {
 
@@ -88,7 +86,7 @@ public class DenormalizationJsonESWriterHelper {
 
 		if (CollectionUtils.isNotEmpty(valuesProp)) {
 
-			jg.writeFieldName("rcd:data");
+            jg.writeFieldName("pi:data");
 			jg.writeStartObject();
 
 			for (Property valueProp : valuesProp) {
@@ -114,7 +112,7 @@ public class DenormalizationJsonESWriterHelper {
 								value = initialValue;
 							}
 						}
-						
+
 						jg.writeStringField(name, value);
 					}
 				}
