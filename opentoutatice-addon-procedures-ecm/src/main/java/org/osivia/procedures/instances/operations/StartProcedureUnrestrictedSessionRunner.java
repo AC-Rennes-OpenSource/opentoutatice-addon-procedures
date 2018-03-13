@@ -2,7 +2,6 @@ package org.osivia.procedures.instances.operations;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -145,9 +144,7 @@ public class StartProcedureUnrestrictedSessionRunner extends AbstractProcedureUn
         }
 
         // Create procedure instance model
-        String name = model.getName() +"."+ Long.toString(Calendar.getInstance().getTimeInMillis()); // Generate a unique ID for this PI
-		DocumentModel procedureInstanceModel = session.createDocumentModel(parentPath, name, "ProcedureInstance");
-		procedureInstanceModel.setPropertyValue("ttc:webid", name);
+        DocumentModel procedureInstanceModel = session.createDocumentModel(parentPath, model.getName(), "ProcedureInstance");
 		
         // Create procedure instance based on model
         DocumentModel procedureInstance = session.createDocument(procedureInstanceModel);
