@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.osivia.procedures.es.customizer;
 
@@ -14,7 +14,7 @@ import org.nuxeo.runtime.api.Framework;
 import org.osivia.procedures.constants.ProceduresConstants;
 
 import fr.toutatice.ecm.platform.core.helper.ToutaticeDocumentHelper;
-import fr.toutatice.ecm.platform.core.helper.ToutaticeQueryHelper;
+import fr.toutatice.ecm.platform.core.query.helper.ToutaticeQueryHelper;
 
 
 /**
@@ -42,7 +42,7 @@ public final class ProcedureDenormalizationHelper {
 
     /**
      * Getter for ProcedureDenormalizationHelper instance.
-     * 
+     *
      * @return instance of ProcedureDenormalizationHelper.
      */
     public static synchronized ProcedureDenormalizationHelper getInstance() {
@@ -62,14 +62,14 @@ public final class ProcedureDenormalizationHelper {
 
     /**
      * Get Task document model associated with given procedureInstance.
-     * 
+     *
      * @return Task document model associated with given procedureInstance.
      */
     public DocumentModel getTaskOfProcedureInstance(CoreSession session, DocumentModel pi) {
         String query = String.format(TASK_DOC_QUERY, pi.getId());
         DocumentModelList tasks = null;
-        
-        if (session.getPrincipal() != null && !((NuxeoPrincipal) session.getPrincipal()).isAdministrator()) {
+
+        if ((session.getPrincipal() != null) && !((NuxeoPrincipal) session.getPrincipal()).isAdministrator()) {
             // Listener case
             tasks = ToutaticeQueryHelper.queryUnrestricted(session, query);
         } else {
@@ -77,7 +77,7 @@ public final class ProcedureDenormalizationHelper {
             tasks = session.query(query);
         }
 
-        if (tasks != null && tasks.size() == 1) {
+        if ((tasks != null) && (tasks.size() == 1)) {
             return tasks.get(0);
         }
         return null;
@@ -85,7 +85,7 @@ public final class ProcedureDenormalizationHelper {
 
     /**
      * Get ProcedureInstance linked to given TaskDoc.
-     * 
+     *
      * @param doc
      * @return ProcedureInstance.
      */
@@ -93,7 +93,7 @@ public final class ProcedureDenormalizationHelper {
         Task task = taskDoc.getAdapter(Task.class);
         DocumentModel targetDocumentModel = null;
 
-        if (session.getPrincipal() != null && !((NuxeoPrincipal) session.getPrincipal()).isAdministrator()) {
+        if ((session.getPrincipal() != null) && !((NuxeoPrincipal) session.getPrincipal()).isAdministrator()) {
             // Listener case
             targetDocumentModel = ToutaticeDocumentHelper.getUnrestrictedDocument(session, task.getTargetDocumentId());
         } else {
@@ -101,7 +101,7 @@ public final class ProcedureDenormalizationHelper {
             targetDocumentModel = getTaskService().getTargetDocumentModel(task, session);
         }
 
-        return targetDocumentModel != null && StringUtils.equals(ProceduresConstants.PI_TYPE, targetDocumentModel.getType()) ? targetDocumentModel : null;
+        return (targetDocumentModel != null) && StringUtils.equals(ProceduresConstants.PI_TYPE, targetDocumentModel.getType()) ? targetDocumentModel : null;
     }
 
 }
