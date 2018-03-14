@@ -7,8 +7,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.osivia.procedures.record.security.rules.model.relation.RecordsRelation;
-
 /**
  * @author david
  *

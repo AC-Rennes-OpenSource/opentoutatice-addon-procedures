@@ -37,7 +37,7 @@ public class SecurityPolicyDelegator {
 		String sessionId = doc.getSession().getSessionId();
 		CoreSession coreSession = CoreInstance.getInstance().getSession(sessionId);
 		if (coreSession != null) {
-			SecurityRelations rules = SecurityRulesBuilder.buildSecurityRelations(coreSession, principal);
+			SecurityRelations rules = SecurityRulesBuilder.getInstance().buildSecurityRelations(coreSession, principal);
 			String recordType = (String) doc.getPropertyValue("rcd:procedureModelWebId");
 
 			if (rules.getTypes().contains(recordType)) {

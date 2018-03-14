@@ -44,7 +44,7 @@ public class ProcedureInstanceJsonESWriter extends AbstractCustomJsonESWriter {
         DenormalizationJsonESWriterHelper.mapKeyValue(jg, pi, ProceduresConstants.PI_VALUES_XPATH, 
                 ProceduresConstants.PI_ENTRY_KEY, ProceduresConstants.ENTRY_VALUE);
         // Custom name / value as Json
-        DenormalizationJsonESWriterHelper.mapKeyValueAsJson(jg, pi, ProceduresConstants.PI_VALUES_XPATH, 
+        DenormalizationJsonESWriterHelper.mapKeyValueAsJson(jg, "pi:data", pi, ProceduresConstants.PI_VALUES_XPATH, 
                 ProceduresConstants.PI_ENTRY_KEY, ProceduresConstants.ENTRY_VALUE);
     }
 

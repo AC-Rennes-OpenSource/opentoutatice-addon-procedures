@@ -26,7 +26,7 @@ import org.osivia.procedures.constants.ProceduresConstants;
 import org.osivia.procedures.es.customizer.writer.helper.DenormalizationJsonESWriterHelper;
 import org.osivia.procedures.record.RecordsConstants;
 import org.osivia.procedures.record.model.FieldTypes;
-import org.osivia.procedures.record.model.ModelAnalyzer;
+import org.osivia.procedures.record.model.RecordModelAnalyzer;
 import org.osivia.procedures.record.model.relation.RelationsModelResolver;
 import org.osivia.procedures.record.security.rules.RecordsRelationsResolver;
 import org.osivia.procedures.record.security.rules.helper.RecordHelper;
@@ -34,7 +34,6 @@ import org.osivia.procedures.record.security.rules.helper.RecordsFetcherHelper;
 
 import fr.toutatice.ecm.es.customizer.writers.denormalization.AbstractDenormalizationJsonESWriter;
 import fr.toutatice.ecm.platform.core.constants.ToutaticeNuxeoStudioConst;
-import fr.toutatice.ecm.platform.core.helper.ToutaticeDocumentHelper;
 
 /**
  * @author david
@@ -81,7 +80,7 @@ public class RecordJsonESDenormalizationWriter extends AbstractDenormalizationJs
 
 		if (CollectionUtils.isNotEmpty(valuesProp)) {
 
-			jg.writeFieldName("rcd:data");
+			jg.writeFieldName(RecordsConstants.CUSTOM_RECORD_XPATH);
 			jg.writeStartObject();
 
 			for (Property valueProp : valuesProp) {
@@ -114,7 +113,7 @@ public class RecordJsonESDenormalizationWriter extends AbstractDenormalizationJs
 								jg.writeStringField(name, value);
 							}
 						} else {
-							String fieldType = ModelAnalyzer.getInstance().getFieldType(recordModel, name);
+							String fieldType = RecordModelAnalyzer.getInstance().getFieldType(recordModel, name);
 							if (isAttachedBinary(fieldType)) {
 								value = org.apache.commons.lang.StringUtils.substringBeforeLast(value, "}")
 										.concat(",\"type\":\"" + fieldType + "\"}\"");

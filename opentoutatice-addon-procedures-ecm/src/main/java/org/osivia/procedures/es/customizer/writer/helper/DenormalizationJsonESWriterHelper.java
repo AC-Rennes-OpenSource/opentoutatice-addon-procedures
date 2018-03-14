@@ -79,14 +79,14 @@ public class DenormalizationJsonESWriterHelper {
         return jg;
     }
 
-	public static JsonGenerator mapKeyValueAsJson(JsonGenerator jg, DocumentModel doc, String listPropXPath, String entryKey,
+	public static JsonGenerator mapKeyValueAsJson(JsonGenerator jg, String customProperty, DocumentModel doc, String listPropXPath, String entryKey,
 			String entryValue) throws JsonGenerationException, IOException {
 
 		ListProperty valuesProp = (ListProperty) doc.getProperty(listPropXPath);
 
 		if (CollectionUtils.isNotEmpty(valuesProp)) {
 
-            jg.writeFieldName("pi:data");
+            jg.writeFieldName(customProperty);
 			jg.writeStartObject();
 
 			for (Property valueProp : valuesProp) {

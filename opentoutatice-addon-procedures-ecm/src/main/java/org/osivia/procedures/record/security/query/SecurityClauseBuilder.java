@@ -51,20 +51,29 @@ public class SecurityClauseBuilder {
 	}
 
 	public FilterBuilder getFilter(CoreSession session) {
+		long begin = System.currentTimeMillis();
+		
 		// Result
 		FilterBuilder filterBuilder = null;
 
-		SecurityRelations rules = SecurityRulesBuilder.buildSecurityRelations(session, session.getPrincipal());
+		SecurityRelations rules = SecurityRulesBuilder.getInstance().buildSecurityRelations(session, session.getPrincipal());
 		List<FilterBuilder> filters = build(session, rules);
 		// There is Records security
 		if (filters.size() > 0) {
 			filterBuilder = FilterBuilders.orFilter(filters.toArray(new FilterBuilder[0]));
+		}
+		
+		if(log.isDebugEnabled()) {
+			long end =System.currentTimeMillis();
+			log.debug("[#getFilter] " + String.valueOf(end - begin) + " ms");
 		}
 
 		return filterBuilder;
 	}
 
 	public List<FilterBuilder> build(CoreSession session, SecurityRelations rules) {
+		long begin = System.currentTimeMillis();
+		
 		List<FilterBuilder> filters = new LinkedList<>();
 
 		if (rules != null) {
@@ -102,6 +111,11 @@ public class SecurityClauseBuilder {
 					break;
 				}
 			}
+		}
+		
+		if(log.isDebugEnabled()) {
+			long end =System.currentTimeMillis();
+			log.debug("[#build] " + String.valueOf(end - begin) + " ms");
 		}
 
 		return filters;

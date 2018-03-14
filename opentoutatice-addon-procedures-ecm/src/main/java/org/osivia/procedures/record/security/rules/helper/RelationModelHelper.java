@@ -26,8 +26,8 @@ public class RelationModelHelper {
 		super();
 	}
 	
-	public static String getTargetKey(MapProperty field) {
-		return field.get(FieldsConstants.NAME).getValue(String.class);
+	public static String getTargetKey(MapProperty recordField) {
+		return recordField.get(FieldsConstants.NAME).getValue(String.class);
 	}
 	
 	public static boolean isOneToNRelation(DocumentModel srcModel, String targetKey) {
@@ -68,6 +68,8 @@ public class RelationModelHelper {
 		return oneToNIndicator;
 	}
 	
+	// Use RelationModelResolver 
+	@Deprecated
 	public static String getOneToNRelationKey(DocumentModel srcModel, String targetKey) {
 		String relationKey = StringUtils.EMPTY;
 

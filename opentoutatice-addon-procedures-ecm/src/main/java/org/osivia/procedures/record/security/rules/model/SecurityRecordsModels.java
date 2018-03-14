@@ -3,9 +3,9 @@
  */
 package org.osivia.procedures.record.security.rules.model;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.osivia.procedures.record.security.rules.model.type.Entity;
 
@@ -19,7 +19,7 @@ public class SecurityRecordsModels {
 	
 	public SecurityRecordsModels() {
 		super();
-		this.entities = new HashMap<>(0);
+		this.entities = new ConcurrentHashMap<String, Entity>(0);
 	}
 	
 	public void addEntity(Entity entity) {

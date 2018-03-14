@@ -81,7 +81,7 @@ public class SecurityEntitiesResolver {
 
 				// Store
 				if (entities == null) {
-					entities = new HashMap<>();
+					entities = new ConcurrentHashMap<>();
 				}
 				entities.put(EntityHelper.getType(securityModel), securityEntity);
 			}

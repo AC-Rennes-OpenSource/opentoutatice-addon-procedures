@@ -16,17 +16,17 @@ import org.osivia.procedures.constants.ProceduresConstants;
  * @author david
  *
  */
-public class ModelAnalyzer {
+public class RecordModelAnalyzer {
 	
-	private static ModelAnalyzer instance;
+	private static RecordModelAnalyzer instance;
 	
-	private ModelAnalyzer() {
+	private RecordModelAnalyzer() {
 		super();
 	}
 	
-	public static synchronized ModelAnalyzer getInstance() {
+	public static synchronized RecordModelAnalyzer getInstance() {
 		if(instance == null) {
-			instance = new ModelAnalyzer();
+			instance = new RecordModelAnalyzer();
 		}
 		return instance;
 	}

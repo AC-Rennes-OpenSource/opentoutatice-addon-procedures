@@ -8,7 +8,7 @@
 		point="operations">
 		
 		<operation class="org.osivia.procedures.record.query.automation.SecurityQueryES" replace="true" />
-	<!-- 	<operation class="org.osivia.procedures.record.security.automation.RefreshPrincipalSecurity" replace="true" /> -->
+	 	<operation class="org.osivia.procedures.record.security.automation.RefreshPrincipalSecurity" replace="true" /> 
 		
 	</extension>
   

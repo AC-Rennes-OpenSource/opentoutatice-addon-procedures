@@ -24,6 +24,8 @@
         <listener class="org.osivia.procedures.es.customizer.listener.ProcedureInstanceDenormalizationESListener" />
         <listener class="org.osivia.procedures.es.customizer.listener.ProcedureTaskDenormalizationESListener" />
         
+        <listener class="org.osivia.procedures.record.es.customizer.listener.denormalization.RecordTargetDenormalizationListener" /> 
+        
     </extension>
 	
 </component>

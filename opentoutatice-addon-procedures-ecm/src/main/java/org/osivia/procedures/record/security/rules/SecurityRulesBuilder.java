@@ -35,13 +35,13 @@ import fr.toutatice.ecm.platform.core.query.helper.ToutaticeEsQueryHelper;
 public class SecurityRulesBuilder {
 
 	private static final Log log = LogFactory.getLog(SecurityRulesBuilder.class);
-
-	// Temporary
-	private static Map<String, SecurityRelations> rulesByUser;
-
-	private static RecordsRelationsResolver resolver;
-
+	
 	private static SecurityRulesBuilder instance;
+
+	// Temporary ?
+	private Map<String, SecurityRelations> rulesByUser;
+
+	private RecordsRelationsResolver resolver;
 
 	private SecurityRulesBuilder() {
 		super();
@@ -55,14 +55,14 @@ public class SecurityRulesBuilder {
 		return instance;
 	}
 
-	public static RecordsRelationsResolver getRecordsRelationsResolver() {
-		if (resolver == null) {
-			resolver = RecordsRelationsResolver.getInstance();
+	public RecordsRelationsResolver getRecordsRelationsResolver() {
+		if (this.resolver == null) {
+			this.resolver = RecordsRelationsResolver.getInstance();
 		}
-		return resolver;
+		return this.resolver;
 	}
 
-	public static SecurityRelations buildSecurityRelations(CoreSession session, Principal currentPrincipal) {
+	public SecurityRelations buildSecurityRelations(CoreSession session, Principal currentPrincipal) {
 		UnrestrictedSecurityRulesBuilder builder = new UnrestrictedSecurityRulesBuilder(session, currentPrincipal);
 		builder.runUnrestricted();
 		return builder.getSecurityRelations();
@@ -73,9 +73,9 @@ public class SecurityRulesBuilder {
 		SecurityRelations rules = null;
 
 		// Check if yet calculated
-//		if (rulesByUser.containsKey(currentPrincipal.getName())) {
-//			rules = rulesByUser.get(currentPrincipal.getName());
-//		} else {
+		if (this.rulesByUser.containsKey(currentPrincipal.getName())) {
+			rules = this.rulesByUser.get(currentPrincipal.getName());
+		} else {
 			rules = new SecurityRelations(0);
 
 			Map<String, Entity> securityEntities = SecurityEntitiesResolver.getInstance().getSecurityEntitiesOf(session,
@@ -94,16 +94,20 @@ public class SecurityRulesBuilder {
 				rules = buildSecurity(session, rules, securityEntities, models, treatedEntities, treatedRelations);
 
 				// Store
-//				rulesByUser.put(currentPrincipal.getName(), rules);
+				this.rulesByUser.put(currentPrincipal.getName(), rules);
 
 				if (log.isDebugEnabled()) {
 					final long end = System.currentTimeMillis();
 					log.debug("[#resolveLinkedEntites] " + String.valueOf(end - begin) + " ms");
 				}
 			}
-//		}
+		}
 
 		return rules;
+	}
+	
+	public synchronized void invalidateRulesOf(String userName) {
+		this.rulesByUser.remove(userName);
 	}
 
 	/**
@@ -169,9 +173,9 @@ public class SecurityRulesBuilder {
 		}
 	}
 
-	private Map<String, Entity> getNextEntities(SecurityRelations inComingRelations,
+	private synchronized Map<String, Entity> getNextEntities(SecurityRelations inComingRelations,
 			SecurityRelations outComingRelations) {
-		Map<String, Entity> nextEntities = new HashMap<>(0);
+		Map<String, Entity> nextEntities = new ConcurrentHashMap<>(0);
 
 		for (SecurityRelation inSr : inComingRelations) {
 			Entity entity = inSr.getEntity();
