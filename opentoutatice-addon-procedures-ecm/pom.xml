@@ -23,6 +23,10 @@
 			<artifactId>opentoutatice-ecm-platform-web</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>opentoutatice-ecm.elasticsearch</groupId>
+			<artifactId>opentoutatice-addon-elasticsearch-ecm</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>opentoutatice-ecm.elasticsearch-customizer</groupId>
 			<artifactId>opentoutatice-addon-elasticsearch-customizer-ecm</artifactId>
 		</dependency>

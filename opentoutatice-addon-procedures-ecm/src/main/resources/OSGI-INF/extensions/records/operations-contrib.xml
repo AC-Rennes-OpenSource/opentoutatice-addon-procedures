@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<component name="org.osivia.procedures.record.automation.contrib" version="1.0">
+	
+	<require>fr.toutatice.ecm.platform.automation.contrib</require>
+	<require>fr.toutatice.ecm.elasticsearch.automation.contrib</require>
+
+	<extension target="org.nuxeo.ecm.core.operation.OperationServiceComponent"
+		point="operations">
+		
+		<operation class="org.osivia.procedures.record.query.automation.SecurityQueryES" replace="true" />
+	<!-- 	<operation class="org.osivia.procedures.record.security.automation.RefreshPrincipalSecurity" replace="true" /> -->
+		
+	</extension>
+  
+</component>
