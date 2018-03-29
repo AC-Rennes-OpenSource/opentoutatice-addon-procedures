@@ -5,25 +5,21 @@ package org.osivia.procedures.record.security.rules.helper;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
-import org.nuxeo.ecm.core.api.impl.DocumentModelListImpl;
 import org.nuxeo.ecm.core.api.model.Property;
 import org.nuxeo.ecm.core.api.model.impl.ListProperty;
 import org.nuxeo.ecm.core.api.model.impl.MapProperty;
 import org.osivia.procedures.constants.ProceduresConstants;
 import org.osivia.procedures.record.RecordsConstants;
 import org.osivia.procedures.record.security.rules.model.relation.RelationModel;
-import org.osivia.procedures.record.security.rules.model.relation.RelationModelType;
 import org.osivia.procedures.record.security.rules.model.type.Entity;
 import org.osivia.procedures.record.security.rules.model.type.FieldsConstants;
 
 import fr.toutatice.ecm.platform.core.constants.ToutaticeNuxeoStudioConst;
-import fr.toutatice.ecm.platform.core.helper.ToutaticeDocumentHelper;
 import fr.toutatice.ecm.platform.core.query.helper.ToutaticeEsQueryHelper;
 
 /**
@@ -37,9 +33,6 @@ public class RecordsFetcherHelper {
 
 	public static final String TGT_RECORDS_QUERY = "select * from Record where rcd:type = '%s' and ttc:webid in %s "
 			+ RecordsConstants.DEFAULT_FILTER;
-
-	public static final Pattern RECORDS_WEBIDS_PATTERN = Pattern
-			.compile("\\\"[a-zA-Z0-9]+\\\":\\\"([0-9a-zA-Z]{6}){1}\\\"");
 
 	private RecordsFetcherHelper() {
 		super();
@@ -119,7 +112,7 @@ public class RecordsFetcherHelper {
 
 				if (StringUtils.isNotBlank(webIdsAsString)) {
 					// Extract webIds
-					webIds = RecordHelper.getIds(webIds, webIdsAsString, RECORDS_WEBIDS_PATTERN);
+                    webIds = RecordHelper.getIds(webIds, webIdsAsString);
 				}
 			}
 		}

@@ -3,12 +3,8 @@
  */
 package org.osivia.procedures.record.security.rules.helper;
 
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
-import java.util.regex.Pattern;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
@@ -18,9 +14,10 @@ import org.osivia.procedures.constants.ProceduresConstants;
 import org.osivia.procedures.record.RecordsConstants;
 import org.osivia.procedures.record.security.rules.model.type.Entity;
 import org.osivia.procedures.record.security.rules.model.type.FieldsConstants;
-import org.osivia.procedures.record.security.rules.model.type.RecordModel;
 
 import fr.toutatice.ecm.platform.core.constants.ToutaticeNuxeoStudioConst;
+import net.sf.json.JSONException;
+import net.sf.json.JSONObject;
 
 /**
  * @author david
@@ -30,9 +27,6 @@ public class RecordModelHelper {
 	
 	public static final String RECORD_MODELS_QUERY = "select * from RecordFolder where "
 			+ StringUtils.substringAfter(RecordsConstants.DEFAULT_FILTER, " and");
-	
-	public static final Pattern MODEL_WEBID_PATTERN = Pattern
-			.compile("\\\"recordFolderWebId\\\":\\\"([0-9a-zA-Z]{6}){1}\\\"");
 	
 	private RecordModelHelper() {
 		super();
@@ -44,9 +38,17 @@ public class RecordModelHelper {
 	}
 
 	public static String getModelType(MapProperty relationProperty) {
-		String typeAsString = (String) relationProperty.get(FieldsConstants.VAR_OPTIONS).getValue();
-		List<String> ids = RecordHelper.getIds(new ArrayList<String>(0), typeAsString, MODEL_WEBID_PATTERN);
-		return CollectionUtils.isNotEmpty(ids) ? ids.get(0) : null;
+        String value = (String) relationProperty.get(FieldsConstants.VAR_OPTIONS).getValue();
+
+        String webId;
+        try {
+            JSONObject object = JSONObject.fromObject(value);
+            webId = object.getString("recordFolderWebId");
+        } catch (JSONException e) {
+            webId = null;
+        }
+
+        return webId;
 	}
 	
 	public static String getType(DocumentModel model) {

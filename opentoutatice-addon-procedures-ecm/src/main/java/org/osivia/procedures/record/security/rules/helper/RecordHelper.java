@@ -4,8 +4,10 @@
 package org.osivia.procedures.record.security.rules.helper;
 
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONException;
+import net.sf.json.JSONObject;
 
 /**
  * @author david
@@ -17,13 +19,19 @@ public class RecordHelper {
 		super();
 	}
 
-	public static List<String> getIds(List<String> elements, String extractFrom, Pattern pattern) {
-		if (elements != null) {
-			Matcher matcher = pattern.matcher(extractFrom);
-			while (matcher.find()) {
-				elements.add(matcher.group(1));
-			}
-		}
+	public static List<String> getIds(List<String> elements, String extractFrom) {
+        try {
+            JSONArray array = JSONArray.fromObject(extractFrom);
+            for (int i = 0; i < array.size(); i++) {
+                JSONObject object = array.getJSONObject(i);
+                for (Object key : object.keySet()) {
+                    elements.add(object.getString(String.valueOf(key)));
+                }
+            }
+        } catch (JSONException e) {
+            // Do nothing
+        }
+
 		return elements;
 	}
 

@@ -28,7 +28,6 @@ import org.osivia.procedures.record.RecordsConstants;
 import org.osivia.procedures.record.model.FieldTypes;
 import org.osivia.procedures.record.model.RecordModelAnalyzer;
 import org.osivia.procedures.record.model.relation.RelationsModelResolver;
-import org.osivia.procedures.record.security.rules.RecordsRelationsResolver;
 import org.osivia.procedures.record.security.rules.helper.RecordHelper;
 import org.osivia.procedures.record.security.rules.helper.RecordsFetcherHelper;
 
@@ -186,7 +185,7 @@ public class RecordJsonESDenormalizationWriter extends AbstractDenormalizationJs
 
 		// Get ids as list
 		List<String> ids = new ArrayList<>(0);
-		ids = RecordHelper.getIds(ids, idsAsString, RecordsRelationsResolver.RECORDS_WEBIDS_PATTERN);
+        ids = RecordHelper.getIds(ids, idsAsString);
 
 		if (CollectionUtils.isNotEmpty(ids)) {
 			String query = String.format(GET_LINKED_N_TO_N_ENTITIES_QUERY, type,

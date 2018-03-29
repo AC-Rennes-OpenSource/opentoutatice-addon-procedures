@@ -6,8 +6,6 @@ package org.osivia.procedures.record.model.relation;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -20,18 +18,16 @@ import org.nuxeo.ecm.core.api.model.impl.MapProperty;
 import org.osivia.procedures.constants.ProceduresConstants;
 import org.osivia.procedures.record.RecordsConstants;
 import org.osivia.procedures.record.model.RecordAnalyzer;
-import org.osivia.procedures.record.model.RecordModelAnalyzer;
-import org.osivia.procedures.record.security.rules.SecurityRulesBuilder;
-import org.osivia.procedures.record.security.rules.helper.RecordHelper;
 import org.osivia.procedures.record.security.rules.helper.RecordModelHelper;
 import org.osivia.procedures.record.security.rules.helper.RelationModelHelper;
-import org.osivia.procedures.record.security.rules.model.SecurityRelations;
 import org.osivia.procedures.record.security.rules.model.type.FieldType;
 import org.osivia.procedures.record.security.rules.model.type.FieldsConstants;
 
 import fr.toutatice.ecm.platform.core.constants.ToutaticeNuxeoStudioConst;
 import fr.toutatice.ecm.platform.core.helper.ToutaticeDocumentHelper;
 import fr.toutatice.ecm.platform.core.query.helper.ToutaticeEsQueryHelper;
+import net.sf.json.JSONException;
+import net.sf.json.JSONObject;
 
 /**
  * @author david
@@ -148,11 +144,13 @@ public class RelationsModelResolver {
 									String fieldDefType = fieldDef.get("type").getValue(String.class);
 									if (StringUtils.equals(fieldDefType, FieldType.Record.getType())) {
 										// Get Model type
-										String typeAsFlatStr = fieldDef.get("varOptions").getValue(String.class);
+                                        String value = fieldDef.get("varOptions").getValue(String.class);
 
-										Matcher matcher = RecordModelHelper.MODEL_WEBID_PATTERN.matcher(typeAsFlatStr);
-										if (matcher.find()) {
-											type = matcher.group(1);
+                                        try {
+                                            JSONObject object = JSONObject.fromObject(value);
+                                            type = object.getString("recordFolderWebId");
+                                        } catch (JSONException e) {
+                                            type = null;
 										}
 									}
 								}

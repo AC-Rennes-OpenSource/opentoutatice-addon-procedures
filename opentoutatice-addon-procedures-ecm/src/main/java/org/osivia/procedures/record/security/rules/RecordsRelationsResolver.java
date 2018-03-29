@@ -5,11 +5,8 @@ package org.osivia.procedures.record.security.rules;
 
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
@@ -34,13 +31,8 @@ import fr.toutatice.ecm.platform.core.constants.ToutaticeNuxeoStudioConst;
  */
 public class RecordsRelationsResolver {
 
-	private static final Log log = LogFactory.getLog(RecordsRelationsResolver.class);
-
 	public static final String LINKED_ONE_TO_N_ENTITIES_QUERY = "select * from Record where rcd:type = '%s' and ttc:webid in %s ";
 	public static final String LINKED_ONE_TO_ONE_ENTITY_QUERY = "select * from Record where rcd:type = '%s' and rcd:data.%s = '%s' ";
-
-	public static final Pattern RECORDS_WEBIDS_PATTERN = Pattern
-			.compile("\\\"[a-zA-Z0-9]+\\\":\\\"([0-9a-zA-Z]{6}){1}\\\"");
 
 	private static RecordsRelationsResolver instance;
 
