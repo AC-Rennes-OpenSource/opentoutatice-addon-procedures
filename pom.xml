@@ -11,17 +11,17 @@
 	<version>4.7-SNAPSHOT</version>
 
 	<properties>
-		<nuxeo.version>6.0-HF44</nuxeo.version>
-		<nuxeo.cap.version>6.0</nuxeo.cap.version>
-		<nuxeo.opentoutatice.version>4.7</nuxeo.opentoutatice.version>
-		<ottc.addon.es.version>4.7</ottc.addon.es.version>
-		<ottc.addon.es.customizer.version>4.7</ottc.addon.es.customizer.version>
+		<nuxeo.version>6.1.0</nuxeo.version>
+		<!-- <nuxeo.cap.version>6.0</nuxeo.cap.version> -->
+		<opentoutatice.version>4.7.17</opentoutatice.version>
+		<ottc.addon.es.version>4.7.17</ottc.addon.es.version>
+		<ottc.addon.es.customizer.version>4.7.17</ottc.addon.es.customizer.version>
 		<elasticsearch.version>1.1.2</elasticsearch.version>
 	</properties>
 
 	<modules>
 		<module>opentoutatice-addon-procedures-ecm</module>
-		<module>opentoutatice-addon-procedures-marketplace</module>
+		<!-- <module>opentoutatice-addon-procedures-marketplace</module> -->
 	</modules>
 
 	<dependencyManagement>
@@ -43,12 +43,12 @@
 			<dependency>
 				<groupId>opentoutatice-ecm.platform</groupId>
 				<artifactId>opentoutatice-ecm-platform-core</artifactId>
-				<version>${nuxeo.opentoutatice.version}</version>
+				<version>${opentoutatice.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>opentoutatice-ecm.platform</groupId>
 				<artifactId>opentoutatice-ecm-platform-web</artifactId>
-				<version>${nuxeo.opentoutatice.version}</version>
+				<version>${opentoutatice.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>opentoutatice-ecm.elasticsearch</groupId>
@@ -117,21 +117,6 @@
 			<url>http://projet.toutatice.fr/nexus/content/repositories/toutatice-snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
-	
-    <profiles>
-    	<profile>
-    		<id>ci</id>
-			<activation>
-				<activeByDefault>false</activeByDefault>
-			</activation>
-			<distributionManagement>
-    			<snapshotRepository>
-            		<id>galactica-ci-snapshots</id>
-            		<url>http://nexus:8081/repository/ci-snapshots</url>
-        		</snapshotRepository>
-    		</distributionManagement>
-    	</profile>
-    </profiles>
-    
+	    
 </project>
 
