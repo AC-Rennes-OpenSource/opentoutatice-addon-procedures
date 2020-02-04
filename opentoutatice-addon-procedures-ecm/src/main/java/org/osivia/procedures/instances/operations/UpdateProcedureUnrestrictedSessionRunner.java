@@ -107,6 +107,12 @@ public class UpdateProcedureUnrestrictedSessionRunner extends AbstractProcedureU
 
         // Create task
         createTask(model, procedureInstance, processId, title, actors, additionalAuthorizations);
+        
+        // Force refresh because the datas can be accessed later without enough rights (JSonWriter)
+        // and detach mode breaks transaction
+        
+        procedureInstance.refresh(DocumentModel.REFRESH_ALL, procedureInstance.getSchemas());
+        procedureInstance.getLockInfo();
 
     }
 

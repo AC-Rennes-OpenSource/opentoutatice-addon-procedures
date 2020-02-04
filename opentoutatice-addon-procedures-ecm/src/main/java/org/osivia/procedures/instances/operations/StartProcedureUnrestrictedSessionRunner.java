@@ -96,6 +96,9 @@ public class StartProcedureUnrestrictedSessionRunner extends AbstractProcedureUn
 
         // Create task
         createTask(model, procedureInstance, processId, title, actors, additionalAuthorizations);
+        
+        
+        
     }
 
 
@@ -140,6 +143,14 @@ public class StartProcedureUnrestrictedSessionRunner extends AbstractProcedureUn
 
         // Save document
         DocumentModel saveDocument = session.saveDocument(procedureInstance);
+        
+        // Force refresh because the datas can be accessed later without enough rights (JSonWriter)
+        // and detach mode breaks transaction
+
+        saveDocument.refresh(DocumentModel.REFRESH_ALL, saveDocument.getSchemas());
+        saveDocument.getLockInfo();
+        
+        
          
         return saveDocument;
     }
