@@ -11,11 +11,11 @@
 	<version>4.7-SNAPSHOT</version>
 
 	<properties>
-		<nuxeo.version>6.1.0</nuxeo.version>
-		<!-- <nuxeo.cap.version>6.0</nuxeo.cap.version> -->
-		<opentoutatice.version>4.7.17</opentoutatice.version>
-		<ottc.addon.es.version>4.7.17</ottc.addon.es.version>
-		<ottc.addon.es.customizer.version>4.7.17.1</ottc.addon.es.customizer.version>
+		<nuxeo.version>RAB-6.1.5</nuxeo.version>
+		<!-- <nuxeo.cap.version>RAB-6.1.5</nuxeo.cap.version> -->
+		<opentoutatice.version>RAB-4.7.44</opentoutatice.version>
+		<ottc.addon.es.version>RAB-4.7.28</ottc.addon.es.version>
+		<ottc.addon.es.customizer.version>RAB-4.7.18</ottc.addon.es.customizer.version>
 		<elasticsearch.version>1.1.2</elasticsearch.version>
 	</properties>
 
@@ -111,22 +111,22 @@
 
 
 	<scm>
-		<url>https://github.com/osivia/opentoutatice-addon-procedures</url>
-		<connection>scm:git:ssh://git@github.com/osivia/opentoutatice-addon-procedures.git</connection>
-		<developerConnection>scm:git:ssh://git@github.com/osivia/opentoutatice-addon-procedures.git</developerConnection>     
-		<tag>HEAD</tag> 
-    </scm>
-    
-    <distributionManagement>
-        <repository>
-            <id>osivia-releases</id>
-            <url>http://www.osivia.org/nexus/content/repositories/osivia-releases</url>
-        </repository>
-        <snapshotRepository>
-            <id>osivia-snapshots</id>
-            <url>http://www.osivia.org/nexus/content/repositories/osivia-snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
+		<url>https://github.com/AC-Rennes-OpenSource/opentoutatice-addon-procedures</url>
+		<connection>scm:git:https://github.com/AC-Rennes-OpenSource/opentoutatice-addon-procedures.git</connection>
+		<developerConnection>scm:git:https://github.com/AC-Rennes-OpenSource/opentoutatice-addon-procedures.git</developerConnection>
+		<tag>HEAD</tag>
+	</scm>
+
+        <distributionManagement>
+                <repository>
+                        <id>${releaseRepoId}</id>
+                        <url>${releaseRepoUrl}</url>
+                </repository>
+                <snapshotRepository>
+                        <id>${snapshotRepoId}</id>
+                        <url>${snapshotRepoUrl}</url>
+                </snapshotRepository>
+        </distributionManagement>
 	    
 </project>
 
