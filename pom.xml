@@ -8,7 +8,7 @@
 	<packaging>pom</packaging>
 	<name>Procedures feature - parent</name>
 	<description>Procedures addon.</description>
-	<version>RAB-4.7.18</version>
+	<version>RAB-4.7.19-RC01-SNAPSHOT</version>
 
 	<properties>
 		<nuxeo.version>RAB-6.1.5</nuxeo.version>
