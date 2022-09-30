@@ -8,12 +8,12 @@
 	<packaging>pom</packaging>
 	<name>Procedures feature - parent</name>
 	<description>Procedures addon.</description>
-	<version>RAB-4.7.19-RC01-SNAPSHOT</version>
+	<version>RAB-4.7.18</version>
 
 	<properties>
 		<nuxeo.version>RAB-6.1.5</nuxeo.version>
 		<!-- <nuxeo.cap.version>RAB-6.1.5</nuxeo.cap.version> -->
-		<opentoutatice.version>RAB-4.7.44</opentoutatice.version>
+		<opentoutatice.version>RAB-4.7.45</opentoutatice.version>
 		<ottc.addon.es.version>RAB-4.7.28</ottc.addon.es.version>
 		<ottc.addon.es.customizer.version>RAB-4.7.18</ottc.addon.es.customizer.version>
 		<elasticsearch.version>1.1.2</elasticsearch.version>
